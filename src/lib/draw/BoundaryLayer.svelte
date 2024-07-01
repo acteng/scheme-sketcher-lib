@@ -1,15 +1,23 @@
 <script lang="ts">
   import mask from "@turf/mask";
-  import type { FeatureCollection, MultiPolygon, Polygon } from "geojson";
+  import type {
+    Feature,
+    FeatureCollection,
+    MultiPolygon,
+    Polygon,
+  } from "geojson";
   import { bbox, layerId } from "$lib/maplibre";
   import { map } from "$lib/config";
   import { getContext } from "svelte";
   import { FillLayer, GeoJSON } from "svelte-maplibre";
 
-  export let boundaryGeojson: FeatureCollection<Polygon | MultiPolygon>;
+  export let boundaryGeojson:
+    | Feature<Polygon | MultiPolygon>
+    | FeatureCollection<Polygon | MultiPolygon>;
+  export let fitBoundsAtStart = false;
 
   // If the URL didn't initially have a viewport set, fit the boundary
-  if (getContext("setCamera")) {
+  if (getContext("setCamera") || fitBoundsAtStart) {
     $map?.fitBounds(bbox(boundaryGeojson), {
       padding: 20,
       animate: false,

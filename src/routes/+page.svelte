@@ -7,16 +7,60 @@
   import PolygonToolLayer from "$lib/draw/polygon/PolygonToolLayer.svelte";
   import RouteSnapperLayer from "$lib/draw/route/RouteSnapperLayer.svelte";
   import SplitRouteMode from "$lib/draw/route/SplitRouteMode.svelte";
+  import BoundaryLayer from "$lib/draw/BoundaryLayer.svelte";
   import { mode } from "$lib/draw/stores";
   import Toolbox from "$lib/draw/Toolbox.svelte";
+  import PerModeControls from "$lib/sidebar/PerModeControls.svelte";
 
   // Use your own key (for MapTiler or another basemap service)
   let apiKey = "MZEJTanw3WpxRvt7qDfo";
+  let routeSnapperUrl = "https://atip.uk/route-snappers/v2.6/LAD_Adur.bin.gz";
+  let boundaryGeojson = {
+    type: "Feature" as const,
+    geometry: {
+      type: "Polygon" as const,
+      coordinates: [
+        [
+          [-0.364623, 50.874533],
+          [-0.371208, 50.869793],
+          [-0.367479, 50.860539],
+          [-0.369022, 50.855288],
+          [-0.365441, 50.846933],
+          [-0.358547, 50.843541],
+          [-0.358369, 50.830646],
+          [-0.349344, 50.822407],
+          [-0.339007, 50.822184],
+          [-0.330269, 50.816102],
+          [-0.299725, 50.823206],
+          [-0.280328, 50.825936],
+          [-0.25188, 50.825546],
+          [-0.237095, 50.828265],
+          [-0.21626, 50.826897],
+          [-0.215382, 50.830533],
+          [-0.234361, 50.851116],
+          [-0.239727, 50.861896],
+          [-0.244998, 50.863815],
+          [-0.248948, 50.870547],
+          [-0.258962, 50.871214],
+          [-0.256606, 50.862342],
+          [-0.269032, 50.863672],
+          [-0.287977, 50.864159],
+          [-0.298485, 50.866274],
+          [-0.311454, 50.864779],
+          [-0.320283, 50.865434],
+          [-0.339752, 50.862547],
+          [-0.349058, 50.865902],
+          [-0.364623, 50.874533],
+        ],
+      ],
+    },
+    properties: {},
+  };
 </script>
 
 <div style="display: flex; height: 100vh">
   <div class="sidebar">
-    <h1>The sidebar</h1>
+    <PerModeControls {routeSnapperUrl} />
   </div>
   <div class="map">
     <MapLibre
@@ -27,10 +71,9 @@
         console.log(e.detail.error);
       }}
       bind:map={$map}
-      bounds={[-5.96, 49.89, 2.31, 55.94]}
     >
       <!--<Geocoder position="top-right" />-->
-      <!--<BoundaryLayer {boundaryGeojson} />-->
+      <BoundaryLayer {boundaryGeojson} fitBoundsAtStart />
       <InterventionLayer />
       <ImageLayer />
       {#if $mode.mode == "list"}
