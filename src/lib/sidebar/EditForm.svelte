@@ -97,10 +97,4 @@
 
 <ErrorMessage errorMessage={cfg.interventionWarning(feature)} />
 
-<!--{#if $schema == "v1"}
-  <UnexpectedProperties id={feature.id} props={feature.properties} />
-  <FormV1 bind:props={feature.properties} />
-{:else if $schema == "pipeline"}
-  <UnexpectedProperties id={feature.id} props={feature.properties} />
-  <PipelineForm bind:props={feature.properties} />
-{/if}-->
+<svelte:component this={cfg.editFeatureForm} bind:props={feature.properties} />

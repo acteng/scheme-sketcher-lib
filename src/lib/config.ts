@@ -11,6 +11,7 @@ import type {
 } from "$lib/draw/types";
 import type { Feature, LineString, Polygon, Point } from "geojson";
 import { get, writable, type Writable } from "svelte/store";
+import { SvelteComponent, type ComponentType } from "svelte";
 import type { Map } from "maplibre-gl";
 
 export let map: Writable<Map | null> = writable(null);
@@ -38,6 +39,12 @@ export let cfg = {
   interventionWarning: (feature: FeatureWithAnyProps) => {
     return null;
   },
+
+  editFeatureForm: null as null | ComponentType<
+    SvelteComponent<{
+      props: { [name: string]: any };
+    }>
+  >,
 
   newPointFeature: (f: Feature<Point>) => {
     gjSchemeCollection.update((gj) => {

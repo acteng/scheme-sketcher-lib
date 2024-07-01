@@ -1,7 +1,7 @@
 <script lang="ts">
   import { MapLibre } from "svelte-maplibre";
   import type { Map } from "maplibre-gl";
-  import { map } from "$lib/config";
+  import { cfg, map } from "$lib/config";
   import ImageLayer from "$lib/draw/image/ImageLayer.svelte";
   import InterventionLayer from "$lib/draw/InterventionLayer.svelte";
   import PolygonToolLayer from "$lib/draw/polygon/PolygonToolLayer.svelte";
@@ -11,6 +11,9 @@
   import { mode } from "$lib/draw/stores";
   import Toolbox from "$lib/draw/Toolbox.svelte";
   import PerModeControls from "$lib/sidebar/PerModeControls.svelte";
+  import ExampleFeatureForm from "./ExampleFeatureForm.svelte";
+
+  cfg.editFeatureForm = ExampleFeatureForm;
 
   // Use your own key (for MapTiler or another basemap service)
   let apiKey = "MZEJTanw3WpxRvt7qDfo";
