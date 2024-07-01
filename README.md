@@ -26,6 +26,8 @@ TODO: Document all of these
 - z-order
 - env vars
 - making forms and designing a schema
+- mapStyle
+- maybe change UserSettings local storage sync / key
 
 ## Immediate TODOs
 

@@ -3,7 +3,8 @@
   import { getRoadLayerNames } from "$lib/maplibre";
   import type { MapMouseEvent } from "maplibre-gl";
   import { map } from "$lib/config";
-  import { mapStyle, userSettings } from "stores";
+  import { userSettings } from "$lib/draw/stores";
+  import { mapStyle } from "$lib/config";
   import { onDestroy } from "svelte";
   import cameraCursorUrl from "$lib/assets/camera_cursor.svg?url";
   import StreetViewHelp from "./StreetViewHelp.svelte";

@@ -9,6 +9,7 @@ import { get, writable, type Writable } from "svelte/store";
 import type { Map } from "maplibre-gl";
 
 export let map: Writable<Map | null> = writable(null);
+export const mapStyle: Writable<string> = writable("dataviz");
 
 // The draw code should be agnostic to the feature properties that differ by
 // schema. Start centralizing the logic here, so it's easy for other users to

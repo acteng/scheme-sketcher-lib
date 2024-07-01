@@ -5,6 +5,7 @@ import { PointTool } from "./point/point_tool";
 import { PolygonTool } from "maplibre-draw-polygon";
 import { RouteTool } from "route-snapper-ts";
 import type { Position } from "geojson";
+import { isStreetViewImagery, type UserSettings } from "./types";
 
 // TODO Should we instead store a map from ID to feature?
 export const gjSchemeCollection: Writable<SchemeCollection> =
@@ -73,4 +74,32 @@ export function getArbitrarySchemeRef(
 // places (10cm) is plenty of precision
 export function setPrecision(pt: Position): Position {
   return [Math.round(pt[0] * 10e6) / 10e6, Math.round(pt[1] * 10e6) / 10e6];
+}
+
+export const userSettings: Writable<UserSettings> =
+  writable(loadUserSettings());
+userSettings.subscribe((value) =>
+  window.localStorage.setItem("userSettings", JSON.stringify(value)),
+);
+
+function loadUserSettings(): UserSettings {
+  let settings = {
+    streetViewImagery: "google",
+    avoidDoublingBack: false,
+  };
+
+  // Be paranoid when loading from local storage, and only copy over valid items
+  try {
+    let x = JSON.parse(window.localStorage.getItem("userSettings") || "{}");
+    if (isStreetViewImagery(x.streetViewImagery)) {
+      settings.streetViewImagery = x.streetViewImagery;
+    }
+    if (typeof x.avoidDoublingBack == "boolean") {
+      settings.avoidDoublingBack = x.avoidDoublingBack;
+    }
+  } catch (error) {
+    console.log(`Couldn't parse userSettings from local storage: ${error}`);
+  }
+  // The cast is necessary, because of streetViewImagery looking like just a string
+  return settings as UserSettings;
 }
