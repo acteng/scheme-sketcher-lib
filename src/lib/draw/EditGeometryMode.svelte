@@ -9,7 +9,7 @@
   } from "$lib/draw/stores";
   import type { FeatureWithAnyProps } from "$lib/draw/types";
   import { ButtonGroup, DefaultButton, SecondaryButton } from "govuk-svelte";
-  import { cfg } from "$lib/draw/config";
+  import { cfg } from "$lib/config";
   import { onDestroy, onMount } from "svelte";
   import PointControls from "./point/PointControls.svelte";
   import PolygonControls from "./polygon/PolygonControls.svelte";

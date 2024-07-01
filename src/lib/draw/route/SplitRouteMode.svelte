@@ -14,7 +14,7 @@
   } from "$lib/draw/stores";
   import { emptyGeojson, layerId } from "$lib/maplibre";
   import type { MapMouseEvent } from "maplibre-gl";
-  import { map } from "stores";
+  import { map } from "$lib/config";
   import { onDestroy, onMount } from "svelte";
   import { CircleLayer, GeoJSON, MapEvents } from "svelte-maplibre";
   import splitIcon from "$lib/assets/split_route.svg";
@@ -24,10 +24,14 @@
 
   onMount(() => {
     // Use a fallback icon in case the image fails
-    $map.getCanvas().style.cursor = `url(${splitIcon}), crosshair`;
+    if ($map) {
+      $map.getCanvas().style.cursor = `url(${splitIcon}), crosshair`;
+    }
   });
   onDestroy(() => {
-    $map.getCanvas().style.cursor = "inherit";
+    if ($map) {
+      $map.getCanvas().style.cursor = "inherit";
+    }
   });
 
   let snappedCursor: Feature<Point> | null = null;
@@ -44,6 +48,9 @@
   }
 
   function onMouseMove(e: CustomEvent<MapMouseEvent>) {
+    if (!$map) {
+      return;
+    }
     snappedCursor = null;
     snappedIndex = null;
 

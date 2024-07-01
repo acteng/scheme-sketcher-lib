@@ -2,7 +2,7 @@
   import mask from "@turf/mask";
   import type { FeatureCollection, MultiPolygon, Polygon } from "geojson";
   import { bbox, layerId } from "$lib/maplibre";
-  import { map } from "stores";
+  import { map } from "$lib/config";
   import { getContext } from "svelte";
   import { FillLayer, GeoJSON } from "svelte-maplibre";
 
@@ -10,7 +10,7 @@
 
   // If the URL didn't initially have a viewport set, fit the boundary
   if (getContext("setCamera")) {
-    $map.fitBounds(bbox(boundaryGeojson), {
+    $map?.fitBounds(bbox(boundaryGeojson), {
       padding: 20,
       animate: false,
     });

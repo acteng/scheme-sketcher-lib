@@ -2,7 +2,8 @@
   import { CollapsibleCard, Radio, SecondaryButton } from "govuk-svelte";
   import { getRoadLayerNames } from "$lib/maplibre";
   import type { MapMouseEvent } from "maplibre-gl";
-  import { map, mapStyle, userSettings } from "stores";
+  import { map } from "$lib/config";
+  import { mapStyle, userSettings } from "stores";
   import { onDestroy } from "svelte";
   import cameraCursorUrl from "$lib/assets/camera_cursor.svg?url";
   import StreetViewHelp from "./StreetViewHelp.svelte";
@@ -13,6 +14,9 @@
   let defaultLineColorPerLayer: [string, any][] = [];
 
   function on() {
+    if (!$map) {
+      return;
+    }
     $map.on("click", onClick);
     $map.getCanvas().style.cursor = `url(${cameraCursorUrl}), auto`;
 

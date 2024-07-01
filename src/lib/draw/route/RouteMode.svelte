@@ -4,7 +4,7 @@
   import { ButtonGroup, DefaultButton, SecondaryButton } from "govuk-svelte";
   import { onDestroy, onMount } from "svelte";
   import RouteControls from "./RouteControls.svelte";
-  import { cfg } from "$lib/draw/config";
+  import { cfg } from "$lib/config";
 
   onMount(() => {
     $routeTool!.startRoute();

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { routeTool } from "$lib/draw/stores";
   import { ErrorMessage } from "govuk-svelte";
-  import { map } from "stores";
+  import { map } from "$lib/config";
   import { onMount } from "svelte";
   import { init, RouteTool } from "route-snapper-ts";
   import { routeToolGj, snapMode, undoLength } from "./stores";
@@ -23,7 +23,7 @@
         progress = p;
       });
       routeTool.set(
-        new RouteTool($map, graphBytes, routeToolGj, snapMode, undoLength),
+        new RouteTool($map!, graphBytes, routeToolGj, snapMode, undoLength),
       );
       progress = 100;
       routeToolReady = true;

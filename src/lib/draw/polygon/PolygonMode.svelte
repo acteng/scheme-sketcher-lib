@@ -4,7 +4,7 @@
   import { ButtonGroup, DefaultButton, SecondaryButton } from "govuk-svelte";
   import { onDestroy, onMount } from "svelte";
   import PolygonControls from "./PolygonControls.svelte";
-  import { cfg } from "$lib/draw/config";
+  import { cfg } from "$lib/config";
 
   onMount(() => {
     $polygonTool!.startNew();

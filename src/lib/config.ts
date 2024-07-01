@@ -5,7 +5,10 @@ import {
 } from "$lib/draw/stores";
 import type { FeatureWithAnyProps } from "$lib/draw/types";
 import type { Feature, LineString, Polygon, Point } from "geojson";
-import { get } from "svelte/store";
+import { get, writable, type Writable } from "svelte/store";
+import type { Map } from "maplibre-gl";
+
+export let map: Writable<Map | null> = writable(null);
 
 // The draw code should be agnostic to the feature properties that differ by
 // schema. Start centralizing the logic here, so it's easy for other users to

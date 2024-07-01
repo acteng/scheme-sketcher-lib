@@ -1,4 +1,4 @@
-import { map as mapStore } from "stores";
+import { map as mapStore } from "$lib/config";
 import { get } from "svelte/store";
 
 interface LayerProps {

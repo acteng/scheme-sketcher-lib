@@ -10,12 +10,11 @@
     isPolygon,
     layerId,
   } from "$lib/maplibre";
-  import { cfg } from "$lib/draw/config";
+  import { cfg, map } from "$lib/config";
   import type {
     DataDrivenPropertyValueSpecification,
     ExpressionSpecification,
   } from "maplibre-gl";
-  import { map } from "stores";
   import {
     CircleLayer,
     FillLayer,
@@ -94,7 +93,7 @@
   }
 
   function onClick(e: CustomEvent<LayerClickInfo>) {
-    if ($mode.mode != "list") {
+    if ($mode.mode != "list" || !$map) {
       return;
     }
     // TODO Possible to be missing?

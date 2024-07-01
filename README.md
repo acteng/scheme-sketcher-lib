@@ -19,6 +19,8 @@ This is a library for building Svelte web apps to edit GeoJSON files with MapLib
 
 TODO: Document all of these
 
+- setting things in config
+  - map store
 - govuk
 - static assets
 - z-order

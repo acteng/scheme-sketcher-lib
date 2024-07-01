@@ -4,7 +4,7 @@
   import { routeTool } from "$lib/draw/stores";
   import { TextInput } from "govuk-svelte";
   import { emptyGeojson } from "$lib/maplibre";
-  import { map } from "stores";
+  import { map } from "$lib/config";
   import { geocoderGj } from "./stores";
 
   let query = "";
@@ -17,7 +17,7 @@
 
     let params = new URLSearchParams({
       country: "gb",
-      proximity: $map.getCenter().toArray().join(","),
+      proximity: $map!.getCenter().toArray().join(","),
       fuzzyMatch: "true",
       key: import.meta.env.VITE_MAPTILER_API_KEY,
     }).toString();

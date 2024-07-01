@@ -4,7 +4,7 @@
   import { SecondaryButton } from "govuk-svelte";
   import { onDestroy, onMount } from "svelte";
   import PointControls from "./PointControls.svelte";
-  import { cfg } from "$lib/draw/config";
+  import { cfg } from "$lib/config";
 
   onMount(() => {
     $pointTool!.start();

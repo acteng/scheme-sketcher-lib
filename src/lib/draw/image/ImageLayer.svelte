@@ -1,7 +1,7 @@
 <script lang="ts">
   import { mode } from "$lib/draw/stores";
   import { layerId } from "$lib/maplibre";
-  import { map } from "stores";
+  import { map } from "$lib/config";
   import { ImageSource, Marker, RasterLayer } from "svelte-maplibre";
   import { imgSrc, opacity } from "./stores";
 
@@ -9,6 +9,7 @@
   let bottomRight = { lng: 0, lat: 0 };
 
   $: if (
+    $map &&
     $imgSrc &&
     $mode.mode == "set-image" &&
     topLeft.lng == 0 &&
