@@ -18,6 +18,26 @@
     ".": {
       "types": "./dist/index.d.ts",
       "svelte": "./dist/index.js"
+    },
+    "./common": {
+      "types": "./dist/common/index.d.ts",
+      "svelte": "./dist/common/index.js",
+      "import": "./dist/common/index.js"
+    },
+    "./draw": {
+      "types": "./dist/draw/index.d.ts",
+      "svelte": "./dist/draw/index.js",
+      "import": "./dist/draw/index.js"
+    },
+    "./maplibre": {
+      "types": "./dist/maplibre/index.d.ts",
+      "svelte": "./dist/maplibre/index.js",
+      "import": "./dist/maplibre/index.js"
+    },
+    "./sidebar": {
+      "types": "./dist/sidebar/index.d.ts",
+      "svelte": "./dist/sidebar/index.js",
+      "import": "./dist/sidebar/index.js"
     }
   },
   "files": [
