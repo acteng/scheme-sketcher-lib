@@ -1,5 +1,7 @@
+export { default as Modal } from "./Modal.svelte";
 export { default as StreetViewHelp } from "./StreetViewHelp.svelte";
 export { default as StreetViewTool } from "./StreetViewTool.svelte";
+export { default as WarningIcon } from "./WarningIcon.svelte";
 
 // Fetch a URL and return bytes. Along the way, calls setProgress with a number [0, 100] -- but sometimes over 100 when the file is compressed. This function will throw if the server doesn't send back a Content-Length header.
 export async function fetchWithProgress(

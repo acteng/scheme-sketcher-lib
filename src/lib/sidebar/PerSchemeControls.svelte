@@ -1,6 +1,5 @@
 <script lang="ts">
-  import Modal from "$lib/common/Modal.svelte";
-  import WarningIcon from "$lib/common/WarningIcon.svelte";
+  import { Modal, WarningIcon } from "$lib/common";
   import {
     gjSchemeCollection,
     hideSchemes,
