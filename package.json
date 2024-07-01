@@ -33,6 +33,7 @@
     "@sveltejs/kit": "^2.0.0",
     "@sveltejs/package": "^2.0.0",
     "@sveltejs/vite-plugin-svelte": "^3.0.0",
+    "@types/geojson": "^7946.0.14",
     "prettier": "^3.1.1",
     "prettier-plugin-svelte": "^3.1.2",
     "publint": "^0.1.9",
@@ -42,8 +43,23 @@
     "typescript": "^5.0.0",
     "vite": "^5.0.11"
   },
+  "dependencies": {
+    "@maptiler/geocoding-control": "^1.3.1",
+    "@turf/mask": "^7.0.0",
+    "@turf/nearest-point-on-line": "^7.0.0",
+    "govuk-svelte": "github:acteng/govuk-svelte",
+    "maplibre-draw-polygon": "github:dabreegster/maplibre-draw-polygon",
+    "maplibre-gl": "^4.0.2",
+    "route-snapper": "^0.3.0",
+    "route-snapper-ts": "^0.0.5",
+    "svelte-maplibre": "^0.9.7"
+  },
+  "overrides": {
+    "route-snapper-ts": {
+      "route-snapper": "^0.3.0"
+    }
+  },
   "svelte": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "type": "module",
-  "dependencies": {}
+  "type": "module"
 }

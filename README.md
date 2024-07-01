@@ -1,16 +1,33 @@
-# Scheme Sketcher
+# Scheme Sketcher library
 
-NOTE: This repo isn't ready for use yet.
+NOTE: This repo isn't ready for use yet. It's currently being refactored from <https://github.com/acteng/atip>.
 
-This is a collection of components for drawing and editing objects with MapLibre.
+This is a library for building Svelte web apps to edit GeoJSON files with MapLibre. It includes:
 
-## Goals / non-goals
+- a toolbox for drawing points, linestrings, and polygons, optionally [snapping to a network](https://github.com/dabreegster/route_snapper/)
+- state management -- GeoJSON is autosaved to local storage, with filesystem download and upload
+- layers -- objects can be grouped into distinct layers, moved around, hidden, etc
 
-- Map styling is hardcoded here. If there are improvements to any app using this library, they should be made here and benefit all uses. If there's something particular to one use, then they can either copy the component and modify accordingly, or we can carefully consider making it configurable here. Making everything configurable adds lots of complexity, so won't be a first choice.
+## Design choices / non-goals
+
 - There are assumptions about how this library is used -- like there's only one set of controls instantiated per page, so singletons in Svelte stores are fine.
+- Controls are styled using the [GOV.UK Design System](https://design-system.service.gov.uk/). This isn't planned to be configurable yet.
+- Map styling is also hardcoded here.
+  - Improvements to components should be made here and compatible with the few planned users. When users need more control, we'll explore tradeoffs between copying a bit of code and making things configurabl here. Making _everything_ configurable adds lots of complexity, so won't be a first choice.
 
 ## Setup
+
+TODO: Document all of these
 
 - govuk
 - static assets
 - z-order
+- env vars
+- making forms and designing a schema
+
+## Immediate TODOs
+
+- undo route-snapper version hack
+- upgrade packages
+- consider renaming "intervention" and "scheme"
+- coverage polygons in InterventionLayer
