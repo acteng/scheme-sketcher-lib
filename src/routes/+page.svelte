@@ -92,7 +92,6 @@
     width: 30%;
     overflow-y: scroll;
     padding: 10px;
-    border: 1px solid black;
   }
 
   .map {

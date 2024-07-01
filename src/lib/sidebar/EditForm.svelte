@@ -95,8 +95,9 @@
   <WarningButton on:click={() => deleteIntervention(id)}>Delete</WarningButton>
 </ButtonGroup>
 
-<!--<ErrorMessage errorMessage={warning} />
-{#if $schema == "v1"}
+<ErrorMessage errorMessage={cfg.interventionWarning(feature)} />
+
+<!--{#if $schema == "v1"}
   <UnexpectedProperties id={feature.id} props={feature.properties} />
   <FormV1 bind:props={feature.properties} />
 {:else if $schema == "pipeline"}

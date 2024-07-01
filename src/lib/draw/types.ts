@@ -24,11 +24,15 @@ export type Mode =
 export type FeatureWithAnyProps<G extends Geometry = Geometry> = Feature<G> & {
   properties: { [name: string]: any };
 };
+export type FeatureWithID<G extends Geometry = Geometry> = Feature<G> & {
+  properties: { [name: string]: any };
+  id: number;
+};
 
 export interface SchemeCollection {
   type: "FeatureCollection";
   // TODO Specifying scheme_reference would be nice
-  features: FeatureWithAnyProps[];
+  features: FeatureWithID[];
   // Keyed by scheme_reference, which doesn't change over the lifetime of the sketch tool
   schemes: { [reference: string]: SchemeData };
 }

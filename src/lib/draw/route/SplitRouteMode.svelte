@@ -18,6 +18,7 @@
   import { onDestroy, onMount } from "svelte";
   import { CircleLayer, GeoJSON, MapEvents } from "svelte-maplibre";
   import splitIcon from "$lib/assets/split_route.svg";
+  import type { FeatureWithID } from "$lib/draw/types";
 
   const circleRadiusPixels = 10;
   const snapDistancePixels = 30;
@@ -113,7 +114,12 @@
         piece2.id = newFeatureId(gj);
 
         // Replace the one LineString we snapped to with the two new pieces
-        gj.features.splice(snappedIndex!, 1, piece1, piece2);
+        gj.features.splice(
+          snappedIndex!,
+          1,
+          piece1 as FeatureWithID,
+          piece2 as FeatureWithID,
+        );
 
         return gj;
       });

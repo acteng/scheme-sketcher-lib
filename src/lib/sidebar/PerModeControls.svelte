@@ -14,6 +14,7 @@
   import SnapPolygonMode from "../draw/snap_polygon/SnapPolygonMode.svelte";
   import StreetViewMode from "../draw/StreetViewMode.svelte";
   import EditForm from "./EditForm.svelte";
+  import ListMode from "./ListMode.svelte";
 
   export let routeSnapperUrl: string;
 
@@ -41,8 +42,7 @@ toolbox, but that gets created and destroyed frequently. -->
 </div>
 
 {#if $mode.mode == "list"}
-  <!--<ListMode />-->
-  <p>List mode</p>
+  <ListMode />
 {:else if $mode.mode == "edit-form"}
   <EditForm id={$mode.id} />
 {:else if $mode.mode == "edit-geometry"}
