@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    
+		<link rel="modulepreload" href="./_app/immutable/entry/start.BCFmn3Ix.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/entry.B9hjOZqF.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/scheduler.i93Z4zgA.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/index.B8wenr62.js">
+		<link rel="modulepreload" href="./_app/immutable/entry/app.D-IaoWT4.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/index.Bcwxk98K.js">
+  </head>
+  <body data-sveltekit-preload-data="hover">
+    <div>
+			<script>
+				{
+					__sveltekit_vw5ks2 = {
+						base: new URL(".", location).pathname.slice(0, -1),
+						assets: "/scheme-sketcher-lib"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("./_app/immutable/entry/start.BCFmn3Ix.js"),
+						import("./_app/immutable/entry/app.D-IaoWT4.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element);
+					});
+				}
+			</script>
+		</div>
+  </body>
+</html>
