@@ -34,6 +34,7 @@
     "@sveltejs/package": "^2.0.0",
     "@sveltejs/vite-plugin-svelte": "^3.0.0",
     "@types/geojson": "^7946.0.14",
+    "@types/uuid": "^10.0.0",
     "prettier": "^3.1.1",
     "prettier-plugin-svelte": "^3.1.2",
     "publint": "^0.1.9",
@@ -52,7 +53,8 @@
     "maplibre-gl": "^4.0.2",
     "route-snapper": "^0.3.0",
     "route-snapper-ts": "^0.0.5",
-    "svelte-maplibre": "^0.9.7"
+    "svelte-maplibre": "^0.9.7",
+    "uuid": "^10.0.0"
   },
   "overrides": {
     "route-snapper-ts": {

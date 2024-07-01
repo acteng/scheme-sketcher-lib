@@ -1,7 +1,6 @@
-import { emptyCollection } from "$lib/sidebar/scheme_data";
+import { emptyCollection } from "./schemes";
 import { writable, type Writable } from "svelte/store";
-import type { SchemeCollection } from "types";
-import type { Mode } from "./types";
+import type { Mode, SchemeCollection } from "./types";
 import { PointTool } from "./point/point_tool";
 import { PolygonTool } from "maplibre-draw-polygon";
 import { RouteTool } from "route-snapper-ts";

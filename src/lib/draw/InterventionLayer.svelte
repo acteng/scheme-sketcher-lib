@@ -23,8 +23,7 @@
     Popup,
     type LayerClickInfo,
   } from "svelte-maplibre";
-  import type { SchemeCollection } from "types";
-  import type { FeatureWithAnyProps } from "$lib/draw/types";
+  import type { FeatureWithAnyProps, SchemeCollection } from "$lib/draw/types";
 
   $: gj = addLineStringEndpoints($gjSchemeCollection);
 
@@ -107,11 +106,11 @@
   function tooltip(features: Feature[] | null): string {
     if (features) {
       let feature = features[0] as FeatureWithAnyProps;
-      let name = cfg.interventionName(feature);
-      let scheme =
-        $gjSchemeCollection.schemes[feature.properties.scheme_reference]
-          .scheme_name ?? "Untitled scheme";
-      return `${name} (${scheme})`;
+      let featureName = cfg.interventionName(feature);
+      let schemeName = cfg.schemeName(
+        $gjSchemeCollection.schemes[feature.properties.scheme_reference],
+      );
+      return `${featureName} (${schemeName})`;
     }
     // TODO Improve upstream, this should be impossible
     return "Tooltip bug";

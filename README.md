@@ -33,3 +33,4 @@ TODO: Document all of these
 - upgrade packages
 - consider renaming "intervention" and "scheme"
 - coverage polygons in InterventionLayer
+- addEmptyScheme needs to blank pipeline

@@ -3,7 +3,7 @@ import {
   getArbitrarySchemeRef,
   gjSchemeCollection,
 } from "$lib/draw/stores";
-import type { FeatureWithAnyProps } from "$lib/draw/types";
+import type { FeatureWithAnyProps, SchemeData } from "$lib/draw/types";
 import type { Feature, LineString, Polygon, Point } from "geojson";
 import { get, writable, type Writable } from "svelte/store";
 import type { Map } from "maplibre-gl";
@@ -18,7 +18,11 @@ export let map: Writable<Map | null> = writable(null);
 
 export let cfg = {
   interventionName: (f: FeatureWithAnyProps) => {
-    return f.properties.name || `untitled ${f.geometry.type}`;
+    return f.properties.name || `Untitled ${f.geometry.type}`;
+  },
+
+  schemeName: (s: SchemeData) => {
+    return `scheme ${s.scheme_reference}`;
   },
 
   newPointFeature: (f: Feature<Point>) => {
@@ -26,8 +30,7 @@ export let cfg = {
       f.id = newFeatureId(gj);
       f.properties ||= {};
       f.properties.scheme_reference = getArbitrarySchemeRef(gj);
-      f.properties.intervention_type = "other";
-      gj.features.push(f);
+      gj.features.push(f as FeatureWithAnyProps);
       return gj;
     });
   },
@@ -37,8 +40,7 @@ export let cfg = {
       f.id = newFeatureId(gj);
       f.properties ||= {};
       f.properties.scheme_reference = getArbitrarySchemeRef(gj);
-      f.properties.intervention_type = "area";
-      gj.features.push(f);
+      gj.features.push(f as FeatureWithAnyProps);
       return gj;
     });
   },
@@ -48,8 +50,7 @@ export let cfg = {
       f.id = newFeatureId(gj);
       f.properties ||= {};
       f.properties.scheme_reference = getArbitrarySchemeRef(gj);
-      f.properties.intervention_type = "route";
-      gj.features.push(f);
+      gj.features.push(f as FeatureWithAnyProps);
       return gj;
     });
   },

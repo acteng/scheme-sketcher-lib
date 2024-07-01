@@ -113,13 +113,7 @@
         piece2.id = newFeatureId(gj);
 
         // Replace the one LineString we snapped to with the two new pieces
-        gj.features.splice(
-          snappedIndex!,
-          1,
-          // @ts-expect-error The more specific types are lost. Trust splitRoute.
-          piece1,
-          piece2,
-        );
+        gj.features.splice(snappedIndex!, 1, piece1, piece2);
 
         return gj;
       });
