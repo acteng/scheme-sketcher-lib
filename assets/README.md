@@ -1,0 +1,2 @@
+- Material Icons courtesy <https://fonts.google.com/icons>
+- [Camera icon](https://icon-icons.com/icon/screenshot-cursor-camera/100181) by Luc Chaissac, CC BY 4.0
