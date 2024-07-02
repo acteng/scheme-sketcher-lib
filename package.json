@@ -24,6 +24,11 @@
       "svelte": "./dist/common/index.js",
       "import": "./dist/common/index.js"
     },
+    "./config": {
+      "types": "./dist/config.d.ts",
+      "svelte": "./dist/config.js",
+      "import": "./dist/config.js"
+    },
     "./draw": {
       "types": "./dist/draw/index.d.ts",
       "svelte": "./dist/draw/index.js",
