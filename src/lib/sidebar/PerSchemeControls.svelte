@@ -135,11 +135,7 @@
 </h3>
 <Checkbox bind:checked={showScheme} on:change={showOrHide}>Show</Checkbox>
 <slot />
-<!--{#if $schema == "pipeline"}
-  <PipelineSchemeForm {scheme_reference} />
-{:else}
-  <GenericSchemeForm {scheme_reference} />
-{/if}-->
+<svelte:component this={cfg.editSchemeForm} {scheme_reference} />
 
 {#if numErrors == 1}
   <ErrorMessage errorMessage="There's a problem with one intervention below" />

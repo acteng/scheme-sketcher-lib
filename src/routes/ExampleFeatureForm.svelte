@@ -5,7 +5,7 @@
 
   export let id: number;
   // TODO Can we make this generic?
-  export let props: any;
+  export let props: { [name: string]: any };
 
   // Hide svelte-check warning
   let _ = id;

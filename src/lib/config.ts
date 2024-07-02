@@ -25,7 +25,7 @@ export const mapStyle: Writable<string> = writable("dataviz");
 
 export let cfg = {
   interventionName: (f: FeatureWithAnyProps) => {
-    return f.properties.name || `Untitled ${f.geometry.type}`;
+    return `some ${f.geometry.type} feature`;
   },
 
   schemeName: (s: SchemeData) => {
@@ -44,6 +44,12 @@ export let cfg = {
     SvelteComponent<{
       id: number;
       props: { [name: string]: any };
+    }>
+  >,
+
+  editSchemeForm: null as null | ComponentType<
+    SvelteComponent<{
+      scheme_reference: string;
     }>
   >,
 

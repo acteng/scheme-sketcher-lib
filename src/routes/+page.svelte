@@ -12,8 +12,10 @@
   import Toolbox from "$lib/draw/Toolbox.svelte";
   import PerModeControls from "$lib/sidebar/PerModeControls.svelte";
   import ExampleFeatureForm from "./ExampleFeatureForm.svelte";
+  import ExampleSchemeForm from "./ExampleSchemeForm.svelte";
 
   cfg.editFeatureForm = ExampleFeatureForm;
+  cfg.editSchemeForm = ExampleSchemeForm;
 
   // Use your own key (for MapTiler or another basemap service)
   let apiKey = "MZEJTanw3WpxRvt7qDfo";
