@@ -39,6 +39,11 @@
       "svelte": "./dist/draw/stores.js",
       "import": "./dist/draw/stores.js"
     },
+    "./draw/types": {
+      "types": "./dist/draw/types.d.ts",
+      "svelte": "./dist/draw/types.js",
+      "import": "./dist/draw/types.js"
+    },
     "./maplibre": {
       "types": "./dist/maplibre/index.d.ts",
       "svelte": "./dist/maplibre/index.js",
