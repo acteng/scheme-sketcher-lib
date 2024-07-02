@@ -3,8 +3,12 @@
   import { TextInput, Radio, Select, TextArea } from "govuk-svelte";
   import { cfg } from "$lib/config";
 
+  export let id: number;
   // TODO Can we make this generic?
   export let props: any;
+
+  // Hide svelte-check warning
+  let _ = id;
 </script>
 
 <TextInput label="Name" bind:value={props.name} />

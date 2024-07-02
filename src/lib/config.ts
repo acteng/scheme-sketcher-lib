@@ -42,6 +42,7 @@ export let cfg = {
 
   editFeatureForm: null as null | ComponentType<
     SvelteComponent<{
+      id: number;
       props: { [name: string]: any };
     }>
   >,

@@ -97,4 +97,8 @@
 
 <ErrorMessage errorMessage={cfg.interventionWarning(feature)} />
 
-<svelte:component this={cfg.editFeatureForm} bind:props={feature.properties} />
+<svelte:component
+  this={cfg.editFeatureForm}
+  {id}
+  bind:props={feature.properties}
+/>
