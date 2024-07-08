@@ -67,5 +67,5 @@ export let cfg = {
 
   // When the StreetView tool is activated, line layers with these IDs will be
   // highlighted. This depends on the basemap.
-  getStreetViewRoadLayerNames: (map: Map) => [],
+  getStreetViewRoadLayerNames: (map: Map) => [] as string[],
 };
