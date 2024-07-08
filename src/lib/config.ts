@@ -68,4 +68,43 @@ export let cfg = {
   // When the StreetView tool is activated, line layers with these IDs will be
   // highlighted. This depends on the basemap.
   getStreetViewRoadLayerNames: (map: Map) => [] as string[],
+
+  // All layer IDs used with layerId must be defined here, with later entries
+  // drawn on top. These entries cover everything used by this library.
+  layerZorder: [
+    // Polygons are bigger than lines, which're bigger than points. When geometry
+    // overlaps, put the smaller thing on top
+    "interventions-coverage-polygons-outlines",
+    "interventions-polygons",
+    "interventions-polygons-outlines",
+    // This is an outline, so draw on top
+    "hover-polygons",
+
+    // The hover effect thickens, so draw beneath
+    "hover-lines",
+    "interventions-lines",
+    "interventions-lines-endpoints",
+
+    "hover-points",
+    "interventions-points",
+
+    "edit-polygon-fill",
+    "edit-polygon-lines",
+    "edit-polygon-vertices",
+
+    "draw-split-route",
+
+    "route-points",
+    "route-lines",
+    "route-polygons",
+
+    // TODO Move this to the sveltekit demo app. It assumes a basemap.
+    "road_label",
+
+    // Draw the inverted boundary fade on top of basemap labels
+    "boundary",
+
+    // TODO This might look nicer lower
+    "georeferenced-image",
+  ],
 };

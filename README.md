@@ -5,7 +5,7 @@ NOTE: This repo isn't ready for use yet. It's currently being refactored from <h
 This is a library for building Svelte web apps to edit GeoJSON files with MapLibre. It includes:
 
 - a toolbox for drawing points, linestrings, and polygons, optionally [snapping to a network](https://github.com/dabreegster/route_snapper/)
-- state management -- GeoJSON is autosaved to local storage, with filesystem download and upload
+- state management -- GeoJSON is autosaved to local storage, with filesystem download and upload. General undo support is planned.
 - layers -- objects can be grouped into distinct layers, moved around, hidden, etc
 
 This library is higher-level than collections of drawing tools, such as [mapbox-gl-draw](https://github.com/mapbox/mapbox-gl-draw) and [terra-draw](https://github.com/JamesLMilner/terra-draw). If you want individual tools, see [route_snapper](https://github.com/dabreegster/route_snapper/) and [maplibre-draw-polygon](https://github.com/dabreegster/maplibre-draw-polygon). If you don't want opinionated state management and layers, then don't use this.
@@ -37,7 +37,6 @@ TODO: Document all of these
 - upgrade packages
 - consider renaming "intervention" and "scheme"
 - coverage polygons in InterventionLayer
-- baselayer switcher at bottom of sidebar
 
 ## Developer guide
 
