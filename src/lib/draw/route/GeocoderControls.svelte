@@ -6,6 +6,7 @@
   import { emptyGeojson } from "$lib/maplibre";
   import { map } from "$lib/config";
   import { geocoderGj } from "./stores";
+  import { cfg } from "$lib/config";
 
   let query = "";
 
@@ -19,7 +20,7 @@
       country: "gb",
       proximity: $map!.getCenter().toArray().join(","),
       fuzzyMatch: "true",
-      key: import.meta.env.VITE_MAPTILER_API_KEY,
+      key: cfg.maptilerApiKey,
     }).toString();
     let url = `https://api.maptiler.com/geocoding/${query}.json?${params}`;
     let resp = await fetch(url);

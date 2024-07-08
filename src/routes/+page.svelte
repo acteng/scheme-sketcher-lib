@@ -14,9 +14,6 @@
   import ExampleFeatureForm from "./ExampleFeatureForm.svelte";
   import ExampleSchemeForm from "./ExampleSchemeForm.svelte";
 
-  cfg.editFeatureForm = ExampleFeatureForm;
-  cfg.editSchemeForm = ExampleSchemeForm;
-
   // Use your own key (for MapTiler or another basemap service)
   let apiKey = "MZEJTanw3WpxRvt7qDfo";
   let routeSnapperUrl = "https://atip.uk/route-snappers/v2.6/LAD_Adur.bin.gz";
@@ -61,6 +58,10 @@
     },
     properties: {},
   };
+
+  cfg.editFeatureForm = ExampleFeatureForm;
+  cfg.editSchemeForm = ExampleSchemeForm;
+  cfg.maptilerApiKey = apiKey;
 </script>
 
 <div style="display: flex; height: 100vh">

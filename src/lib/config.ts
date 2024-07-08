@@ -62,4 +62,7 @@ export let cfg = {
   ) => {
     // Don't do anything by default
   },
+
+  // Required for the geocoder in the route mote to work
+  maptilerApiKey: "",
 };

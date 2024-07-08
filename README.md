@@ -8,6 +8,8 @@ This is a library for building Svelte web apps to edit GeoJSON files with MapLib
 - state management -- GeoJSON is autosaved to local storage, with filesystem download and upload
 - layers -- objects can be grouped into distinct layers, moved around, hidden, etc
 
+This library is higher-level than collections of drawing tools, such as [mapbox-gl-draw](https://github.com/mapbox/mapbox-gl-draw) and [terra-draw](https://github.com/JamesLMilner/terra-draw). If you want individual tools, see [route_snapper](https://github.com/dabreegster/route_snapper/) and [maplibre-draw-polygon](https://github.com/dabreegster/maplibre-draw-polygon). If you don't want opinionated state management and layers, then don't use this.
+
 ## Design choices / non-goals
 
 - There are assumptions about how this library is used -- like there's only one set of controls instantiated per page, so singletons in Svelte stores are fine.
@@ -21,6 +23,7 @@ TODO: Document all of these
 
 - setting things in config
   - map store
+  - ownership of gjSchemeCollection and initialization gotchas
 - govuk
 - static assets
 - z-order
@@ -35,5 +38,4 @@ TODO: Document all of these
 - consider renaming "intervention" and "scheme"
 - coverage polygons in InterventionLayer
 - can we totally remove mapStyle from this library and let streetview tool use a config hook instead?
-- GeocoderControls assumes maptiler api key
 - baselayer switcher at bottom of sidebar

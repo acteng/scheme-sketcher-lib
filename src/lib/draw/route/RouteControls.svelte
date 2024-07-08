@@ -3,6 +3,7 @@
   import { Checkbox, CheckboxGroup, SecondaryButton } from "govuk-svelte";
   import GeocoderControls from "./GeocoderControls.svelte";
   import { snapMode, undoLength } from "./stores";
+  import { cfg } from "$lib/config";
 
   // Start with this enabled or disabled, based on whether we're drawing a new
   // route or editing an existing.
@@ -93,4 +94,6 @@
   </Checkbox>
 </CheckboxGroup>
 
-<GeocoderControls />
+{#if cfg.maptilerApiKey}
+  <GeocoderControls />
+{/if}
