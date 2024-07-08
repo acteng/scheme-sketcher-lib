@@ -64,6 +64,42 @@
   cfg.maptilerApiKey = apiKey;
   // Just one from the dataviz basemap, as an example
   cfg.getStreetViewRoadLayerNames = (map) => ["Road network"];
+  cfg.layerZorder = [
+    // Polygons are bigger than lines, which're bigger than points. When geometry
+    // overlaps, put the smaller thing on top
+    "interventions-coverage-polygons-outlines",
+    "interventions-polygons",
+    "interventions-polygons-outlines",
+    // This is an outline, so draw on top
+    "hover-polygons",
+
+    // The hover effect thickens, so draw beneath
+    "hover-lines",
+    "interventions-lines",
+    "interventions-lines-endpoints",
+
+    "hover-points",
+    "interventions-points",
+
+    "edit-polygon-fill",
+    "edit-polygon-lines",
+    "edit-polygon-vertices",
+
+    "draw-split-route",
+
+    "route-points",
+    "route-lines",
+    "route-polygons",
+
+    // From the dataviz basemap
+    "road_label",
+
+    // Draw the inverted boundary fade on top of basemap labels
+    "boundary",
+
+    // TODO This might look nicer lower
+    "georeferenced-image",
+  ];
 </script>
 
 <div style="display: flex; height: 100vh">
