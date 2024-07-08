@@ -34,7 +34,6 @@ TODO: Document all of these
 - upgrade packages
 - consider renaming "intervention" and "scheme"
 - coverage polygons in InterventionLayer
-- addEmptyScheme needs to blank pipeline
 - can we totally remove mapStyle from this library and let streetview tool use a config hook instead?
 - GeocoderControls assumes maptiler api key
 - baselayer switcher at bottom of sidebar

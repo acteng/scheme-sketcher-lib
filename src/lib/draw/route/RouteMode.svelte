@@ -1,10 +1,17 @@
 <script lang="ts">
   import type { Feature, LineString, Polygon } from "geojson";
-  import { mode, routeTool } from "$lib/draw/stores";
+  import {
+    mode,
+    routeTool,
+    newFeatureId,
+    getArbitrarySchemeRef,
+    gjSchemeCollection,
+  } from "$lib/draw/stores";
   import { ButtonGroup, DefaultButton, SecondaryButton } from "govuk-svelte";
   import { onDestroy, onMount } from "svelte";
   import RouteControls from "./RouteControls.svelte";
   import { cfg } from "$lib/config";
+  import type { FeatureWithID } from "$lib/draw/types";
 
   onMount(() => {
     $routeTool!.startRoute();
@@ -16,10 +23,18 @@
     $routeTool!.clearEventListeners();
   });
 
-  function onSuccess(feature: Feature<LineString | Polygon>) {
-    // We did startRoute, so we know it's a LineString
-    cfg.newLineStringFeature(feature as Feature<LineString>);
-    mode.set({ mode: "edit-form", id: feature.id as number });
+  function onSuccess(f: Feature<LineString | Polygon>) {
+    gjSchemeCollection.update((gj) => {
+      f.id = newFeatureId(gj);
+      f.properties ||= {};
+      f.properties.scheme_reference = getArbitrarySchemeRef(gj);
+      // @ts-expect-error We did startRoute, so we know it's a LineString
+      cfg.newPolygonFeature(f as Feature<LineString>);
+      gj.features.push(f as FeatureWithID);
+      return gj;
+    });
+
+    mode.set({ mode: "edit-form", id: f.id as number });
   }
 
   function onFailure() {

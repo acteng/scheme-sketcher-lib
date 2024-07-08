@@ -1,4 +1,4 @@
-import { emptyCollection } from "./schemes";
+import { cfg } from "$lib/config";
 import { writable, type Writable } from "svelte/store";
 import type { Mode, SchemeCollection } from "./types";
 import { PointTool } from "./point/point_tool";
@@ -6,6 +6,8 @@ import { PolygonTool } from "maplibre-draw-polygon";
 import { RouteTool } from "route-snapper-ts";
 import type { Position } from "geojson";
 import { isStreetViewImagery, type UserSettings } from "./types";
+import { v4 as uuidv4 } from "uuid";
+import { randomSchemeColor } from "./colors";
 
 // TODO Should we instead store a map from ID to feature?
 export const gjSchemeCollection: Writable<SchemeCollection> =
@@ -102,4 +104,24 @@ function loadUserSettings(): UserSettings {
   }
   // The cast is necessary, because of streetViewImagery looking like just a string
   return settings as UserSettings;
+}
+
+export function emptyCollection(): SchemeCollection {
+  let gj = {
+    type: "FeatureCollection" as const,
+    features: [],
+    schemes: {},
+  };
+  addEmptyScheme(gj);
+  return gj;
+}
+
+export function addEmptyScheme(gj: SchemeCollection) {
+  let scheme_reference = uuidv4();
+  let scheme = {
+    scheme_reference,
+    color: randomSchemeColor(),
+  };
+  cfg.initializeEmptyScheme(scheme);
+  gj.schemes[scheme_reference] = scheme;
 }

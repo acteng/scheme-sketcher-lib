@@ -1,10 +1,17 @@
 <script lang="ts">
   import type { Feature, Polygon } from "geojson";
-  import { mode, polygonTool } from "$lib/draw/stores";
+  import {
+    mode,
+    polygonTool,
+    newFeatureId,
+    getArbitrarySchemeRef,
+    gjSchemeCollection,
+  } from "$lib/draw/stores";
   import { ButtonGroup, DefaultButton, SecondaryButton } from "govuk-svelte";
   import { onDestroy, onMount } from "svelte";
   import PolygonControls from "./PolygonControls.svelte";
   import { cfg } from "$lib/config";
+  import type { FeatureWithID } from "$lib/draw/types";
 
   onMount(() => {
     $polygonTool!.startNew();
@@ -16,9 +23,17 @@
     $polygonTool!.clearEventListeners();
   });
 
-  function onSuccess(feature: Feature<Polygon>) {
-    cfg.newPolygonFeature(feature);
-    mode.set({ mode: "edit-form", id: feature.id as number });
+  function onSuccess(f: Feature<Polygon>) {
+    gjSchemeCollection.update((gj) => {
+      f.id = newFeatureId(gj);
+      f.properties ||= {};
+      f.properties.scheme_reference = getArbitrarySchemeRef(gj);
+      cfg.newPolygonFeature(f);
+      gj.features.push(f as FeatureWithID);
+      return gj;
+    });
+
+    mode.set({ mode: "edit-form", id: f.id as number });
   }
 
   function onFailure() {

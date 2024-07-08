@@ -1,8 +1,3 @@
-import {
-  newFeatureId,
-  getArbitrarySchemeRef,
-  gjSchemeCollection,
-} from "$lib/draw/stores";
 import type {
   FeatureWithAnyProps,
   FeatureWithID,
@@ -36,6 +31,8 @@ export let cfg = {
     return json as SchemeCollection;
   },
 
+  initializeEmptyScheme: (scheme: SchemeData) => {},
+
   interventionWarning: (feature: FeatureWithAnyProps) => {
     return null;
   },
@@ -53,35 +50,11 @@ export let cfg = {
     }>
   >,
 
-  newPointFeature: (f: Feature<Point>) => {
-    gjSchemeCollection.update((gj) => {
-      f.id = newFeatureId(gj);
-      f.properties ||= {};
-      f.properties.scheme_reference = getArbitrarySchemeRef(gj);
-      gj.features.push(f as FeatureWithID);
-      return gj;
-    });
-  },
-
-  newPolygonFeature: (f: Feature<Polygon>) => {
-    gjSchemeCollection.update((gj) => {
-      f.id = newFeatureId(gj);
-      f.properties ||= {};
-      f.properties.scheme_reference = getArbitrarySchemeRef(gj);
-      gj.features.push(f as FeatureWithID);
-      return gj;
-    });
-  },
-
-  newLineStringFeature: (f: Feature<LineString>) => {
-    gjSchemeCollection.update((gj) => {
-      f.id = newFeatureId(gj);
-      f.properties ||= {};
-      f.properties.scheme_reference = getArbitrarySchemeRef(gj);
-      gj.features.push(f as FeatureWithID);
-      return gj;
-    });
-  },
+  // Should assign any necessary properties. Runs inside a gjSchemeCollection
+  // update; the logic shouldn't look at anything in there.
+  newPointFeature: (f: Feature<Point>) => {},
+  newPolygonFeature: (f: Feature<Polygon>) => {},
+  newLineStringFeature: (f: Feature<LineString>) => {},
 
   updateFeature: (
     destination: FeatureWithAnyProps,

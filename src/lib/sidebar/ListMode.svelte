@@ -1,9 +1,8 @@
 <script lang="ts">
-  import { gjSchemeCollection } from "$lib/draw/stores";
+  import { gjSchemeCollection, addEmptyScheme } from "$lib/draw/stores";
   import { ErrorMessage, FileInput, SecondaryButton } from "govuk-svelte";
   import PerSchemeControls from "./PerSchemeControls.svelte";
   import { cfg } from "$lib/config";
-  import { addEmptyScheme } from "$lib/draw/schemes";
 
   function newBlankScheme() {
     addEmptyScheme($gjSchemeCollection);

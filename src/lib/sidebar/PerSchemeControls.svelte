@@ -5,6 +5,7 @@
     hideSchemes,
     mode,
     sidebarHover,
+    emptyCollection,
   } from "$lib/draw/stores";
   import {
     ButtonGroup,
@@ -18,7 +19,6 @@
   import { map, cfg } from "$lib/config";
   import { onDestroy } from "svelte";
   import deleteIcon from "$lib/assets/delete.svg?url";
-  import { emptyCollection } from "$lib/draw/schemes";
 
   export let scheme_reference: string;
 
