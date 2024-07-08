@@ -62,6 +62,8 @@
   cfg.editFeatureForm = ExampleFeatureForm;
   cfg.editSchemeForm = ExampleSchemeForm;
   cfg.maptilerApiKey = apiKey;
+  // Just one from the dataviz basemap, as an example
+  cfg.getStreetViewRoadLayerNames = (map) => ["Road network"];
 </script>
 
 <div style="display: flex; height: 100vh">

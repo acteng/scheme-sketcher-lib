@@ -37,5 +37,8 @@ TODO: Document all of these
 - upgrade packages
 - consider renaming "intervention" and "scheme"
 - coverage polygons in InterventionLayer
-- can we totally remove mapStyle from this library and let streetview tool use a config hook instead?
 - baselayer switcher at bottom of sidebar
+
+## Developer guide
+
+This is a fairly standard Sveltekit project. `src/lib` is the library meant for use by others, and `src/routes` is a demo site using it. `npm i`, then `npm run dev` to develop locally.

@@ -1,4 +1,3 @@
-export { getRoadLayerNames } from "./highlight_roads";
 export { layerId } from "./zorder";
 
 // Helpers for https://maplibre.org/maplibre-gl-js-docs/style-spec/

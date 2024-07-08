@@ -10,7 +10,6 @@ import { SvelteComponent, type ComponentType } from "svelte";
 import type { Map } from "maplibre-gl";
 
 export let map: Writable<Map | null> = writable(null);
-export const mapStyle: Writable<string> = writable("dataviz");
 
 // The draw code should be agnostic to the feature properties that differ by
 // schema. Start centralizing the logic here, so it's easy for other users to
@@ -65,4 +64,8 @@ export let cfg = {
 
   // Required for the geocoder in the route mote to work
   maptilerApiKey: "",
+
+  // When the StreetView tool is activated, line layers with these IDs will be
+  // highlighted. This depends on the basemap.
+  getStreetViewRoadLayerNames: (map: Map) => [],
 };
