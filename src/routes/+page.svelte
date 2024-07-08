@@ -80,7 +80,6 @@
       }}
       bind:map={$map}
     >
-      <!--<Geocoder position="top-right" />-->
       <BoundaryLayer {boundaryGeojson} fitBoundsAtStart />
       <InterventionLayer />
       <ImageLayer />
