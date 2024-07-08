@@ -23,14 +23,14 @@
     $routeTool!.clearEventListeners();
   });
 
-  function onSuccess(f: Feature<LineString | Polygon>) {
+  function onSuccess(feature: Feature<LineString | Polygon>) {
+    let f = feature as FeatureWithID<LineString>;
     gjSchemeCollection.update((gj) => {
       f.id = newFeatureId(gj);
       f.properties ||= {};
       f.properties.scheme_reference = getArbitrarySchemeRef(gj);
-      // @ts-expect-error We did startRoute, so we know it's a LineString
-      cfg.newPolygonFeature(f as Feature<LineString>);
-      gj.features.push(f as FeatureWithID);
+      cfg.newLineStringFeature(f);
+      gj.features.push(f);
       return gj;
     });
 

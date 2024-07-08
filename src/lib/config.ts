@@ -52,9 +52,9 @@ export let cfg = {
 
   // Should assign any necessary properties. Runs inside a gjSchemeCollection
   // update; the logic shouldn't look at anything in there.
-  newPointFeature: (f: Feature<Point>) => {},
-  newPolygonFeature: (f: Feature<Polygon>) => {},
-  newLineStringFeature: (f: Feature<LineString>) => {},
+  newPointFeature: (f: FeatureWithID<Point>) => {},
+  newPolygonFeature: (f: FeatureWithID<Polygon>) => {},
+  newLineStringFeature: (f: FeatureWithID<LineString>) => {},
 
   updateFeature: (
     destination: FeatureWithAnyProps,

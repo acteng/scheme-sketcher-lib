@@ -23,13 +23,14 @@
     $pointTool!.clearEventListeners();
   });
 
-  function onSuccess(f: Feature<Point>) {
+  function onSuccess(feature: Feature<Point>) {
+    let f = feature as FeatureWithID<Point>;
     gjSchemeCollection.update((gj) => {
       f.id = newFeatureId(gj);
       f.properties ||= {};
       f.properties.scheme_reference = getArbitrarySchemeRef(gj);
       cfg.newPointFeature(f);
-      gj.features.push(f as FeatureWithID);
+      gj.features.push(f);
       return gj;
     });
 

@@ -23,13 +23,14 @@
     $polygonTool!.clearEventListeners();
   });
 
-  function onSuccess(f: Feature<Polygon>) {
+  function onSuccess(feature: Feature<Polygon>) {
+    let f = feature as FeatureWithID<Polygon>;
     gjSchemeCollection.update((gj) => {
       f.id = newFeatureId(gj);
       f.properties ||= {};
       f.properties.scheme_reference = getArbitrarySchemeRef(gj);
       cfg.newPolygonFeature(f);
-      gj.features.push(f as FeatureWithID);
+      gj.features.push(f);
       return gj;
     });
 
