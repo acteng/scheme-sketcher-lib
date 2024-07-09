@@ -1,5 +1,7 @@
 <script lang="ts">
   import { mode, pointTool, polygonTool, routeTool } from "$lib/draw/stores";
+  import type { SchemeCollection } from "$lib/draw/types";
+  import type { Writable } from "svelte/store";
   import { DefaultButton } from "govuk-svelte";
   import { map } from "$lib/config";
   import { onDestroy } from "svelte";
@@ -16,6 +18,7 @@
   import EditForm from "./EditForm.svelte";
   import ListMode from "./ListMode.svelte";
 
+  export let gjSchemeCollection: Writable<SchemeCollection>;
   export let routeSnapperUrl: string;
 
   $: if ($map && !$pointTool) {
@@ -42,23 +45,23 @@ toolbox, but that gets created and destroyed frequently. -->
 </div>
 
 {#if $mode.mode == "list"}
-  <ListMode />
+  <ListMode {gjSchemeCollection} />
 {:else if $mode.mode == "edit-form"}
-  <EditForm id={$mode.id} />
+  <EditForm {gjSchemeCollection} id={$mode.id} />
 {:else if $mode.mode == "edit-geometry"}
-  <EditGeometryMode id={$mode.id} />
+  <EditGeometryMode {gjSchemeCollection} id={$mode.id} />
 {:else if $mode.mode == "new-point"}
   <h2>New point</h2>
-  <PointMode />
+  <PointMode {gjSchemeCollection} />
 {:else if $mode.mode == "new-route"}
   <h2>New route</h2>
-  <RouteMode />
+  <RouteMode {gjSchemeCollection} />
 {:else if $mode.mode == "new-freehand-polygon"}
   <h2>New polygon (freehand)</h2>
-  <PolygonMode />
+  <PolygonMode {gjSchemeCollection} />
 {:else if $mode.mode == "new-snapped-polygon"}
   <h2>New polygon (snapped)</h2>
-  <SnapPolygonMode />
+  <SnapPolygonMode {gjSchemeCollection} />
 {:else if $mode.mode == "split-route"}
   <h2>Split route</h2>
   <DefaultButton on:click={() => mode.set({ mode: "list" })}>

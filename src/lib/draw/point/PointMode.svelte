@@ -3,7 +3,6 @@
   import {
     mode,
     pointTool,
-    gjSchemeCollection,
     newFeatureId,
     getArbitrarySchemeRef,
   } from "$lib/draw/stores";
@@ -12,6 +11,10 @@
   import PointControls from "./PointControls.svelte";
   import { cfg } from "$lib/config";
   import type { FeatureWithID } from "$lib/draw/types";
+  import type { SchemeCollection } from "$lib/draw/types";
+  import type { Writable } from "svelte/store";
+
+  export let gjSchemeCollection: Writable<SchemeCollection>;
 
   onMount(() => {
     $pointTool!.start();

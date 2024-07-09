@@ -1,8 +1,10 @@
 <script lang="ts">
   import { Modal } from "$lib/common";
-  import { gjSchemeCollection } from "$lib/draw/stores";
   import { DefaultButton, SecondaryButton, TextInput } from "govuk-svelte";
+  import type { SchemeCollection } from "$lib/draw/types";
+  import type { Writable } from "svelte/store";
 
+  export let gjSchemeCollection: Writable<SchemeCollection>;
   export let scheme_reference: string;
 
   let showModal = false;

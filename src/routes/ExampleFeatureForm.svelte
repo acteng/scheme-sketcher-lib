@@ -1,8 +1,10 @@
 <script lang="ts">
-  import { gjSchemeCollection } from "$lib/draw/stores";
   import { TextInput, Radio, Select, TextArea } from "govuk-svelte";
   import { cfg } from "$lib/config";
+  import type { SchemeCollection } from "$lib/draw/types";
+  import type { Writable } from "svelte/store";
 
+  export let gjSchemeCollection: Writable<SchemeCollection>;
   export let id: number;
   // TODO Can we make this generic?
   export let props: { [name: string]: any };

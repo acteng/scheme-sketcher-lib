@@ -1,13 +1,7 @@
 <script lang="ts">
   import type { Feature, LineString, Point, Polygon } from "geojson";
-  import {
-    gjSchemeCollection,
-    mode,
-    pointTool,
-    polygonTool,
-    routeTool,
-  } from "$lib/draw/stores";
-  import type { FeatureWithAnyProps } from "$lib/draw/types";
+  import { mode, pointTool, polygonTool, routeTool } from "$lib/draw/stores";
+  import type { FeatureWithAnyProps, SchemeCollection } from "$lib/draw/types";
   import { ButtonGroup, DefaultButton, SecondaryButton } from "govuk-svelte";
   import { cfg } from "$lib/config";
   import { onDestroy, onMount } from "svelte";
@@ -16,7 +10,9 @@
   import RouteControls from "./route/RouteControls.svelte";
   import SnapPolygonControls from "./snap_polygon/SnapPolygonControls.svelte";
   import type { AreaProps, RouteProps } from "route-snapper-ts";
+  import type { Writable } from "svelte/store";
 
+  export let gjSchemeCollection: Writable<SchemeCollection>;
   export let id: number;
 
   let name = "";

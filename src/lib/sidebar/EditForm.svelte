@@ -1,9 +1,5 @@
 <script lang="ts">
-  import {
-    deleteIntervention,
-    gjSchemeCollection,
-    mode,
-  } from "$lib/draw/stores";
+  import { deleteIntervention, mode } from "$lib/draw/stores";
   import {
     ButtonGroup,
     DefaultButton,
@@ -14,8 +10,10 @@
   import type { MapMouseEvent } from "maplibre-gl";
   import { map, cfg } from "$lib/config";
   import { onDestroy, onMount } from "svelte";
-  import type { FeatureWithAnyProps } from "$lib/draw/types";
+  import type { FeatureWithAnyProps, SchemeCollection } from "$lib/draw/types";
+  import type { Writable } from "svelte/store";
 
+  export let gjSchemeCollection: Writable<SchemeCollection>;
   export let id: number;
 
   let feature = $gjSchemeCollection.features.find((f) => f.id == id)!;
@@ -65,7 +63,7 @@
       }
       e.stopPropagation();
 
-      deleteIntervention(id);
+      deleteIntervention(gjSchemeCollection, id);
     }
 
     if (e.key == "e") {
@@ -92,13 +90,16 @@
   <SecondaryButton on:click={() => mode.set({ mode: "edit-geometry", id })}>
     Edit geometry
   </SecondaryButton>
-  <WarningButton on:click={() => deleteIntervention(id)}>Delete</WarningButton>
+  <WarningButton on:click={() => deleteIntervention(gjSchemeCollection, id)}>
+    Delete
+  </WarningButton>
 </ButtonGroup>
 
 <ErrorMessage errorMessage={cfg.interventionWarning(feature)} />
 
 <svelte:component
   this={cfg.editFeatureForm}
+  {gjSchemeCollection}
   {id}
   bind:props={feature.properties}
 />

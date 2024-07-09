@@ -9,10 +9,6 @@ import { isStreetViewImagery, type UserSettings } from "./types";
 import { v4 as uuidv4 } from "uuid";
 import { randomSchemeColor } from "./colors";
 
-// TODO Should we instead store a map from ID to feature?
-export const gjSchemeCollection: Writable<SchemeCollection> =
-  writable(emptyCollection());
-
 export const pointTool: Writable<PointTool | null> = writable(null);
 export const polygonTool: Writable<PolygonTool | null> = writable(null);
 // A global singleton, with the route tool loaded for the current map. It's
@@ -54,7 +50,10 @@ export function newFeatureId(gj: SchemeCollection): number {
   return id;
 }
 
-export function deleteIntervention(id: number) {
+export function deleteIntervention(
+  gjSchemeCollection: Writable<SchemeCollection>,
+  id: number,
+) {
   console.log(`Deleting intervention ${id}`);
   gjSchemeCollection.update((gj) => {
     gj.features = gj.features.filter((f) => f.id != id);

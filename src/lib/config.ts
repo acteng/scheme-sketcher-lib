@@ -38,6 +38,7 @@ export let cfg = {
 
   editFeatureForm: null as null | ComponentType<
     SvelteComponent<{
+      gjSchemeCollection: Writable<SchemeCollection>;
       id: number;
       props: { [name: string]: any };
     }>
@@ -45,6 +46,7 @@ export let cfg = {
 
   editSchemeForm: null as null | ComponentType<
     SvelteComponent<{
+      gjSchemeCollection: Writable<SchemeCollection>;
       scheme_reference: string;
     }>
   >,

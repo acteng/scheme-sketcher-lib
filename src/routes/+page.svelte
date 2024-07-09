@@ -8,11 +8,12 @@
   import RouteSnapperLayer from "$lib/draw/route/RouteSnapperLayer.svelte";
   import SplitRouteMode from "$lib/draw/route/SplitRouteMode.svelte";
   import BoundaryLayer from "$lib/draw/BoundaryLayer.svelte";
-  import { mode } from "$lib/draw/stores";
+  import { mode, emptyCollection } from "$lib/draw/stores";
   import Toolbox from "$lib/draw/Toolbox.svelte";
   import PerModeControls from "$lib/sidebar/PerModeControls.svelte";
   import ExampleFeatureForm from "./ExampleFeatureForm.svelte";
   import ExampleSchemeForm from "./ExampleSchemeForm.svelte";
+  import { writable } from "svelte/store";
 
   // Use your own key (for MapTiler or another basemap service)
   let apiKey = "MZEJTanw3WpxRvt7qDfo";
@@ -100,11 +101,13 @@
     // TODO This might look nicer lower
     "georeferenced-image",
   ];
+
+  let gjSchemeCollection = writable(emptyCollection());
 </script>
 
 <div style="display: flex; height: 100vh">
   <div class="sidebar">
-    <PerModeControls {routeSnapperUrl} />
+    <PerModeControls {gjSchemeCollection} {routeSnapperUrl} />
   </div>
   <div class="map">
     <MapLibre
@@ -117,12 +120,12 @@
       bind:map={$map}
     >
       <BoundaryLayer {boundaryGeojson} fitBoundsAtStart />
-      <InterventionLayer />
+      <InterventionLayer {gjSchemeCollection} />
       <ImageLayer />
       {#if $mode.mode == "list"}
-        <Toolbox />
+        <Toolbox {gjSchemeCollection} />
       {:else if $mode.mode == "split-route"}
-        <SplitRouteMode />
+        <SplitRouteMode {gjSchemeCollection} />
       {/if}
       <RouteSnapperLayer />
       <PolygonToolLayer />

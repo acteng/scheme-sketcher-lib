@@ -1,7 +1,6 @@
 <script lang="ts">
   import { Modal, WarningIcon } from "$lib/common";
   import {
-    gjSchemeCollection,
     hideSchemes,
     mode,
     sidebarHover,
@@ -19,7 +18,10 @@
   import { map, cfg } from "$lib/config";
   import { onDestroy } from "svelte";
   import deleteIcon from "$lib/assets/delete.svg?url";
+  import type { SchemeCollection } from "$lib/draw/types";
+  import type { Writable } from "svelte/store";
 
+  export let gjSchemeCollection: Writable<SchemeCollection>;
   export let scheme_reference: string;
 
   let showDeleteModal = false;
@@ -135,7 +137,11 @@
 </h3>
 <Checkbox bind:checked={showScheme} on:change={showOrHide}>Show</Checkbox>
 <slot />
-<svelte:component this={cfg.editSchemeForm} {scheme_reference} />
+<svelte:component
+  this={cfg.editSchemeForm}
+  {gjSchemeCollection}
+  {scheme_reference}
+/>
 
 {#if numErrors == 1}
   <ErrorMessage errorMessage="There's a problem with one intervention below" />

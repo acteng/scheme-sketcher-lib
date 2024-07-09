@@ -1,6 +1,6 @@
 <script lang="ts">
   import { circleRadius, colors, lineWidth } from "$lib/draw/colors";
-  import { gjSchemeCollection, sidebarHover } from "$lib/draw/stores";
+  import { sidebarHover } from "$lib/draw/stores";
   import {
     emptyGeojson,
     isLine,
@@ -9,6 +9,10 @@
     layerId,
   } from "$lib/maplibre";
   import { CircleLayer, GeoJSON, LineLayer } from "svelte-maplibre";
+  import type { SchemeCollection } from "$lib/draw/types";
+  import type { Writable } from "svelte/store";
+
+  export let gjSchemeCollection: Writable<SchemeCollection>;
 
   // Use a layer that only ever has zero or one features for hovering.
   $: gj =

@@ -6,19 +6,17 @@
   import { splitRoute, type RouteProps } from "route-snapper-ts";
   import nearestPointOnLine from "@turf/nearest-point-on-line";
   import type { Feature, LineString, Point, Position } from "geojson";
-  import {
-    gjSchemeCollection,
-    mode,
-    newFeatureId,
-    setPrecision,
-  } from "$lib/draw/stores";
+  import { mode, newFeatureId, setPrecision } from "$lib/draw/stores";
   import { emptyGeojson, layerId } from "$lib/maplibre";
   import type { MapMouseEvent } from "maplibre-gl";
   import { map } from "$lib/config";
   import { onDestroy, onMount } from "svelte";
   import { CircleLayer, GeoJSON, MapEvents } from "svelte-maplibre";
   import splitIcon from "$lib/assets/split_route.svg";
-  import type { FeatureWithID } from "$lib/draw/types";
+  import type { FeatureWithID, SchemeCollection } from "$lib/draw/types";
+  import type { Writable } from "svelte/store";
+
+  export let gjSchemeCollection: Writable<SchemeCollection>;
 
   const circleRadiusPixels = 10;
   const snapDistancePixels = 30;
