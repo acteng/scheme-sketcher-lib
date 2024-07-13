@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="ts" generics="F, S">
   import { mode, pointTool, polygonTool, routeTool } from "$lib/draw/stores";
   import { SecondaryButton } from "govuk-svelte";
   import imageIcon from "$lib/assets/image.svg";
@@ -12,7 +12,7 @@
   import type { SchemeCollection } from "$lib/draw/types";
   import type { Writable } from "svelte/store";
 
-  export let gjSchemeCollection: Writable<SchemeCollection>;
+  export let gjSchemeCollection: Writable<SchemeCollection<F, S>>;
 </script>
 
 <HoverLayer {gjSchemeCollection} />

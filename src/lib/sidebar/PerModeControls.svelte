@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="ts" generics="F, S">
   import { mode, pointTool, polygonTool, routeTool } from "$lib/draw/stores";
   import type { SchemeCollection } from "$lib/draw/types";
   import type { Writable } from "svelte/store";
@@ -18,7 +18,7 @@
   import EditForm from "./EditForm.svelte";
   import ListMode from "./ListMode.svelte";
 
-  export let gjSchemeCollection: Writable<SchemeCollection>;
+  export let gjSchemeCollection: Writable<SchemeCollection<F, S>>;
   export let routeSnapperUrl: string;
 
   $: if ($map && !$pointTool) {

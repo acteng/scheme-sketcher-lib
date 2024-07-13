@@ -3,8 +3,11 @@
   import { cfg } from "$lib/config";
   import type { SchemeCollection } from "$lib/draw/types";
   import type { Writable } from "svelte/store";
+  import type { ExampleFeature, ExampleScheme } from "./types";
 
-  export let gjSchemeCollection: Writable<SchemeCollection>;
+  export let gjSchemeCollection: Writable<
+    SchemeCollection<ExampleFeature, ExampleScheme>
+  >;
   export let id: number;
   // TODO Can we make this generic?
   export let props: { [name: string]: any };

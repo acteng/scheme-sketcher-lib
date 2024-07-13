@@ -37,7 +37,7 @@ export const mode: Writable<Mode> = writable({ mode: "list" });
 // NOTE! If you call this twice in a row in a `gjScheme.update` transaction
 // without adding one of the new features, then this'll return the same ID
 // twice!
-export function newFeatureId(gj: SchemeCollection): number {
+export function newFeatureId<F, S>(gj: SchemeCollection<F, S>): number {
   let ids = new Set();
   for (let f of gj.features) {
     ids.add(f.id);
@@ -50,8 +50,8 @@ export function newFeatureId(gj: SchemeCollection): number {
   return id;
 }
 
-export function deleteIntervention(
-  gjSchemeCollection: Writable<SchemeCollection>,
+export function deleteIntervention<F, S>(
+  gjSchemeCollection: Writable<SchemeCollection<F, S>>,
   id: number,
 ) {
   console.log(`Deleting intervention ${id}`);
@@ -65,8 +65,8 @@ export function deleteIntervention(
 
 // When creating a new feature, arbitrarily assign it to the first scheme. The
 // user can change it later.
-export function getArbitrarySchemeRef(
-  schemeCollection: SchemeCollection,
+export function getArbitrarySchemeRef<F, S>(
+  schemeCollection: SchemeCollection<F, S>,
 ): string {
   return Object.values(schemeCollection.schemes)[0].scheme_reference;
 }
@@ -105,7 +105,7 @@ function loadUserSettings(): UserSettings {
   return settings as UserSettings;
 }
 
-export function emptyCollection(): SchemeCollection {
+export function emptyCollection<F, S>(): SchemeCollection<F, S> {
   let gj = {
     type: "FeatureCollection" as const,
     features: [],
@@ -115,7 +115,7 @@ export function emptyCollection(): SchemeCollection {
   return gj;
 }
 
-export function addEmptyScheme(gj: SchemeCollection) {
+export function addEmptyScheme<F, S>(gj: SchemeCollection<F, S>) {
   let scheme_reference = uuidv4();
   let scheme = {
     scheme_reference,

@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="ts" generics="F, S">
   import { Modal, WarningIcon } from "$lib/common";
   import {
     hideSchemes,
@@ -21,7 +21,7 @@
   import type { SchemeCollection } from "$lib/draw/types";
   import type { Writable } from "svelte/store";
 
-  export let gjSchemeCollection: Writable<SchemeCollection>;
+  export let gjSchemeCollection: Writable<SchemeCollection<F, S>>;
   export let scheme_reference: string;
 
   let showDeleteModal = false;

@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="ts" generics="F, S">
   import type { Feature, LineString, Polygon } from "geojson";
   import {
     mode,
@@ -14,7 +14,7 @@
   import type { SchemeCollection } from "$lib/draw/types";
   import type { Writable } from "svelte/store";
 
-  export let gjSchemeCollection: Writable<SchemeCollection>;
+  export let gjSchemeCollection: Writable<SchemeCollection<F, S>>;
 
   onMount(() => {
     $routeTool!.startArea();

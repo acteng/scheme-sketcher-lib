@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="ts" generics="F, S">
   import { deleteIntervention, mode } from "$lib/draw/stores";
   import {
     ButtonGroup,
@@ -13,7 +13,7 @@
   import type { FeatureWithAnyProps, SchemeCollection } from "$lib/draw/types";
   import type { Writable } from "svelte/store";
 
-  export let gjSchemeCollection: Writable<SchemeCollection>;
+  export let gjSchemeCollection: Writable<SchemeCollection<F, S>>;
   export let id: number;
 
   let feature = $gjSchemeCollection.features.find((f) => f.id == id)!;

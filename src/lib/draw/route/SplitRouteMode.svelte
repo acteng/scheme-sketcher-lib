@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="ts" generics="F, S">
   // Note this component has to embedded underneath <Map> for the <GeoJSON>
   // component to work. This is an exception to how LeftSidebar manages most
   // modes.
@@ -16,7 +16,7 @@
   import type { FeatureWithID, SchemeCollection } from "$lib/draw/types";
   import type { Writable } from "svelte/store";
 
-  export let gjSchemeCollection: Writable<SchemeCollection>;
+  export let gjSchemeCollection: Writable<SchemeCollection<F, S>>;
 
   const circleRadiusPixels = 10;
   const snapDistancePixels = 30;

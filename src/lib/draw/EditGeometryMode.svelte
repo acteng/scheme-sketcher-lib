@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="ts" generics="F, S">
   import type { Feature, LineString, Point, Polygon } from "geojson";
   import { mode, pointTool, polygonTool, routeTool } from "$lib/draw/stores";
   import type { FeatureWithAnyProps, SchemeCollection } from "$lib/draw/types";
@@ -12,7 +12,7 @@
   import type { AreaProps, RouteProps } from "route-snapper-ts";
   import type { Writable } from "svelte/store";
 
-  export let gjSchemeCollection: Writable<SchemeCollection>;
+  export let gjSchemeCollection: Writable<SchemeCollection<F, S>>;
   export let id: number;
 
   let name = "";

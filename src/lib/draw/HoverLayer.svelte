@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="ts" generics="F, S">
   import { circleRadius, colors, lineWidth } from "$lib/draw/colors";
   import { sidebarHover } from "$lib/draw/stores";
   import {
@@ -12,7 +12,7 @@
   import type { SchemeCollection } from "$lib/draw/types";
   import type { Writable } from "svelte/store";
 
-  export let gjSchemeCollection: Writable<SchemeCollection>;
+  export let gjSchemeCollection: Writable<SchemeCollection<F, S>>;
 
   // Use a layer that only ever has zero or one features for hovering.
   $: gj =

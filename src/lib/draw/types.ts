@@ -29,12 +29,12 @@ export type FeatureWithID<G extends Geometry = Geometry> = Feature<G> & {
   id: number;
 };
 
-export interface SchemeCollection {
+export interface SchemeCollection<F, S> {
   type: "FeatureCollection";
   // TODO Specifying scheme_reference would be nice
   features: FeatureWithID[];
   // Keyed by scheme_reference, which doesn't change over the lifetime of the sketch tool
-  schemes: { [reference: string]: SchemeData };
+  schemes: { [reference: string]: SchemeData & S };
 }
 
 export interface SchemeData {

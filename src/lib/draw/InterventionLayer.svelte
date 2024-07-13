@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="ts" generics="F, S">
   import { circleRadius, colors, lineWidth } from "$lib/draw/colors";
   import type { Feature } from "geojson";
   import { hideSchemes, mode } from "$lib/draw/stores";
@@ -26,7 +26,7 @@
   import type { FeatureWithAnyProps, SchemeCollection } from "$lib/draw/types";
   import type { Writable } from "svelte/store";
 
-  export let gjSchemeCollection: Writable<SchemeCollection>;
+  export let gjSchemeCollection: Writable<SchemeCollection<F, S>>;
 
   $: gj = addLineStringEndpoints($gjSchemeCollection);
 
@@ -79,8 +79,8 @@
   }
 
   $: colorInterventions = colorByScheme($gjSchemeCollection);
-  function colorByScheme(
-    gj: SchemeCollection,
+  function colorByScheme<F, S>(
+    gj: SchemeCollection<F, S>,
   ): DataDrivenPropertyValueSpecification<string> {
     return constructMatchExpression(
       ["get", "scheme_reference"],

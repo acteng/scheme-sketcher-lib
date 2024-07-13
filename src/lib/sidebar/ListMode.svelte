@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="ts" generics="F, S">
   import { addEmptyScheme } from "$lib/draw/stores";
   import { ErrorMessage, FileInput, SecondaryButton } from "govuk-svelte";
   import PerSchemeControls from "./PerSchemeControls.svelte";
@@ -6,7 +6,7 @@
   import type { SchemeCollection } from "$lib/draw/types";
   import type { Writable } from "svelte/store";
 
-  export let gjSchemeCollection: Writable<SchemeCollection>;
+  export let gjSchemeCollection: Writable<SchemeCollection<F, S>>;
 
   function newBlankScheme() {
     addEmptyScheme($gjSchemeCollection);
@@ -16,7 +16,7 @@
   let errorFromFile = "";
   function mergeSchemesFromFile(filename: string, text: string) {
     try {
-      let gj = cfg.backfill(JSON.parse(text));
+      let gj: SchemeCollection<F, S> = cfg.backfill(JSON.parse(text));
 
       for (let scheme of Object.values(gj.schemes)) {
         if (scheme.scheme_reference in $gjSchemeCollection.schemes) {
