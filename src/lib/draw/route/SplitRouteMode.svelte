@@ -13,11 +13,11 @@
   import { onDestroy, onMount } from "svelte";
   import { CircleLayer, GeoJSON, MapEvents } from "svelte-maplibre";
   import splitIcon from "$lib/assets/split_route.svg";
-  import type { FeatureWithID, SchemeCollection } from "$lib/draw/types";
+  import type { FeatureWithID, Schemes } from "$lib/draw/types";
   import type { Writable } from "svelte/store";
 
   export let cfg: Config<F, S>;
-  export let gjSchemeCollection: Writable<SchemeCollection<F, S>>;
+  export let gjSchemes: Writable<Schemes<F, S>>;
 
   const circleRadiusPixels = 10;
   const snapDistancePixels = 30;
@@ -65,7 +65,7 @@
 
     // Are we snapped to anything?
     let candidates: [number, Position, number][] = [];
-    for (let [index, f] of $gjSchemeCollection.features.entries()) {
+    for (let [index, f] of $gjSchemes.features.entries()) {
       if (f.geometry.type == "LineString") {
         let snapped = nearestPointOnLine(f.geometry, cursor, {
           units: "kilometers",
@@ -98,7 +98,7 @@
     }
 
     let result = splitRoute(
-      $gjSchemeCollection.features[snappedIndex] as unknown as Feature<
+      $gjSchemes.features[snappedIndex] as unknown as Feature<
         LineString,
         RouteProps
       >,
@@ -107,7 +107,7 @@
 
     if (result != null) {
       let [piece1, piece2] = result;
-      gjSchemeCollection.update((gj) => {
+      gjSchemes.update((gj) => {
         // Keep the old ID for one, assign a new ID to the other
         piece1.id = gj.features[snappedIndex!].id;
         piece2.id = newFeatureId(gj);

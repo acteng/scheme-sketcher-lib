@@ -11,11 +11,11 @@
   import PolygonControls from "./PolygonControls.svelte";
   import { type Config } from "$lib/config";
   import type { FeatureWithID } from "$lib/draw/types";
-  import type { SchemeCollection } from "$lib/draw/types";
+  import type { Schemes } from "$lib/draw/types";
   import type { Writable } from "svelte/store";
 
   export let cfg: Config<F, S>;
-  export let gjSchemeCollection: Writable<SchemeCollection<F, S>>;
+  export let gjSchemes: Writable<Schemes<F, S>>;
 
   onMount(() => {
     $polygonTool!.startNew();
@@ -30,7 +30,7 @@
   function onSuccess(feature: Feature<Polygon>) {
     feature.properties ||= {};
     let f = feature as FeatureWithID<F, Polygon>;
-    gjSchemeCollection.update((gj) => {
+    gjSchemes.update((gj) => {
       f.id = newFeatureId(gj);
       f.properties.scheme_reference = getArbitrarySchemeRef(gj);
       cfg.newPolygonFeature(f);

@@ -10,11 +10,11 @@
   import { onDestroy, onMount } from "svelte";
   import RouteControls from "./RouteControls.svelte";
   import { type Config } from "$lib/config";
-  import type { FeatureWithID, SchemeCollection } from "$lib/draw/types";
+  import type { FeatureWithID, Schemes } from "$lib/draw/types";
   import type { Writable } from "svelte/store";
 
   export let cfg: Config<F, S>;
-  export let gjSchemeCollection: Writable<SchemeCollection<F, S>>;
+  export let gjSchemes: Writable<Schemes<F, S>>;
 
   onMount(() => {
     $routeTool!.startRoute();
@@ -28,7 +28,7 @@
 
   function onSuccess(feature: Feature<LineString | Polygon>) {
     let f = feature as FeatureWithID<F, LineString>;
-    gjSchemeCollection.update((gj) => {
+    gjSchemes.update((gj) => {
       f.id = newFeatureId(gj);
       f.properties.scheme_reference = getArbitrarySchemeRef(gj);
       cfg.newLineStringFeature(f);

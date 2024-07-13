@@ -10,18 +10,18 @@
   import type { MapMouseEvent } from "maplibre-gl";
   import { map, type Config } from "$lib/config";
   import { onDestroy, onMount } from "svelte";
-  import type { FeatureWithID, SchemeCollection } from "$lib/draw/types";
+  import type { FeatureWithID, Schemes } from "$lib/draw/types";
   import type { Writable } from "svelte/store";
 
   export let cfg: Config<F, S>;
-  export let gjSchemeCollection: Writable<SchemeCollection<F, S>>;
+  export let gjSchemes: Writable<Schemes<F, S>>;
   export let id: number;
 
-  let feature = $gjSchemeCollection.features.find((f) => f.id == id)!;
+  let feature = $gjSchemes.features.find((f) => f.id == id)!;
 
   // Because of how properties are bound individually, updates to $gjScheme aren't seen. Force them.
   function featureUpdated(feature: FeatureWithID<F>) {
-    $gjSchemeCollection = $gjSchemeCollection;
+    $gjSchemes = $gjSchemes;
   }
   $: featureUpdated(feature);
 
@@ -64,7 +64,7 @@
       }
       e.stopPropagation();
 
-      deleteIntervention(gjSchemeCollection, id);
+      deleteIntervention(gjSchemes, id);
     }
 
     if (e.key == "e") {
@@ -91,7 +91,7 @@
   <SecondaryButton on:click={() => mode.set({ mode: "edit-geometry", id })}>
     Edit geometry
   </SecondaryButton>
-  <WarningButton on:click={() => deleteIntervention(gjSchemeCollection, id)}>
+  <WarningButton on:click={() => deleteIntervention(gjSchemes, id)}>
     Delete
   </WarningButton>
 </ButtonGroup>
@@ -101,7 +101,7 @@
 <svelte:component
   this={cfg.editFeatureForm}
   {cfg}
-  {gjSchemeCollection}
+  {gjSchemes}
   {id}
   bind:props={feature.properties}
 />

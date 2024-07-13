@@ -1,6 +1,6 @@
 import type {
   FeatureWithID,
-  SchemeCollection,
+  Schemes,
   SchemeData,
   FeatureProps,
 } from "$lib/draw/types";
@@ -21,7 +21,7 @@ export interface Config<F, S> {
 
   schemeName: (s: SchemeData & S) => string;
 
-  backfill: (json: any) => SchemeCollection<F, S>;
+  backfill: (json: any) => Schemes<F, S>;
 
   initializeEmptyScheme: (scheme: SchemeData) => SchemeData & S;
 
@@ -30,7 +30,7 @@ export interface Config<F, S> {
   editFeatureForm: null | ComponentType<
     SvelteComponent<{
       cfg: Config<F, S>;
-      gjSchemeCollection: Writable<SchemeCollection<F, S>>;
+      gjSchemes: Writable<Schemes<F, S>>;
       id: number;
       props: FeatureProps<F>;
     }>
@@ -38,12 +38,12 @@ export interface Config<F, S> {
 
   editSchemeForm: null | ComponentType<
     SvelteComponent<{
-      gjSchemeCollection: Writable<SchemeCollection<F, S>>;
+      gjSchemes: Writable<Schemes<F, S>>;
       scheme_reference: string;
     }>
   >;
 
-  // Should assign any necessary properties. Runs inside a gjSchemeCollection
+  // Should assign any necessary properties. Runs inside a gjSchemes
   // update; the logic shouldn't look at anything in there.
   newPointFeature: (f: FeatureWithID<F, Point>) => void;
   newPolygonFeature: (f: FeatureWithID<F, Polygon>) => void;

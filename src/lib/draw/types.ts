@@ -1,6 +1,7 @@
 import type { Feature, Geometry } from "geojson";
 import type { Waypoint } from "route-snapper-ts";
 
+// The tool is in one of these mutually exclusive modes.
 export type Mode =
   | {
       mode: "list";
@@ -21,7 +22,7 @@ export type Mode =
   | { mode: "set-image" }
   | { mode: "streetview" };
 
-// This library manages some properties, in addition to the generic user-specified ones.
+// This library manages some per-feature properties, in addition to the generic user-specified ones.
 export type FeatureProps<F> = F & {
   scheme_reference: string;
 
@@ -34,21 +35,23 @@ export type FeatureProps<F> = F & {
   waypoints?: Waypoint[];
 };
 
-// TODO Rename
+// Unlike the geojson Feature type, this satisfies more invariants. It's parameterized by user-specified properties.
 export type FeatureWithID<F, G extends Geometry = Geometry> = Feature<G> & {
+  // The ID is always unique, numeric, and >0.
   id: number;
   properties: FeatureProps<F>;
 };
 
-export interface SchemeCollection<F, S> {
+// All state managed by scheme-sketcher-lib is captured here. This is a GeoJSON FeatureCollection with additional invariants.
+export interface Schemes<F, S> {
   type: "FeatureCollection";
   features: FeatureWithID<F>[];
-  // Keyed by scheme_reference, which doesn't change over the lifetime of the sketch tool
+  // Keyed by FeatureProps.scheme_reference, which doesn't change over the lifetime of the sketch tool
   schemes: { [reference: string]: SchemeData & S };
 }
 
 export interface SchemeData {
-  // The key into SchemeCollection.schemes
+  // The key into Schemes.schemes
   scheme_reference: string;
   // For the sketch page; not important
   color: string;

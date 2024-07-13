@@ -9,7 +9,6 @@ interface LayerProps {
 // Use this helper for every svelte-maplibre layer component. It sets the layer
 // ID, beforeId (for z-ordering between layers), and defaults to only using the
 // top-most layer for hovering/clicking.
-// TODO Ahh kind of annoying to need to plumb this here
 export function layerId<F, S>(cfg: Config<F, S>, layerId: string): LayerProps {
   return {
     id: layerId,

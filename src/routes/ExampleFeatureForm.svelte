@@ -1,14 +1,12 @@
 <script lang="ts">
   import { TextInput, Radio, Select, TextArea } from "govuk-svelte";
   import { type Config } from "$lib/config";
-  import type { FeatureProps, SchemeCollection } from "$lib/draw/types";
+  import type { FeatureProps, Schemes } from "$lib/draw/types";
   import type { Writable } from "svelte/store";
   import type { ExampleFeature, ExampleScheme } from "./types";
 
   export let cfg: Config<ExampleFeature, ExampleScheme>;
-  export let gjSchemeCollection: Writable<
-    SchemeCollection<ExampleFeature, ExampleScheme>
-  >;
+  export let gjSchemes: Writable<Schemes<ExampleFeature, ExampleScheme>>;
   export let id: number;
   export let props: FeatureProps<ExampleFeature>;
 
@@ -20,7 +18,7 @@
 
 <Select
   label="Scheme"
-  choices={Object.values($gjSchemeCollection.schemes).map((scheme) => [
+  choices={Object.values($gjSchemes.schemes).map((scheme) => [
     scheme.scheme_reference,
     cfg.schemeName(scheme),
   ])}

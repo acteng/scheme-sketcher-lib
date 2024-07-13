@@ -9,15 +9,15 @@
   import splitRouteIcon from "$lib/assets/split_route.svg";
   import streetViewIcon from "$lib/assets/street_view.svg";
   import HoverLayer from "./HoverLayer.svelte";
-  import type { SchemeCollection } from "$lib/draw/types";
+  import type { Schemes } from "$lib/draw/types";
   import type { Writable } from "svelte/store";
   import type { Config } from "$lib/config";
 
   export let cfg: Config<F, S>;
-  export let gjSchemeCollection: Writable<SchemeCollection<F, S>>;
+  export let gjSchemes: Writable<Schemes<F, S>>;
 </script>
 
-<HoverLayer {cfg} {gjSchemeCollection} />
+<HoverLayer {cfg} {gjSchemes} />
 
 <div class="top govuk-prose">
   <SecondaryButton

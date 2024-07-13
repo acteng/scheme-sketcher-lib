@@ -1,7 +1,7 @@
 <script lang="ts" generics="F, S">
   import type { Feature, LineString, Point, Polygon } from "geojson";
   import { mode, pointTool, polygonTool, routeTool } from "$lib/draw/stores";
-  import type { FeatureWithID, SchemeCollection } from "$lib/draw/types";
+  import type { FeatureWithID, Schemes } from "$lib/draw/types";
   import { ButtonGroup, DefaultButton, SecondaryButton } from "govuk-svelte";
   import { type Config } from "$lib/config";
   import { onDestroy, onMount } from "svelte";
@@ -13,7 +13,7 @@
   import type { Writable } from "svelte/store";
 
   export let cfg: Config<F, S>;
-  export let gjSchemeCollection: Writable<SchemeCollection<F, S>>;
+  export let gjSchemes: Writable<Schemes<F, S>>;
   export let id: number;
 
   let name = "";
@@ -24,7 +24,7 @@
 
   onMount(() => {
     let maybeFeature: FeatureWithID<F> | null = null;
-    gjSchemeCollection.update((gj) => {
+    gjSchemes.update((gj) => {
       maybeFeature = gj.features.find((f) => f.id == id)!;
       // Hide it from the regular drawing while we're editing
       maybeFeature.properties.hide_while_editing = true;
@@ -76,7 +76,7 @@
     $polygonTool?.stop();
     $polygonTool?.clearEventListeners();
 
-    gjSchemeCollection.update((gj) => {
+    gjSchemes.update((gj) => {
       let featureToBeUpdated = gj.features.find((f) => f.id == id)!;
 
       // Show the feature again
@@ -120,7 +120,6 @@
 
     // Copy properties that may come from routeTool. Not all tools or cases
     // will produce all of these.
-    // TODO We're depending on implementation details here and knowing what to copy...
     if (source.properties.length_meters) {
       destination.properties.length_meters = source.properties.length_meters;
     }

@@ -23,13 +23,13 @@
     Popup,
     type LayerClickInfo,
   } from "svelte-maplibre";
-  import type { FeatureWithID, SchemeCollection } from "$lib/draw/types";
+  import type { FeatureWithID, Schemes } from "$lib/draw/types";
   import type { Writable } from "svelte/store";
 
   export let cfg: Config<F, S>;
-  export let gjSchemeCollection: Writable<SchemeCollection<F, S>>;
+  export let gjSchemes: Writable<Schemes<F, S>>;
 
-  $: gj = addLineStringEndpoints($gjSchemeCollection);
+  $: gj = addLineStringEndpoints($gjSchemes);
 
   // TODO Maybe have a separate component for different modes.
   const hideWhileEditing: ExpressionSpecification = [
@@ -79,9 +79,9 @@
     }
   }
 
-  $: colorInterventions = colorByScheme($gjSchemeCollection);
+  $: colorInterventions = colorByScheme($gjSchemes);
   function colorByScheme<F, S>(
-    gj: SchemeCollection<F, S>,
+    gj: Schemes<F, S>,
   ): DataDrivenPropertyValueSpecification<string> {
     return constructMatchExpression(
       ["get", "scheme_reference"],
@@ -112,7 +112,7 @@
       let feature = features[0] as FeatureWithID<F>;
       let featureName = cfg.interventionName(feature);
       let schemeName = cfg.schemeName(
-        $gjSchemeCollection.schemes[feature.properties.scheme_reference],
+        $gjSchemes.schemes[feature.properties.scheme_reference],
       );
       return `${featureName} (${schemeName})`;
     }

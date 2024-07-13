@@ -1,6 +1,6 @@
 import { type Config } from "$lib/config";
 import { writable, type Writable } from "svelte/store";
-import type { Mode, SchemeCollection } from "./types";
+import type { Mode, Schemes } from "./types";
 import { PointTool } from "./point/point_tool";
 import { PolygonTool } from "maplibre-draw-polygon";
 import { RouteTool } from "route-snapper-ts";
@@ -37,7 +37,7 @@ export const mode: Writable<Mode> = writable({ mode: "list" });
 // NOTE! If you call this twice in a row in a `gjScheme.update` transaction
 // without adding one of the new features, then this'll return the same ID
 // twice!
-export function newFeatureId<F, S>(gj: SchemeCollection<F, S>): number {
+export function newFeatureId<F, S>(gj: Schemes<F, S>): number {
   let ids = new Set();
   for (let f of gj.features) {
     ids.add(f.id);
@@ -51,11 +51,11 @@ export function newFeatureId<F, S>(gj: SchemeCollection<F, S>): number {
 }
 
 export function deleteIntervention<F, S>(
-  gjSchemeCollection: Writable<SchemeCollection<F, S>>,
+  gjSchemes: Writable<Schemes<F, S>>,
   id: number,
 ) {
   console.log(`Deleting intervention ${id}`);
-  gjSchemeCollection.update((gj) => {
+  gjSchemes.update((gj) => {
     gj.features = gj.features.filter((f) => f.id != id);
     return gj;
   });
@@ -65,10 +65,8 @@ export function deleteIntervention<F, S>(
 
 // When creating a new feature, arbitrarily assign it to the first scheme. The
 // user can change it later.
-export function getArbitrarySchemeRef<F, S>(
-  schemeCollection: SchemeCollection<F, S>,
-): string {
-  return Object.values(schemeCollection.schemes)[0].scheme_reference;
+export function getArbitrarySchemeRef<F, S>(gjSchemes: Schemes<F, S>): string {
+  return Object.values(gjSchemes.schemes)[0].scheme_reference;
 }
 
 // Per https://datatracker.ietf.org/doc/html/rfc7946#section-11.2, 6 decimal
@@ -105,9 +103,7 @@ function loadUserSettings(): UserSettings {
   return settings as UserSettings;
 }
 
-export function emptyCollection<F, S>(
-  cfg: Config<F, S>,
-): SchemeCollection<F, S> {
+export function emptySchemes<F, S>(cfg: Config<F, S>): Schemes<F, S> {
   let gj = {
     type: "FeatureCollection" as const,
     features: [],
@@ -117,10 +113,7 @@ export function emptyCollection<F, S>(
   return gj;
 }
 
-export function addEmptyScheme<F, S>(
-  cfg: Config<F, S>,
-  gj: SchemeCollection<F, S>,
-) {
+export function addEmptyScheme<F, S>(cfg: Config<F, S>, gj: Schemes<F, S>) {
   let scheme_reference = uuidv4();
   let scheme = cfg.initializeEmptyScheme({
     scheme_reference,

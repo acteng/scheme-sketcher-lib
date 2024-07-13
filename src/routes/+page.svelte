@@ -8,7 +8,7 @@
   import RouteSnapperLayer from "$lib/draw/route/RouteSnapperLayer.svelte";
   import SplitRouteMode from "$lib/draw/route/SplitRouteMode.svelte";
   import BoundaryLayer from "$lib/draw/BoundaryLayer.svelte";
-  import { mode, emptyCollection } from "$lib/draw/stores";
+  import { mode, emptySchemes } from "$lib/draw/stores";
   import Toolbox from "$lib/draw/Toolbox.svelte";
   import PerModeControls from "$lib/sidebar/PerModeControls.svelte";
   import ExampleFeatureForm from "./ExampleFeatureForm.svelte";
@@ -130,12 +130,12 @@
     ],
   };
 
-  let gjSchemeCollection = writable(emptyCollection(cfg));
+  let gjSchemes = writable(emptySchemes(cfg));
 </script>
 
 <div style="display: flex; height: 100vh">
   <div class="sidebar">
-    <PerModeControls {cfg} {gjSchemeCollection} {routeSnapperUrl} />
+    <PerModeControls {cfg} {gjSchemes} {routeSnapperUrl} />
   </div>
   <div class="map">
     <MapLibre
@@ -148,12 +148,12 @@
       bind:map={$map}
     >
       <BoundaryLayer {cfg} {boundaryGeojson} fitBoundsAtStart />
-      <InterventionLayer {cfg} {gjSchemeCollection} />
+      <InterventionLayer {cfg} {gjSchemes} />
       <ImageLayer {cfg} />
       {#if $mode.mode == "list"}
-        <Toolbox {cfg} {gjSchemeCollection} />
+        <Toolbox {cfg} {gjSchemes} />
       {:else if $mode.mode == "split-route"}
-        <SplitRouteMode {cfg} {gjSchemeCollection} />
+        <SplitRouteMode {cfg} {gjSchemes} />
       {/if}
       <RouteSnapperLayer {cfg} />
       <PolygonToolLayer {cfg} />

@@ -4,7 +4,7 @@
     hideSchemes,
     mode,
     sidebarHover,
-    emptyCollection,
+    emptySchemes,
   } from "$lib/draw/stores";
   import {
     ButtonGroup,
@@ -18,21 +18,21 @@
   import { map, type Config } from "$lib/config";
   import { onDestroy } from "svelte";
   import deleteIcon from "$lib/assets/delete.svg?url";
-  import type { SchemeCollection } from "$lib/draw/types";
+  import type { Schemes } from "$lib/draw/types";
   import type { Writable } from "svelte/store";
 
   export let cfg: Config<F, S>;
-  export let gjSchemeCollection: Writable<SchemeCollection<F, S>>;
+  export let gjSchemes: Writable<Schemes<F, S>>;
   export let scheme_reference: string;
 
   let showDeleteModal = false;
 
-  $: numErrors = $gjSchemeCollection.features.filter(
+  $: numErrors = $gjSchemes.features.filter(
     (f) =>
       f.properties.scheme_reference == scheme_reference &&
       cfg.interventionWarning(f) != null,
   ).length;
-  $: numFeatures = $gjSchemeCollection.features.filter(
+  $: numFeatures = $gjSchemes.features.filter(
     (f) => f.properties.scheme_reference == scheme_reference,
   ).length;
 
@@ -46,7 +46,7 @@
 
     // When the user starts editing something from the sidebar, warp to what's
     // being edited. (Don't do this when clicking the object on the map.)
-    let feature = $gjSchemeCollection.features.find((f) => f.id == id)!;
+    let feature = $gjSchemes.features.find((f) => f.id == id)!;
 
     // Padding around a point looks odd; special case it by keeping the current zoom
     if (feature.geometry.type == "Point") {
@@ -74,13 +74,13 @@
   }
 
   function deleteScheme() {
-    gjSchemeCollection.update((gj) => {
+    gjSchemes.update((gj) => {
       gj.features = gj.features.filter(
         (f) => f.properties.scheme_reference != scheme_reference,
       );
       delete gj.schemes[scheme_reference];
       if (Object.keys(gj.schemes).length == 0) {
-        gj = emptyCollection(cfg);
+        gj = emptySchemes(cfg);
       }
       return gj;
     });
@@ -94,7 +94,7 @@
   let moveToScheme = "";
   function moveFeatures() {
     if (moveToScheme) {
-      gjSchemeCollection.update((gj) => {
+      gjSchemes.update((gj) => {
         for (let f of gj.features) {
           if (f.properties.scheme_reference == scheme_reference) {
             f.properties.scheme_reference = moveToScheme;
@@ -106,7 +106,7 @@
   }
 
   function moveSchemeChoices(): [string, string][] {
-    return Object.values($gjSchemeCollection.schemes)
+    return Object.values($gjSchemes.schemes)
       .filter((scheme) => scheme.scheme_reference != scheme_reference)
       .map((scheme) => [scheme.scheme_reference, cfg.schemeName(scheme)]);
   }
@@ -126,11 +126,8 @@
 </script>
 
 <h3>
-  {cfg.schemeName($gjSchemeCollection.schemes[scheme_reference])}
-  <input
-    type="color"
-    bind:value={$gjSchemeCollection.schemes[scheme_reference].color}
-  />
+  {cfg.schemeName($gjSchemes.schemes[scheme_reference])}
+  <input type="color" bind:value={$gjSchemes.schemes[scheme_reference].color} />
   <WarningButton on:click={() => (showDeleteModal = true)}>
     <img src={deleteIcon} alt="Delete scheme" />
     Delete
@@ -138,11 +135,7 @@
 </h3>
 <Checkbox bind:checked={showScheme} on:change={showOrHide}>Show</Checkbox>
 <slot />
-<svelte:component
-  this={cfg.editSchemeForm}
-  {gjSchemeCollection}
-  {scheme_reference}
-/>
+<svelte:component this={cfg.editSchemeForm} {gjSchemes} {scheme_reference} />
 
 {#if numErrors == 1}
   <ErrorMessage errorMessage="There's a problem with one intervention below" />
@@ -153,7 +146,7 @@
 {/if}
 
 <ol class="govuk-list govuk-list--number">
-  {#each $gjSchemeCollection.features.filter((f) => f.properties.scheme_reference == scheme_reference) as feature (feature.id)}
+  {#each $gjSchemes.features.filter((f) => f.properties.scheme_reference == scheme_reference) as feature (feature.id)}
     {@const warning = cfg.interventionWarning(feature)}
     <li>
       <!-- svelte-ignore a11y-invalid-attribute -->

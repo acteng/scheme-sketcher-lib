@@ -1,13 +1,11 @@
 <script lang="ts">
   import { Modal } from "$lib/common";
   import { DefaultButton, SecondaryButton, TextInput } from "govuk-svelte";
-  import type { SchemeCollection } from "$lib/draw/types";
+  import type { Schemes } from "$lib/draw/types";
   import type { Writable } from "svelte/store";
   import type { ExampleFeature, ExampleScheme } from "./types";
 
-  export let gjSchemeCollection: Writable<
-    SchemeCollection<ExampleFeature, ExampleScheme>
-  >;
+  export let gjSchemes: Writable<Schemes<ExampleFeature, ExampleScheme>>;
   export let scheme_reference: string;
 
   let showModal = false;
@@ -29,7 +27,7 @@
   <TextInput
     label="Scheme name"
     required
-    bind:value={$gjSchemeCollection.schemes[scheme_reference].scheme_name}
+    bind:value={$gjSchemes.schemes[scheme_reference].scheme_name}
   />
 
   <DefaultButton on:click={() => (showModal = false)}>Save</DefaultButton>

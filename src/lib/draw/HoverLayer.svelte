@@ -9,18 +9,18 @@
     layerId,
   } from "$lib/maplibre";
   import { CircleLayer, GeoJSON, LineLayer } from "svelte-maplibre";
-  import type { SchemeCollection } from "$lib/draw/types";
+  import type { Schemes } from "$lib/draw/types";
   import type { Writable } from "svelte/store";
   import type { Config } from "$lib/config";
 
   export let cfg: Config<F, S>;
-  export let gjSchemeCollection: Writable<SchemeCollection<F, S>>;
+  export let gjSchemes: Writable<Schemes<F, S>>;
 
   // Use a layer that only ever has zero or one features for hovering.
   $: gj =
     $sidebarHover == null
       ? emptyGeojson()
-      : $gjSchemeCollection.features.find((f) => f.id == $sidebarHover)!;
+      : $gjSchemes.features.find((f) => f.id == $sidebarHover)!;
 </script>
 
 <GeoJSON data={gj}>
