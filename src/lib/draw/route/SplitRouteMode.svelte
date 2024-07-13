@@ -116,8 +116,9 @@
         gj.features.splice(
           snappedIndex!,
           1,
-          piece1 as FeatureWithID,
-          piece2 as FeatureWithID,
+          // Casts safe because the input has these invariants
+          piece1 as unknown as FeatureWithID<F>,
+          piece2 as unknown as FeatureWithID<F>,
         );
 
         return gj;

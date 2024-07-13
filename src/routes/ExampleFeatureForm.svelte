@@ -1,7 +1,7 @@
 <script lang="ts">
   import { TextInput, Radio, Select, TextArea } from "govuk-svelte";
   import { type Config } from "$lib/config";
-  import type { SchemeCollection } from "$lib/draw/types";
+  import type { FeatureProps, SchemeCollection } from "$lib/draw/types";
   import type { Writable } from "svelte/store";
   import type { ExampleFeature, ExampleScheme } from "./types";
 
@@ -10,8 +10,7 @@
     SchemeCollection<ExampleFeature, ExampleScheme>
   >;
   export let id: number;
-  // TODO Can we make this generic?
-  export let props: { [name: string]: any };
+  export let props: FeatureProps<ExampleFeature>;
 
   // Hide svelte-check warning
   let _ = id;

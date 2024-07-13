@@ -27,10 +27,9 @@
   });
 
   function onSuccess(feature: Feature<LineString | Polygon>) {
-    let f = feature as FeatureWithID<LineString>;
+    let f = feature as FeatureWithID<F, LineString>;
     gjSchemeCollection.update((gj) => {
       f.id = newFeatureId(gj);
-      f.properties ||= {};
       f.properties.scheme_reference = getArbitrarySchemeRef(gj);
       cfg.newLineStringFeature(f);
       gj.features.push(f);

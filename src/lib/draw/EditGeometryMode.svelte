@@ -1,7 +1,7 @@
 <script lang="ts" generics="F, S">
   import type { Feature, LineString, Point, Polygon } from "geojson";
   import { mode, pointTool, polygonTool, routeTool } from "$lib/draw/stores";
-  import type { FeatureWithAnyProps, SchemeCollection } from "$lib/draw/types";
+  import type { FeatureWithID, SchemeCollection } from "$lib/draw/types";
   import { ButtonGroup, DefaultButton, SecondaryButton } from "govuk-svelte";
   import { type Config } from "$lib/config";
   import { onDestroy, onMount } from "svelte";
@@ -19,12 +19,11 @@
   let name = "";
   let controls = "";
 
-  // As a feature is being edited, store the latest version. This type ignores
-  // the ID and specifics of the properties, but they're there.
-  let unsavedFeature: FeatureWithAnyProps | null = null;
+  // As a feature is being edited, store the latest version
+  let unsavedFeature: FeatureWithID<F> | null = null;
 
   onMount(() => {
-    let maybeFeature: FeatureWithAnyProps | null = null;
+    let maybeFeature: FeatureWithID<F> | null = null;
     gjSchemeCollection.update((gj) => {
       maybeFeature = gj.features.find((f) => f.id == id)!;
       // Hide it from the regular drawing while we're editing
@@ -35,7 +34,10 @@
     name = cfg.interventionName(feature);
 
     if (feature.geometry.type == "LineString") {
-      $routeTool?.editExistingRoute(feature as Feature<LineString, RouteProps>);
+      // TODO Update route-snapper-ts to use Except<route_name> or otherwise pick the important properties
+      $routeTool?.editExistingRoute(
+        feature as unknown as Feature<LineString, RouteProps>,
+      );
       $routeTool?.addEventListenerSuccess(onSuccess);
       $routeTool?.addEventListenerUpdated(onUpdate);
       $routeTool?.addEventListenerFailure(onFailure);
@@ -92,13 +94,15 @@
   function onSuccess(feature: Feature<Point | Polygon | LineString>) {
     feature.properties ??= {};
     // Let onDestroy apply the update
-    unsavedFeature = feature as FeatureWithAnyProps;
+    unsavedFeature = feature as FeatureWithID<F>;
     mode.set({ mode: "edit-form", id });
   }
 
-  function onUpdate(feature: FeatureWithAnyProps<Polygon | LineString>) {
+  function onUpdate(feature: Feature<Polygon | LineString>) {
     // Just remember the update; don't apply it yet
-    unsavedFeature = feature;
+    // The cast is safe because the callers carry forward the ID and
+    // properties passed in, and the input is valid.
+    unsavedFeature = feature as FeatureWithID<F, Polygon | LineString>;
   }
 
   function onFailure() {
@@ -109,8 +113,8 @@
 
   // Copy geometry and properties from source to destination
   function updateFeature(
-    destination: FeatureWithAnyProps,
-    source: FeatureWithAnyProps,
+    destination: FeatureWithID<F>,
+    source: FeatureWithID<F>,
   ) {
     destination.geometry = source.geometry;
 

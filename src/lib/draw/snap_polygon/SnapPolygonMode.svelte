@@ -29,10 +29,9 @@
 
   function onSuccess(feature: Feature<LineString | Polygon>) {
     // We did startArea, so we know it's a Polygon
-    let f = feature as FeatureWithID<Polygon>;
+    let f = feature as FeatureWithID<F, Polygon>;
     gjSchemeCollection.update((gj) => {
       f.id = newFeatureId(gj);
-      f.properties ||= {};
       f.properties.scheme_reference = getArbitrarySchemeRef(gj);
       cfg.newPolygonFeature(f);
       gj.features.push(f);

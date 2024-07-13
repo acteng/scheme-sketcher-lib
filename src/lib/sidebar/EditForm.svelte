@@ -10,7 +10,7 @@
   import type { MapMouseEvent } from "maplibre-gl";
   import { map, type Config } from "$lib/config";
   import { onDestroy, onMount } from "svelte";
-  import type { FeatureWithAnyProps, SchemeCollection } from "$lib/draw/types";
+  import type { FeatureWithID, SchemeCollection } from "$lib/draw/types";
   import type { Writable } from "svelte/store";
 
   export let cfg: Config<F, S>;
@@ -20,7 +20,7 @@
   let feature = $gjSchemeCollection.features.find((f) => f.id == id)!;
 
   // Because of how properties are bound individually, updates to $gjScheme aren't seen. Force them.
-  function featureUpdated(feature: FeatureWithAnyProps) {
+  function featureUpdated(feature: FeatureWithID<F>) {
     $gjSchemeCollection = $gjSchemeCollection;
   }
   $: featureUpdated(feature);

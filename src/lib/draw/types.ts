@@ -1,4 +1,5 @@
 import type { Feature, Geometry } from "geojson";
+import type { Waypoint } from "route-snapper-ts";
 
 export type Mode =
   | {
@@ -20,19 +21,28 @@ export type Mode =
   | { mode: "set-image" }
   | { mode: "streetview" };
 
-// Properties are guaranteed to exist, but can be anything, so TS is mostly disabled
-export type FeatureWithAnyProps<G extends Geometry = Geometry> = Feature<G> & {
-  properties: { [name: string]: any };
+// This library manages some properties, in addition to the generic user-specified ones.
+export type FeatureProps<F> = F & {
+  scheme_reference: string;
+
+  // Temporary state, not meant to be serialized
+  hide_while_editing?: boolean;
+
+  // For LineStrings only
+  length_meters?: number;
+  // For LineStrings and Polygons only
+  waypoints?: Waypoint[];
 };
-export type FeatureWithID<G extends Geometry = Geometry> = Feature<G> & {
-  properties: { [name: string]: any };
+
+// TODO Rename
+export type FeatureWithID<F, G extends Geometry = Geometry> = Feature<G> & {
   id: number;
+  properties: FeatureProps<F>;
 };
 
 export interface SchemeCollection<F, S> {
   type: "FeatureCollection";
-  // TODO Specifying scheme_reference would be nice
-  features: FeatureWithID[];
+  features: FeatureWithID<F>[];
   // Keyed by scheme_reference, which doesn't change over the lifetime of the sketch tool
   schemes: { [reference: string]: SchemeData & S };
 }

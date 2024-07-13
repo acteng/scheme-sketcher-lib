@@ -23,7 +23,7 @@
     Popup,
     type LayerClickInfo,
   } from "svelte-maplibre";
-  import type { FeatureWithAnyProps, SchemeCollection } from "$lib/draw/types";
+  import type { FeatureWithID, SchemeCollection } from "$lib/draw/types";
   import type { Writable } from "svelte/store";
 
   export let cfg: Config<F, S>;
@@ -109,7 +109,7 @@
 
   function tooltip(features: Feature[] | null): string {
     if (features) {
-      let feature = features[0] as FeatureWithAnyProps;
+      let feature = features[0] as FeatureWithID<F>;
       let featureName = cfg.interventionName(feature);
       let schemeName = cfg.schemeName(
         $gjSchemeCollection.schemes[feature.properties.scheme_reference],

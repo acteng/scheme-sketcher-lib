@@ -1,8 +1,8 @@
 import type {
-  FeatureWithAnyProps,
   FeatureWithID,
   SchemeCollection,
   SchemeData,
+  FeatureProps,
 } from "$lib/draw/types";
 import type { Feature, LineString, Polygon, Point } from "geojson";
 import { get, writable, type Writable } from "svelte/store";
@@ -17,7 +17,7 @@ export let map: Writable<Map | null> = writable(null);
 // override.
 // TODO As an alternate idea, users could implement a custom Svelte store with methods for doing these things
 export interface Config<F, S> {
-  interventionName: (f: FeatureWithAnyProps) => string;
+  interventionName: (f: FeatureWithID<F>) => string;
 
   schemeName: (s: SchemeData & S) => string;
 
@@ -25,15 +25,14 @@ export interface Config<F, S> {
 
   initializeEmptyScheme: (scheme: SchemeData) => SchemeData & S;
 
-  interventionWarning: (feature: FeatureWithAnyProps) => string | null;
+  interventionWarning: (feature: FeatureWithID<F>) => string | null;
 
   editFeatureForm: null | ComponentType<
     SvelteComponent<{
       cfg: Config<F, S>;
       gjSchemeCollection: Writable<SchemeCollection<F, S>>;
       id: number;
-      // TODO Change
-      props: { [name: string]: any };
+      props: FeatureProps<F>;
     }>
   >;
 
@@ -46,13 +45,13 @@ export interface Config<F, S> {
 
   // Should assign any necessary properties. Runs inside a gjSchemeCollection
   // update; the logic shouldn't look at anything in there.
-  newPointFeature: (f: FeatureWithID<Point>) => void;
-  newPolygonFeature: (f: FeatureWithID<Polygon>) => void;
-  newLineStringFeature: (f: FeatureWithID<LineString>) => void;
+  newPointFeature: (f: FeatureWithID<F, Point>) => void;
+  newPolygonFeature: (f: FeatureWithID<F, Polygon>) => void;
+  newLineStringFeature: (f: FeatureWithID<F, LineString>) => void;
 
   updateFeature: (
-    destination: FeatureWithAnyProps,
-    source: FeatureWithAnyProps,
+    destination: FeatureWithID<F>,
+    source: FeatureWithID<F>,
   ) => void;
 
   // Required for the geocoder in the route mote to work

@@ -1,4 +1,5 @@
 export interface ExampleFeature {
+  name: string;
   description: string;
   likelihood: "moonshot" | "maybe" | "definitely" | "";
 }
