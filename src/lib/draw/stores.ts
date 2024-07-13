@@ -1,4 +1,4 @@
-import { cfg } from "$lib/config";
+import { type Config } from "$lib/config";
 import { writable, type Writable } from "svelte/store";
 import type { Mode, SchemeCollection } from "./types";
 import { PointTool } from "./point/point_tool";
@@ -105,22 +105,26 @@ function loadUserSettings(): UserSettings {
   return settings as UserSettings;
 }
 
-export function emptyCollection<F, S>(): SchemeCollection<F, S> {
+export function emptyCollection<F, S>(
+  cfg: Config<F, S>,
+): SchemeCollection<F, S> {
   let gj = {
     type: "FeatureCollection" as const,
     features: [],
     schemes: {},
   };
-  addEmptyScheme(gj);
+  addEmptyScheme(cfg, gj);
   return gj;
 }
 
-export function addEmptyScheme<F, S>(gj: SchemeCollection<F, S>) {
+export function addEmptyScheme<F, S>(
+  cfg: Config<F, S>,
+  gj: SchemeCollection<F, S>,
+) {
   let scheme_reference = uuidv4();
-  let scheme = {
+  let scheme = cfg.initializeEmptyScheme({
     scheme_reference,
     color: randomSchemeColor(),
-  };
-  cfg.initializeEmptyScheme(scheme);
+  });
   gj.schemes[scheme_reference] = scheme;
 }

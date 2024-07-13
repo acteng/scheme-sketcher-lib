@@ -2,14 +2,15 @@
   import { addEmptyScheme } from "$lib/draw/stores";
   import { ErrorMessage, FileInput, SecondaryButton } from "govuk-svelte";
   import PerSchemeControls from "./PerSchemeControls.svelte";
-  import { cfg } from "$lib/config";
+  import { type Config } from "$lib/config";
   import type { SchemeCollection } from "$lib/draw/types";
   import type { Writable } from "svelte/store";
 
+  export let cfg: Config<F, S>;
   export let gjSchemeCollection: Writable<SchemeCollection<F, S>>;
 
   function newBlankScheme() {
-    addEmptyScheme($gjSchemeCollection);
+    addEmptyScheme(cfg, $gjSchemeCollection);
     $gjSchemeCollection = $gjSchemeCollection;
   }
 
@@ -100,7 +101,7 @@
 <hr />
 
 {#each Object.keys($gjSchemeCollection.schemes) as scheme_reference, i (scheme_reference)}
-  <PerSchemeControls {gjSchemeCollection} {scheme_reference}>
+  <PerSchemeControls {cfg} {gjSchemeCollection} {scheme_reference}>
     {#if Object.keys($gjSchemeCollection.schemes).length > 1}
       <SecondaryButton
         on:click={() => moveSchemeInList(scheme_reference, -1)}

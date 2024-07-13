@@ -1,10 +1,11 @@
-<script lang="ts">
+<script lang="ts" generics="F, S">
   import { routeTool, userSettings } from "$lib/draw/stores";
   import { Checkbox, CheckboxGroup, SecondaryButton } from "govuk-svelte";
   import GeocoderControls from "./GeocoderControls.svelte";
   import { snapMode, undoLength } from "./stores";
-  import { cfg } from "$lib/config";
+  import { type Config } from "$lib/config";
 
+  export let cfg: Config<F, S>;
   // Start with this enabled or disabled, based on whether we're drawing a new
   // route or editing an existing.
   export let extendRoute: boolean;
@@ -95,5 +96,5 @@
 </CheckboxGroup>
 
 {#if cfg.maptilerApiKey}
-  <GeocoderControls />
+  <GeocoderControls {cfg} />
 {/if}

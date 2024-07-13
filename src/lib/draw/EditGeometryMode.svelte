@@ -3,7 +3,7 @@
   import { mode, pointTool, polygonTool, routeTool } from "$lib/draw/stores";
   import type { FeatureWithAnyProps, SchemeCollection } from "$lib/draw/types";
   import { ButtonGroup, DefaultButton, SecondaryButton } from "govuk-svelte";
-  import { cfg } from "$lib/config";
+  import { type Config } from "$lib/config";
   import { onDestroy, onMount } from "svelte";
   import PointControls from "./point/PointControls.svelte";
   import PolygonControls from "./polygon/PolygonControls.svelte";
@@ -12,6 +12,7 @@
   import type { AreaProps, RouteProps } from "route-snapper-ts";
   import type { Writable } from "svelte/store";
 
+  export let cfg: Config<F, S>;
   export let gjSchemeCollection: Writable<SchemeCollection<F, S>>;
   export let id: number;
 
@@ -145,7 +146,7 @@
 {#if controls == "point"}
   <PointControls editingExisting />
 {:else if controls == "route"}
-  <RouteControls extendRoute={false} />
+  <RouteControls {cfg} extendRoute={false} />
 {:else if controls == "freehand-polygon"}
   <PolygonControls />
 {:else if controls == "snapped-polygon"}

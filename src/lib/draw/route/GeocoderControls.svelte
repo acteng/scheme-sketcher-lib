@@ -1,12 +1,13 @@
-<script lang="ts">
+<script lang="ts" generics="F, S">
   import type { FeatureCollection } from "@maptiler/geocoding-control/types";
   import type { Position } from "geojson";
   import { routeTool } from "$lib/draw/stores";
   import { TextInput } from "govuk-svelte";
   import { emptyGeojson } from "$lib/maplibre";
-  import { map } from "$lib/config";
+  import { map, type Config } from "$lib/config";
   import { geocoderGj } from "./stores";
-  import { cfg } from "$lib/config";
+
+  export let cfg: Config<F, S>;
 
   let query = "";
 

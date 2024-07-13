@@ -11,7 +11,9 @@
   import { CircleLayer, GeoJSON, LineLayer } from "svelte-maplibre";
   import type { SchemeCollection } from "$lib/draw/types";
   import type { Writable } from "svelte/store";
+  import type { Config } from "$lib/config";
 
+  export let cfg: Config<F, S>;
   export let gjSchemeCollection: Writable<SchemeCollection<F, S>>;
 
   // Use a layer that only ever has zero or one features for hovering.
@@ -23,7 +25,7 @@
 
 <GeoJSON data={gj}>
   <LineLayer
-    {...layerId("hover-polygons")}
+    {...layerId(cfg, "hover-polygons")}
     filter={isPolygon}
     paint={{
       "line-color": colors.hovering,
@@ -31,7 +33,7 @@
     }}
   />
   <LineLayer
-    {...layerId("hover-lines")}
+    {...layerId(cfg, "hover-lines")}
     filter={isLine}
     paint={{
       "line-color": colors.hovering,
@@ -39,7 +41,7 @@
     }}
   />
   <CircleLayer
-    {...layerId("hover-points")}
+    {...layerId(cfg, "hover-points")}
     filter={isPoint}
     paint={{
       "circle-color": colors.hovering,

@@ -15,12 +15,13 @@
     WarningButton,
   } from "govuk-svelte";
   import { bbox } from "$lib/maplibre";
-  import { map, cfg } from "$lib/config";
+  import { map, type Config } from "$lib/config";
   import { onDestroy } from "svelte";
   import deleteIcon from "$lib/assets/delete.svg?url";
   import type { SchemeCollection } from "$lib/draw/types";
   import type { Writable } from "svelte/store";
 
+  export let cfg: Config<F, S>;
   export let gjSchemeCollection: Writable<SchemeCollection<F, S>>;
   export let scheme_reference: string;
 
@@ -79,7 +80,7 @@
       );
       delete gj.schemes[scheme_reference];
       if (Object.keys(gj.schemes).length == 0) {
-        gj = emptyCollection();
+        gj = emptyCollection(cfg);
       }
       return gj;
     });

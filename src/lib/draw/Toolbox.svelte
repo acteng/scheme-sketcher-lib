@@ -11,11 +11,13 @@
   import HoverLayer from "./HoverLayer.svelte";
   import type { SchemeCollection } from "$lib/draw/types";
   import type { Writable } from "svelte/store";
+  import type { Config } from "$lib/config";
 
+  export let cfg: Config<F, S>;
   export let gjSchemeCollection: Writable<SchemeCollection<F, S>>;
 </script>
 
-<HoverLayer {gjSchemeCollection} />
+<HoverLayer {cfg} {gjSchemeCollection} />
 
 <div class="top govuk-prose">
   <SecondaryButton

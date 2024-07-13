@@ -1,13 +1,13 @@
-<script lang="ts">
+<script lang="ts" generics="F, S">
   import { CollapsibleCard, Radio, SecondaryButton } from "govuk-svelte";
   import type { MapMouseEvent } from "maplibre-gl";
-  import { map } from "$lib/config";
   import { userSettings } from "$lib/draw/stores";
   import { onDestroy } from "svelte";
   import cameraCursorUrl from "$lib/assets/camera_cursor.svg?url";
   import StreetViewHelp from "./StreetViewHelp.svelte";
-  import { cfg } from "$lib/config";
+  import { map, type Config } from "$lib/config";
 
+  export let cfg: Config<F, S>;
   export let enabled: boolean;
   export let showControls = true;
 

@@ -1,4 +1,5 @@
-<script lang="ts">
+<script lang="ts" generics="F, S">
+  import { type Config } from "$lib/config";
   import type { Feature } from "geojson";
   import {
     constructMatchExpression,
@@ -16,6 +17,8 @@
   } from "svelte-maplibre";
   import { geocoderGj, routeToolGj } from "./stores";
 
+  export let cfg: Config<F, S>;
+
   const circleRadiusPixels = 10;
 
   function getNumber(feature: Feature): string {
@@ -25,7 +28,7 @@
 
 <GeoJSON data={$routeToolGj}>
   <CircleLayer
-    {...layerId("route-points")}
+    {...layerId(cfg, "route-points")}
     filter={isPoint}
     paint={{
       "circle-color": constructMatchExpression(
@@ -45,7 +48,7 @@
     }}
   />
   <LineLayer
-    {...layerId("route-lines")}
+    {...layerId(cfg, "route-lines")}
     filter={isLine}
     paint={{
       "line-color": ["case", ["get", "snapped"], "red", "blue"],
@@ -53,7 +56,7 @@
     }}
   />
   <FillLayer
-    {...layerId("route-polygons")}
+    {...layerId(cfg, "route-polygons")}
     filter={isPolygon}
     paint={{
       "fill-color": "black",

@@ -1,13 +1,16 @@
-<script lang="ts">
+<script lang="ts" generics="F, S">
   import { circleRadius, colors } from "$lib/draw/colors";
   import { isLine, isPoint, isPolygon, layerId } from "$lib/maplibre";
   import { CircleLayer, FillLayer, GeoJSON, LineLayer } from "svelte-maplibre";
   import { polygonToolGj } from "maplibre-draw-polygon";
+  import { type Config } from "$lib/config";
+
+  export let cfg: Config<F, S>;
 </script>
 
 <GeoJSON data={$polygonToolGj}>
   <FillLayer
-    {...layerId("edit-polygon-fill")}
+    {...layerId(cfg, "edit-polygon-fill")}
     filter={isPolygon}
     paint={{
       "fill-color": "red",
@@ -20,7 +23,7 @@
     }}
   />
   <LineLayer
-    {...layerId("edit-polygon-lines")}
+    {...layerId(cfg, "edit-polygon-lines")}
     filter={isLine}
     paint={{
       // TODO Dashed
@@ -30,7 +33,7 @@
     }}
   />
   <CircleLayer
-    {...layerId("edit-polygon-vertices")}
+    {...layerId(cfg, "edit-polygon-vertices")}
     filter={isPoint}
     paint={{
       "circle-color": colors.hovering,

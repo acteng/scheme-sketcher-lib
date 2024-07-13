@@ -9,11 +9,12 @@
   import { SecondaryButton } from "govuk-svelte";
   import { onDestroy, onMount } from "svelte";
   import PointControls from "./PointControls.svelte";
-  import { cfg } from "$lib/config";
+  import { type Config } from "$lib/config";
   import type { FeatureWithID } from "$lib/draw/types";
   import type { SchemeCollection } from "$lib/draw/types";
   import type { Writable } from "svelte/store";
 
+  export let cfg: Config<F, S>;
   export let gjSchemeCollection: Writable<SchemeCollection<F, S>>;
 
   onMount(() => {

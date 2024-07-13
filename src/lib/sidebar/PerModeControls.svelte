@@ -3,7 +3,7 @@
   import type { SchemeCollection } from "$lib/draw/types";
   import type { Writable } from "svelte/store";
   import { DefaultButton } from "govuk-svelte";
-  import { map } from "$lib/config";
+  import { map, type Config } from "$lib/config";
   import { onDestroy } from "svelte";
   import EditGeometryMode from "../draw/EditGeometryMode.svelte";
   import ImageMode from "../draw/image/ImageMode.svelte";
@@ -18,6 +18,7 @@
   import EditForm from "./EditForm.svelte";
   import ListMode from "./ListMode.svelte";
 
+  export let cfg: Config<F, S>;
   export let gjSchemeCollection: Writable<SchemeCollection<F, S>>;
   export let routeSnapperUrl: string;
 
@@ -45,23 +46,23 @@ toolbox, but that gets created and destroyed frequently. -->
 </div>
 
 {#if $mode.mode == "list"}
-  <ListMode {gjSchemeCollection} />
+  <ListMode {cfg} {gjSchemeCollection} />
 {:else if $mode.mode == "edit-form"}
-  <EditForm {gjSchemeCollection} id={$mode.id} />
+  <EditForm {cfg} {gjSchemeCollection} id={$mode.id} />
 {:else if $mode.mode == "edit-geometry"}
-  <EditGeometryMode {gjSchemeCollection} id={$mode.id} />
+  <EditGeometryMode {cfg} {gjSchemeCollection} id={$mode.id} />
 {:else if $mode.mode == "new-point"}
   <h2>New point</h2>
-  <PointMode {gjSchemeCollection} />
+  <PointMode {cfg} {gjSchemeCollection} />
 {:else if $mode.mode == "new-route"}
   <h2>New route</h2>
-  <RouteMode {gjSchemeCollection} />
+  <RouteMode {cfg} {gjSchemeCollection} />
 {:else if $mode.mode == "new-freehand-polygon"}
   <h2>New polygon (freehand)</h2>
-  <PolygonMode {gjSchemeCollection} />
+  <PolygonMode {cfg} {gjSchemeCollection} />
 {:else if $mode.mode == "new-snapped-polygon"}
   <h2>New polygon (snapped)</h2>
-  <SnapPolygonMode {gjSchemeCollection} />
+  <SnapPolygonMode {cfg} {gjSchemeCollection} />
 {:else if $mode.mode == "split-route"}
   <h2>Split route</h2>
   <DefaultButton on:click={() => mode.set({ mode: "list" })}>
@@ -85,5 +86,5 @@ toolbox, but that gets created and destroyed frequently. -->
   <ImageMode />
 {:else if $mode.mode == "streetview"}
   <h2>StreetView</h2>
-  <StreetViewMode />
+  <StreetViewMode {cfg} />
 {/if}

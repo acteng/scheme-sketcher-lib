@@ -1,4 +1,4 @@
-import { cfg, map as mapStore } from "$lib/config";
+import { type Config, map as mapStore } from "$lib/config";
 import { get } from "svelte/store";
 
 interface LayerProps {
@@ -9,10 +9,11 @@ interface LayerProps {
 // Use this helper for every svelte-maplibre layer component. It sets the layer
 // ID, beforeId (for z-ordering between layers), and defaults to only using the
 // top-most layer for hovering/clicking.
-export function layerId(layerId: string): LayerProps {
+// TODO Ahh kind of annoying to need to plumb this here
+export function layerId<F, S>(cfg: Config<F, S>, layerId: string): LayerProps {
   return {
     id: layerId,
-    beforeId: getBeforeId(layerId),
+    beforeId: getBeforeId(cfg, layerId),
   };
 }
 
@@ -20,7 +21,10 @@ export function layerId(layerId: string): LayerProps {
 // Svelte component initialization order being unpredictable, callers might add
 // layers in any order. Use beforeId to guarantee the layers wind up in an
 // explicitly defined order.
-function getBeforeId(layerId: string): string | undefined {
+function getBeforeId<F, S>(
+  cfg: Config<F, S>,
+  layerId: string,
+): string | undefined {
   let map = get(mapStore);
   if (!map) {
     console.warn(

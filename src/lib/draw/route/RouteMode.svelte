@@ -9,10 +9,11 @@
   import { ButtonGroup, DefaultButton, SecondaryButton } from "govuk-svelte";
   import { onDestroy, onMount } from "svelte";
   import RouteControls from "./RouteControls.svelte";
-  import { cfg } from "$lib/config";
+  import { type Config } from "$lib/config";
   import type { FeatureWithID, SchemeCollection } from "$lib/draw/types";
   import type { Writable } from "svelte/store";
 
+  export let cfg: Config<F, S>;
   export let gjSchemeCollection: Writable<SchemeCollection<F, S>>;
 
   onMount(() => {
@@ -53,4 +54,4 @@
   <SecondaryButton on:click={onFailure}>Cancel</SecondaryButton>
 </ButtonGroup>
 
-<RouteControls extendRoute />
+<RouteControls {cfg} extendRoute />

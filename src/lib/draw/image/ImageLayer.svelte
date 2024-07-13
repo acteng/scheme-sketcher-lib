@@ -1,9 +1,11 @@
-<script lang="ts">
+<script lang="ts" generics="F, S">
   import { mode } from "$lib/draw/stores";
   import { layerId } from "$lib/maplibre";
-  import { map } from "$lib/config";
+  import { map, type Config } from "$lib/config";
   import { ImageSource, Marker, RasterLayer } from "svelte-maplibre";
   import { imgSrc, opacity } from "./stores";
+
+  export let cfg: Config<F, S>;
 
   let topLeft = { lng: 0, lat: 0 };
   let bottomRight = { lng: 0, lat: 0 };
@@ -39,7 +41,7 @@
     ]}
   >
     <RasterLayer
-      {...layerId("georeferenced-image")}
+      {...layerId(cfg, "georeferenced-image")}
       paint={{
         "raster-fade-duration": 0,
         "raster-opacity": $opacity / 100.0,

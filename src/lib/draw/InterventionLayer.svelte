@@ -10,7 +10,7 @@
     isPolygon,
     layerId,
   } from "$lib/maplibre";
-  import { cfg, map } from "$lib/config";
+  import { type Config, map } from "$lib/config";
   import type {
     DataDrivenPropertyValueSpecification,
     ExpressionSpecification,
@@ -26,6 +26,7 @@
   import type { FeatureWithAnyProps, SchemeCollection } from "$lib/draw/types";
   import type { Writable } from "svelte/store";
 
+  export let cfg: Config<F, S>;
   export let gjSchemeCollection: Writable<SchemeCollection<F, S>>;
 
   $: gj = addLineStringEndpoints($gjSchemeCollection);
@@ -122,7 +123,7 @@
 
 <GeoJSON data={gj}>
   <CircleLayer
-    {...layerId("interventions-points")}
+    {...layerId(cfg, "interventions-points")}
     filter={["all", isPoint, hideWhileEditing, notEndpoint, showSchemes]}
     paint={{
       "circle-color": color,
@@ -140,7 +141,7 @@
   </CircleLayer>
 
   <LineLayer
-    {...layerId("interventions-lines")}
+    {...layerId(cfg, "interventions-lines")}
     filter={["all", isLine, hideWhileEditing, showSchemes]}
     paint={{
       "line-color": color,
@@ -157,7 +158,7 @@
     {/if}
   </LineLayer>
   <CircleLayer
-    {...layerId("interventions-lines-endpoints")}
+    {...layerId(cfg, "interventions-lines-endpoints")}
     filter={["all", ["==", ["get", "endpoint"], true], showSchemes]}
     paint={{
       "circle-radius": 0.5 * lineWidth,
@@ -168,7 +169,7 @@
   />
 
   <FillLayer
-    {...layerId("interventions-polygons")}
+    {...layerId(cfg, "interventions-polygons")}
     filter={["all", isPolygon, hideWhileEditing, showSchemes]}
     paint={{
       "fill-color": color,
@@ -185,7 +186,7 @@
     {/if}
   </FillLayer>
   <LineLayer
-    {...layerId("interventions-polygons-outlines")}
+    {...layerId(cfg, "interventions-polygons-outlines")}
     filter={["all", isPolygon, hideWhileEditing, showSchemes]}
     paint={{
       "line-color": color,

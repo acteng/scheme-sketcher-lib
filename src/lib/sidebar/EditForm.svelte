@@ -8,11 +8,12 @@
     WarningButton,
   } from "govuk-svelte";
   import type { MapMouseEvent } from "maplibre-gl";
-  import { map, cfg } from "$lib/config";
+  import { map, type Config } from "$lib/config";
   import { onDestroy, onMount } from "svelte";
   import type { FeatureWithAnyProps, SchemeCollection } from "$lib/draw/types";
   import type { Writable } from "svelte/store";
 
+  export let cfg: Config<F, S>;
   export let gjSchemeCollection: Writable<SchemeCollection<F, S>>;
   export let id: number;
 
@@ -99,6 +100,7 @@
 
 <svelte:component
   this={cfg.editFeatureForm}
+  {cfg}
   {gjSchemeCollection}
   {id}
   bind:props={feature.properties}

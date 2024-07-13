@@ -9,13 +9,14 @@
   import { mode, newFeatureId, setPrecision } from "$lib/draw/stores";
   import { emptyGeojson, layerId } from "$lib/maplibre";
   import type { MapMouseEvent } from "maplibre-gl";
-  import { map } from "$lib/config";
+  import { map, type Config } from "$lib/config";
   import { onDestroy, onMount } from "svelte";
   import { CircleLayer, GeoJSON, MapEvents } from "svelte-maplibre";
   import splitIcon from "$lib/assets/split_route.svg";
   import type { FeatureWithID, SchemeCollection } from "$lib/draw/types";
   import type { Writable } from "svelte/store";
 
+  export let cfg: Config<F, S>;
   export let gjSchemeCollection: Writable<SchemeCollection<F, S>>;
 
   const circleRadiusPixels = 10;
@@ -154,7 +155,7 @@
 
 <GeoJSON data={snappedCursorGj}>
   <CircleLayer
-    {...layerId("draw-split-route")}
+    {...layerId(cfg, "draw-split-route")}
     paint={{ "circle-color": "black", "circle-radius": circleRadiusPixels }}
   />
 </GeoJSON>

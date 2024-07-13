@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="ts" generics="F, S">
   import mask from "@turf/mask";
   import type {
     Feature,
@@ -7,10 +7,11 @@
     Polygon,
   } from "geojson";
   import { bbox, layerId } from "$lib/maplibre";
-  import { map } from "$lib/config";
+  import { map, type Config } from "$lib/config";
   import { getContext } from "svelte";
   import { FillLayer, GeoJSON } from "svelte-maplibre";
 
+  export let cfg: Config<F, S>;
   export let boundaryGeojson:
     | Feature<Polygon | MultiPolygon>
     | FeatureCollection<Polygon | MultiPolygon>;
@@ -27,7 +28,7 @@
 
 <GeoJSON data={mask(boundaryGeojson)}>
   <FillLayer
-    {...layerId("boundary")}
+    {...layerId(cfg, "boundary")}
     paint={{
       "fill-color": "black",
       "fill-opacity": 0.5,

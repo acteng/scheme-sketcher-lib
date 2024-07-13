@@ -1,10 +1,11 @@
 <script lang="ts">
   import { TextInput, Radio, Select, TextArea } from "govuk-svelte";
-  import { cfg } from "$lib/config";
+  import { type Config } from "$lib/config";
   import type { SchemeCollection } from "$lib/draw/types";
   import type { Writable } from "svelte/store";
   import type { ExampleFeature, ExampleScheme } from "./types";
 
+  export let cfg: Config<ExampleFeature, ExampleScheme>;
   export let gjSchemeCollection: Writable<
     SchemeCollection<ExampleFeature, ExampleScheme>
   >;

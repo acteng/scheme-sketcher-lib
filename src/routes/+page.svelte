@@ -1,7 +1,7 @@
 <script lang="ts">
   import { MapLibre } from "svelte-maplibre";
   import type { Map } from "maplibre-gl";
-  import { cfg, map } from "$lib/config";
+  import { type Config, map } from "$lib/config";
   import ImageLayer from "$lib/draw/image/ImageLayer.svelte";
   import InterventionLayer from "$lib/draw/InterventionLayer.svelte";
   import PolygonToolLayer from "$lib/draw/polygon/PolygonToolLayer.svelte";
@@ -14,6 +14,8 @@
   import ExampleFeatureForm from "./ExampleFeatureForm.svelte";
   import ExampleSchemeForm from "./ExampleSchemeForm.svelte";
   import { writable } from "svelte/store";
+  import type { ExampleFeature, ExampleScheme } from "./types";
+  import type { SchemeData } from "$lib/draw/types";
 
   // Use your own key (for MapTiler or another basemap service)
   let apiKey = "MZEJTanw3WpxRvt7qDfo";
@@ -60,54 +62,80 @@
     properties: {},
   };
 
-  cfg.editFeatureForm = ExampleFeatureForm;
-  cfg.editSchemeForm = ExampleSchemeForm;
-  cfg.maptilerApiKey = apiKey;
-  // Just one from the dataviz basemap, as an example
-  cfg.getStreetViewRoadLayerNames = (map) => ["Road network"];
-  cfg.layerZorder = [
-    // Polygons are bigger than lines, which're bigger than points. When geometry
-    // overlaps, put the smaller thing on top
-    "interventions-coverage-polygons-outlines",
-    "interventions-polygons",
-    "interventions-polygons-outlines",
-    // This is an outline, so draw on top
-    "hover-polygons",
+  let cfg: Config<ExampleFeature, ExampleScheme> = {
+    interventionName: (f) => `some ${f.geometry.type} feature`,
 
-    // The hover effect thickens, so draw beneath
-    "hover-lines",
-    "interventions-lines",
-    "interventions-lines-endpoints",
+    schemeName: (s) => s.scheme_name,
 
-    "hover-points",
-    "interventions-points",
+    backfill: (json) => json,
 
-    "edit-polygon-fill",
-    "edit-polygon-lines",
-    "edit-polygon-vertices",
+    initializeEmptyScheme: (scheme) => {
+      let s = scheme as SchemeData & ExampleScheme;
+      s.scheme_name = "";
+      return s;
+    },
 
-    "draw-split-route",
+    interventionWarning: (feature) => null,
 
-    "route-points",
-    "route-lines",
-    "route-polygons",
+    editFeatureForm: ExampleFeatureForm,
 
-    // From the dataviz basemap
-    "road_label",
+    editSchemeForm: ExampleSchemeForm,
 
-    // Draw the inverted boundary fade on top of basemap labels
-    "boundary",
+    newPointFeature: (f) => {},
+    newPolygonFeature: (f) => {},
+    newLineStringFeature: (f) => {},
 
-    // TODO This might look nicer lower
-    "georeferenced-image",
-  ];
+    updateFeature: (destination, source) => {},
 
-  let gjSchemeCollection = writable(emptyCollection());
+    maptilerApiKey: apiKey,
+
+    // Just one from the dataviz basemap, as an example
+    getStreetViewRoadLayerNames: (map) => ["Road network"],
+
+    layerZorder: [
+      // Polygons are bigger than lines, which're bigger than points. When geometry
+      // overlaps, put the smaller thing on top
+      "interventions-coverage-polygons-outlines",
+      "interventions-polygons",
+      "interventions-polygons-outlines",
+      // This is an outline, so draw on top
+      "hover-polygons",
+
+      // The hover effect thickens, so draw beneath
+      "hover-lines",
+      "interventions-lines",
+      "interventions-lines-endpoints",
+
+      "hover-points",
+      "interventions-points",
+
+      "edit-polygon-fill",
+      "edit-polygon-lines",
+      "edit-polygon-vertices",
+
+      "draw-split-route",
+
+      "route-points",
+      "route-lines",
+      "route-polygons",
+
+      // From the dataviz basemap
+      "road_label",
+
+      // Draw the inverted boundary fade on top of basemap labels
+      "boundary",
+
+      // TODO This might look nicer lower
+      "georeferenced-image",
+    ],
+  };
+
+  let gjSchemeCollection = writable(emptyCollection(cfg));
 </script>
 
 <div style="display: flex; height: 100vh">
   <div class="sidebar">
-    <PerModeControls {gjSchemeCollection} {routeSnapperUrl} />
+    <PerModeControls {cfg} {gjSchemeCollection} {routeSnapperUrl} />
   </div>
   <div class="map">
     <MapLibre
@@ -119,16 +147,16 @@
       }}
       bind:map={$map}
     >
-      <BoundaryLayer {boundaryGeojson} fitBoundsAtStart />
-      <InterventionLayer {gjSchemeCollection} />
-      <ImageLayer />
+      <BoundaryLayer {cfg} {boundaryGeojson} fitBoundsAtStart />
+      <InterventionLayer {cfg} {gjSchemeCollection} />
+      <ImageLayer {cfg} />
       {#if $mode.mode == "list"}
-        <Toolbox {gjSchemeCollection} />
+        <Toolbox {cfg} {gjSchemeCollection} />
       {:else if $mode.mode == "split-route"}
-        <SplitRouteMode {gjSchemeCollection} />
+        <SplitRouteMode {cfg} {gjSchemeCollection} />
       {/if}
-      <RouteSnapperLayer />
-      <PolygonToolLayer />
+      <RouteSnapperLayer {cfg} />
+      <PolygonToolLayer {cfg} />
     </MapLibre>
   </div>
 </div>
