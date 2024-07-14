@@ -6,8 +6,9 @@
   import cameraCursorUrl from "$lib/assets/camera_cursor.svg?url";
   import StreetViewHelp from "./StreetViewHelp.svelte";
   import { map, type Config } from "$lib/config";
+  import type { Map } from "maplibre-gl";
 
-  export let cfg: Config<F, S>;
+  export let cfg: { getStreetViewRoadLayerNames: (map: Map) => string[] };
   export let enabled: boolean;
   export let showControls = true;
 
