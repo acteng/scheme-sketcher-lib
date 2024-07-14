@@ -2,7 +2,7 @@
   import { StreetViewHelp, StreetViewTool } from "$lib/common";
   import { mode, userSettings } from "$lib/draw/stores";
   import { DefaultButton, Radio } from "govuk-svelte";
-  import type { Config } from "$lib/config";
+  import { type Config, map } from "$lib/config";
 
   export let cfg: Config<F, S>;
 
@@ -12,7 +12,7 @@
   }
 </script>
 
-<StreetViewTool {cfg} bind:enabled showControls={false} />
+<StreetViewTool {cfg} map={$map} bind:enabled showControls={false} />
 
 <DefaultButton on:click={() => (enabled = false)}>Finish</DefaultButton>
 

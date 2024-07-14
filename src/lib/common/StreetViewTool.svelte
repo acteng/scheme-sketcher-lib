@@ -5,38 +5,38 @@
   import { onDestroy } from "svelte";
   import cameraCursorUrl from "$lib/assets/camera_cursor.svg?url";
   import StreetViewHelp from "./StreetViewHelp.svelte";
-  import { map, type Config } from "$lib/config";
   import type { Map } from "maplibre-gl";
 
   export let cfg: { getStreetViewRoadLayerNames: (map: Map) => string[] };
+  export let map: Map | null;
   export let enabled: boolean;
   export let showControls = true;
 
   let defaultLineColorPerLayer: [string, any][] = [];
 
   function on() {
-    if (!$map) {
+    if (!map) {
       return;
     }
-    $map.on("click", onClick);
-    $map.getCanvas().style.cursor = `url(${cameraCursorUrl}), auto`;
+    map.on("click", onClick);
+    map.getCanvas().style.cursor = `url(${cameraCursorUrl}), auto`;
 
-    for (let layer of cfg.getStreetViewRoadLayerNames($map)) {
+    for (let layer of cfg.getStreetViewRoadLayerNames(map)) {
       defaultLineColorPerLayer.push([
         layer,
-        $map.getPaintProperty(layer, "line-color"),
+        map.getPaintProperty(layer, "line-color"),
       ]);
-      $map.setPaintProperty(layer, "line-color", "cyan");
+      map.setPaintProperty(layer, "line-color", "cyan");
     }
   }
 
   function off() {
-    if ($map) {
-      $map.off("click", onClick);
-      $map.getCanvas().style.cursor = "inherit";
+    if (map) {
+      map.off("click", onClick);
+      map.getCanvas().style.cursor = "inherit";
 
       for (let [layer, value] of defaultLineColorPerLayer) {
-        $map.setPaintProperty(layer, "line-color", value);
+        map.setPaintProperty(layer, "line-color", value);
       }
       defaultLineColorPerLayer = [];
     }
