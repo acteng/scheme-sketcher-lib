@@ -19,7 +19,7 @@
 
   // Use your own key (for MapTiler or another basemap service)
   let apiKey = "MZEJTanw3WpxRvt7qDfo";
-  let routeSnapperUrl = "https://atip.uk/route-snappers/v2.6/LAD_Adur.bin.gz";
+  let routeSnapperUrl = "https://atip.uk/route-snappers/v3/LAD_Adur.bin.gz";
   let boundaryGeojson = {
     type: "Feature" as const,
     geometry: {

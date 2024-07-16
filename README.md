@@ -33,10 +33,8 @@ TODO: Document all of these
 
 ## Immediate TODOs
 
-- undo route-snapper version hack
 - upgrade packages
 - consider renaming "intervention" and "scheme"
-- coverage polygons in InterventionLayer
 
 ## Developer guide
 
