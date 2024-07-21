@@ -36,6 +36,11 @@ TODO: Document all of these
 - upgrade packages
 - consider renaming "intervention" and "scheme"
 
+## Current users
+
+- [England](https://github.com/acteng/atip/)
+- [Scotland](https://github.com/nptscot/scheme-sketcher/)
+
 ## Developer guide
 
 This is a fairly standard Sveltekit project. `src/lib` is the library meant for use by others, and `src/routes` is a demo site using it. `npm i`, then `npm run dev` to develop locally.
