@@ -41,7 +41,7 @@ repeatedly load anything. The progress bar would ideally be in list mode's
 toolbox, but that gets created and destroyed frequently. -->
 <div style:visibility={$mode.mode == "list" ? "visible" : "hidden"}>
   {#if $map}
-    <RouteSnapperLoader url={routeSnapperUrl} />
+    <RouteSnapperLoader map={$map} url={routeSnapperUrl} />
   {/if}
 </div>
 

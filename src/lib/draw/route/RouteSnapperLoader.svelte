@@ -1,12 +1,13 @@
 <script lang="ts">
   import { routeTool } from "$lib/draw/stores";
   import { ErrorMessage } from "govuk-svelte";
-  import { map } from "$lib/config";
+  import type { Map } from "maplibre-gl";
   import { onMount } from "svelte";
   import { init, RouteTool } from "route-snapper-ts";
   import { routeToolGj, snapMode, undoLength } from "./stores";
   import { fetchWithProgress } from "$lib/common";
 
+  export let map: Map;
   export let url: string;
 
   let progress: number = 0;
@@ -23,7 +24,7 @@
         progress = p;
       });
       routeTool.set(
-        new RouteTool($map!, graphBytes, routeToolGj, snapMode, undoLength),
+        new RouteTool(map, graphBytes, routeToolGj, snapMode, undoLength),
       );
       progress = 100;
       routeToolReady = true;

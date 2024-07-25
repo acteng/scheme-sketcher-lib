@@ -7,7 +7,7 @@ interface LayerProps {
 }
 
 // Just require the subset of config needed, to make it easier for some callers
-interface ConfigWithZorder {
+export interface ConfigWithZorder {
   layerZorder: string[];
 }
 

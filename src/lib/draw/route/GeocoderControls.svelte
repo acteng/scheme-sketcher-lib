@@ -1,4 +1,4 @@
-<script lang="ts" generics="F, S">
+<script lang="ts">
   import type { FeatureCollection } from "@maptiler/geocoding-control/types";
   import type { Position } from "geojson";
   import { routeTool } from "$lib/draw/stores";
@@ -7,7 +7,7 @@
   import { map, type Config } from "$lib/config";
   import { geocoderGj } from "./stores";
 
-  export let cfg: Config<F, S>;
+  export let maptilerApiKey: string;
 
   let query = "";
 
@@ -21,7 +21,7 @@
       country: "gb",
       proximity: $map!.getCenter().toArray().join(","),
       fuzzyMatch: "true",
-      key: cfg.maptilerApiKey,
+      key: maptilerApiKey,
     }).toString();
     let url = `https://api.maptiler.com/geocoding/${query}.json?${params}`;
     let resp = await fetch(url);

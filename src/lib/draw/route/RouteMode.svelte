@@ -53,4 +53,4 @@
   <SecondaryButton on:click={onFailure}>Cancel</SecondaryButton>
 </ButtonGroup>
 
-<RouteControls {cfg} extendRoute />
+<RouteControls maptilerApiKey={cfg.maptilerApiKey} extendRoute />

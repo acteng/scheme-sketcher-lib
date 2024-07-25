@@ -1,5 +1,4 @@
-<script lang="ts" generics="F, S">
-  import { type Config } from "$lib/config";
+<script lang="ts">
   import type { Feature } from "geojson";
   import {
     constructMatchExpression,
@@ -7,6 +6,7 @@
     isPoint,
     isPolygon,
     layerId,
+    type ConfigWithZorder,
   } from "$lib/maplibre";
   import {
     CircleLayer,
@@ -17,7 +17,7 @@
   } from "svelte-maplibre";
   import { geocoderGj, routeToolGj } from "./stores";
 
-  export let cfg: Config<F, S>;
+  export let cfg: ConfigWithZorder;
 
   const circleRadiusPixels = 10;
 

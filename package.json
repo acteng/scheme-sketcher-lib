@@ -34,6 +34,11 @@
       "svelte": "./dist/draw/index.js",
       "import": "./dist/draw/index.js"
     },
+    "./draw/route": {
+      "types": "./dist/draw/route.d.ts",
+      "svelte": "./dist/draw/route.js",
+      "import": "./dist/draw/route.js"
+    },
     "./draw/stores": {
       "types": "./dist/draw/stores.d.ts",
       "svelte": "./dist/draw/stores.js",

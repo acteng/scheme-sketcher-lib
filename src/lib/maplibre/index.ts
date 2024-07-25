@@ -1,4 +1,4 @@
-export { layerId } from "./zorder";
+export { layerId, type ConfigWithZorder } from "./zorder";
 
 // Helpers for https://maplibre.org/maplibre-gl-js-docs/style-spec/
 import turfBbox from "@turf/bbox";
