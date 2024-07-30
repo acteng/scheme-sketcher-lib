@@ -1,4 +1,4 @@
-<script lang="ts" generics="F, S">
+<script lang="ts">
   import mask from "@turf/mask";
   import type {
     Feature,
@@ -6,12 +6,12 @@
     MultiPolygon,
     Polygon,
   } from "geojson";
-  import { bbox, layerId } from "$lib/maplibre";
-  import { map, type Config } from "$lib/config";
+  import { bbox, layerId, type ConfigWithZorder } from "$lib/maplibre";
+  import { map } from "$lib/config";
   import { getContext } from "svelte";
   import { FillLayer, GeoJSON } from "svelte-maplibre";
 
-  export let cfg: Config<F, S>;
+  export let cfg: ConfigWithZorder;
   export let boundaryGeojson:
     | Feature<Polygon | MultiPolygon>
     | FeatureCollection<Polygon | MultiPolygon>;
