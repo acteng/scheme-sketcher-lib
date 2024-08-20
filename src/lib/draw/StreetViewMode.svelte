@@ -17,7 +17,7 @@
 <DefaultButton on:click={() => (enabled = false)}>Finish</DefaultButton>
 
 <Radio
-  legend="Source"
+  label="Source"
   choices={[
     ["google", "Google Street View"],
     ["bing", "Bing Streetside"],

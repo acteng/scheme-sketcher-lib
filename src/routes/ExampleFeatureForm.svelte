@@ -26,7 +26,7 @@
 />
 
 <Radio
-  legend="Likelihood of construction"
+  label="Likelihood of construction"
   choices={[
     ["moonshot", "Moonshot"],
     ["maybe", "Maybe?"],

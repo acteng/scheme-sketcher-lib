@@ -85,7 +85,7 @@
     </SecondaryButton>
 
     <Radio
-      legend="Source"
+      label="Source"
       choices={[
         ["google", "Google Street View"],
         ["bing", "Bing Streetside"],
