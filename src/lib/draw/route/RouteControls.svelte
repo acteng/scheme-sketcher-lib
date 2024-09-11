@@ -11,7 +11,7 @@
 
   // TODO When editing, we should save in the route and use the previous value
   $: $routeTool!.setRouteConfig({
-    avoid_doubling_back: $userSettings.avoidDoublingBack,
+    avoid_doubling_back: false,
     extend_route: extendRoute,
   });
 
@@ -111,13 +111,6 @@
 
   <Checkbox bind:checked={$showAllNodes}>
     Show all snappable points (zoom in to see)
-  </Checkbox>
-
-  <Checkbox
-    bind:checked={$userSettings.avoidDoublingBack}
-    hint="Try to make the route avoid using the same streets with multiple waypoints"
-  >
-    Avoid doubling back
   </Checkbox>
 </CheckboxGroup>
 

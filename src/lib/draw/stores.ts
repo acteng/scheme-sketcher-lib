@@ -84,7 +84,6 @@ userSettings.subscribe((value) =>
 function loadUserSettings(): UserSettings {
   let settings = {
     streetViewImagery: "google",
-    avoidDoublingBack: false,
   };
 
   // Be paranoid when loading from local storage, and only copy over valid items
@@ -92,9 +91,6 @@ function loadUserSettings(): UserSettings {
     let x = JSON.parse(window.localStorage.getItem("userSettings") || "{}");
     if (isStreetViewImagery(x.streetViewImagery)) {
       settings.streetViewImagery = x.streetViewImagery;
-    }
-    if (typeof x.avoidDoublingBack == "boolean") {
-      settings.avoidDoublingBack = x.avoidDoublingBack;
     }
   } catch (error) {
     console.log(`Couldn't parse userSettings from local storage: ${error}`);

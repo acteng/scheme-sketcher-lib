@@ -61,9 +61,6 @@ export interface SchemeData {
 export interface UserSettings {
   // From the StreetView tool
   streetViewImagery: "google" | "bing";
-
-  // From the Route tool
-  avoidDoublingBack: boolean;
 }
 
 export function isStreetViewImagery(x: string): x is "google" | "bing" {
