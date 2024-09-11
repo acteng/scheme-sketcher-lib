@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="ts" generics="F, S">
   import type { Feature } from "geojson";
   import {
     constructMatchExpression,
@@ -15,14 +15,33 @@
     LineLayer,
     MarkerLayer,
   } from "svelte-maplibre";
-  import { geocoderGj, routeToolGj } from "./stores";
+  import {
+    geocoderGj,
+    routeToolGj,
+    showAllNodes,
+    showAllNodesGj,
+  } from "./stores";
+  import { mode } from "$lib/draw/stores";
+  import type { Writable } from "svelte/store";
+  import type { Schemes, Mode } from "$lib/draw/types";
 
   export let cfg: ConfigWithZorder;
+  export let gjSchemes: Writable<Schemes<F, S>>;
 
   const circleRadiusPixels = 10;
 
   function getNumber(feature: Feature): string {
     return feature.properties?.number;
+  }
+
+  function showSnapping(mode: Mode): boolean {
+    if (mode.mode == "edit-geometry") {
+      let feature = $gjSchemes.features.find((f) => f.id == mode.id)!;
+      return "waypoints" in feature.properties;
+    } else if (mode.mode == "new-snapped-polygon" || mode.mode == "new-route") {
+      return true;
+    }
+    return false;
   }
 </script>
 
@@ -62,6 +81,22 @@
       "fill-color": "black",
       "fill-opacity": 0.5,
     }}
+  />
+</GeoJSON>
+
+<GeoJSON data={$showAllNodesGj}>
+  <CircleLayer
+    {...layerId(cfg, "route-debug-nodes")}
+    paint={{
+      "circle-opacity": 0,
+      "circle-radius": 5,
+      "circle-stroke-color": "black",
+      "circle-stroke-width": 1,
+    }}
+    layout={{
+      visibility: $showAllNodes && showSnapping($mode) ? "visible" : "none",
+    }}
+    minzoom={13}
   />
 </GeoJSON>
 

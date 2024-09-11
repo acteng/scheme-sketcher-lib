@@ -117,6 +117,7 @@
       "route-points",
       "route-lines",
       "route-polygons",
+      "route-debug-nodes",
 
       // From the dataviz basemap
       "road_label",
@@ -154,7 +155,7 @@
       {:else if $mode.mode == "split-route"}
         <SplitRouteMode {cfg} {gjSchemes} />
       {/if}
-      <RouteSnapperLayer {cfg} />
+      <RouteSnapperLayer {cfg} {gjSchemes} />
       <PolygonToolLayer {cfg} />
     </MapLibre>
   </div>

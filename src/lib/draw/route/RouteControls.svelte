@@ -2,7 +2,7 @@
   import { routeTool, userSettings } from "$lib/draw/stores";
   import { Checkbox, CheckboxGroup, SecondaryButton } from "govuk-svelte";
   import GeocoderControls from "./GeocoderControls.svelte";
-  import { snapMode, undoLength } from "./stores";
+  import { snapMode, undoLength, showAllNodes, showAllNodesGj } from "./stores";
 
   export let maptilerApiKey: string;
   // Start with this enabled or disabled, based on whether we're drawing a new
@@ -22,6 +22,28 @@
   function toggleSnap() {
     $routeTool!.toggleSnapMode();
   }
+
+  function loadNodes(show: boolean) {
+    if (show && $showAllNodesGj.features.length == 0) {
+      $showAllNodesGj = JSON.parse($routeTool!.inner.debugSnappableNodes());
+    }
+  }
+  $: loadNodes($showAllNodes);
+
+  // Show snappable nodes when going from freehand to snapped
+  let first = true;
+  function freeToSnapped(snapped: boolean) {
+    if (first) {
+      first = false;
+      return;
+    }
+    if (snapped) {
+      $showAllNodes = true;
+      // TODO Not sure why, but this isn't triggering the reactive statement above
+      loadNodes(true);
+    }
+  }
+  $: freeToSnapped($snapMode);
 </script>
 
 <SecondaryButton disabled={$undoLength == 0} on:click={undo}>
@@ -86,6 +108,11 @@
   >
     Add points to end
   </Checkbox>
+
+  <Checkbox bind:checked={$showAllNodes}>
+    Show all snappable points (zoom in to see)
+  </Checkbox>
+
   <Checkbox
     bind:checked={$userSettings.avoidDoublingBack}
     hint="Try to make the route avoid using the same streets with multiple waypoints"
