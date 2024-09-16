@@ -5,6 +5,7 @@
     mode,
     sidebarHover,
     emptySchemes,
+    preserveListScroll,
   } from "$lib/draw/stores";
   import {
     ButtonGroup,
@@ -15,7 +16,7 @@
     WarningButton,
   } from "govuk-svelte";
   import { bbox } from "$lib/maplibre";
-  import { map, type Config } from "$lib/config";
+  import { map, sidebarDiv, type Config } from "$lib/config";
   import { onDestroy } from "svelte";
   import deleteIcon from "$lib/assets/delete.svg?url";
   import type { Schemes } from "$lib/draw/types";
@@ -26,6 +27,8 @@
   export let scheme_reference: string;
 
   let showDeleteModal = false;
+
+  console.log(`started for ${scheme_reference}. got ${Object.keys($gjSchemes.schemes)} right now`);
 
   $: numErrors = $gjSchemes.features.filter(
     (f) =>
@@ -60,6 +63,8 @@
         duration: 500,
       });
     }
+
+    $preserveListScroll = $sidebarDiv ? $sidebarDiv.scrollTop : 0;
 
     mode.set({ mode: "edit-form", id });
   }

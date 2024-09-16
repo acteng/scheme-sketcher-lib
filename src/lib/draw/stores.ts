@@ -23,6 +23,10 @@ export const sidebarHover: Writable<number | null> = writable(null);
 
 export const mode: Writable<Mode> = writable({ mode: "list" });
 
+// When leaving list mode in some cases, remember the scroll position to later
+// restore it.
+export const preserveListScroll: Writable<number> = writable(0);
+
 // All feature IDs must:
 //
 // - be unique

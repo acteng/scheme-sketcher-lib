@@ -1,10 +1,16 @@
 <script lang="ts" generics="F, S">
-  import { mode, pointTool, polygonTool, routeTool } from "$lib/draw/stores";
+  import {
+    mode,
+    pointTool,
+    polygonTool,
+    routeTool,
+    preserveListScroll,
+  } from "$lib/draw/stores";
   import type { Schemes } from "$lib/draw/types";
   import type { Writable } from "svelte/store";
   import { DefaultButton } from "govuk-svelte";
-  import { map, type Config } from "$lib/config";
-  import { onDestroy } from "svelte";
+  import { map, sidebarDiv, type Config } from "$lib/config";
+  import { onMount, onDestroy, tick } from "svelte";
   import EditGeometryMode from "../draw/EditGeometryMode.svelte";
   import ImageMode from "../draw/image/ImageMode.svelte";
   import { PointTool } from "../draw/point/point_tool";
@@ -28,6 +34,25 @@
   $: if ($map && !$polygonTool) {
     polygonTool.set(new PolygonTool($map));
   }
+
+  // The sidebar isn't recreated when each mode changes, meaning scroll position may be incorrect.
+  async function resetScroll(m: string) {
+    // Wait for the browser to render the new mode's controls
+    await tick();
+    if ($sidebarDiv) {
+      // When returning to list mode after selecting an intervention, restore
+      // the scroll position. Sometimes this looks a bit odd when the
+      // user deletes an intervention, but it generally feels intuitive for long lists.
+      if (m == "list") {
+        $sidebarDiv.scrollTop = $preserveListScroll;
+        $preserveListScroll = 0;
+      } else {
+        // For all other modes, start at the top
+        $sidebarDiv.scrollTop = 0;
+      }
+    }
+  }
+  $: resetScroll($mode.mode);
 
   onDestroy(() => {
     $pointTool?.tearDown();

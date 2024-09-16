@@ -11,6 +11,7 @@ import type { Map } from "maplibre-gl";
 
 // TODO Still do this, or use something else?
 export let map: Writable<Map | null> = writable(null);
+export let sidebarDiv: Writable<HTMLDivElement | null> = writable(null);
 
 // The draw code should be agnostic to the feature properties that differ by
 // schema. Start centralizing the logic here, so it's easy for other users to

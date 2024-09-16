@@ -23,6 +23,7 @@ TODO: Document all of these
 
 - setting things in config
   - map store
+  - sidebarDiv store
   - ownership of gjSchemeCollection and initialization gotchas
 - govuk
 - static assets
