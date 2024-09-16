@@ -1,7 +1,7 @@
 <script lang="ts">
   import { MapLibre } from "svelte-maplibre";
   import type { Map } from "maplibre-gl";
-  import { type Config, map } from "$lib/config";
+  import { type Config, map, sidebarDiv } from "$lib/config";
   import ImageLayer from "$lib/draw/image/ImageLayer.svelte";
   import InterventionLayer from "$lib/draw/InterventionLayer.svelte";
   import PolygonToolLayer from "$lib/draw/polygon/PolygonToolLayer.svelte";
@@ -133,7 +133,7 @@
 </script>
 
 <div style="display: flex; height: 100vh">
-  <div class="sidebar">
+  <div class="sidebar" bind:this={$sidebarDiv}>
     <PerModeControls {cfg} {gjSchemes} {routeSnapperUrl} />
   </div>
   <div class="map">

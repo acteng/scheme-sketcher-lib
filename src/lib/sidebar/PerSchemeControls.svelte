@@ -5,6 +5,7 @@
     mode,
     sidebarHover,
     emptySchemes,
+    preserveListScroll,
   } from "$lib/draw/stores";
   import {
     ButtonGroup,
@@ -15,7 +16,7 @@
     WarningButton,
   } from "govuk-svelte";
   import { bbox } from "$lib/maplibre";
-  import { map, type Config } from "$lib/config";
+  import { map, sidebarDiv, type Config } from "$lib/config";
   import { onDestroy } from "svelte";
   import deleteIcon from "$lib/assets/delete.svg?url";
   import type { Schemes } from "$lib/draw/types";
@@ -60,6 +61,8 @@
         duration: 500,
       });
     }
+
+    $preserveListScroll = $sidebarDiv ? $sidebarDiv.scrollTop : 0;
 
     mode.set({ mode: "edit-form", id });
   }
