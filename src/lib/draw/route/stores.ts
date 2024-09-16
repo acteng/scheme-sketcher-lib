@@ -11,3 +11,8 @@ export const geocoderGj: Writable<FeatureCollection> = writable(
 );
 export const snapMode: Writable<boolean> = writable(true);
 export const undoLength: Writable<number> = writable(0);
+export const showAllNodes: Writable<boolean> = writable(false);
+export const showAllNodesGj: Writable<FeatureCollection> = writable({
+  type: "FeatureCollection",
+  features: [],
+});

@@ -1,11 +1,18 @@
 <script lang="ts">
   import { routeTool } from "$lib/draw/stores";
-  import { SecondaryButton } from "govuk-svelte";
-  import { undoLength } from "../route/stores";
+  import { Checkbox, SecondaryButton } from "govuk-svelte";
+  import { undoLength, showAllNodes, showAllNodesGj } from "../route/stores";
 
   function undo() {
     $routeTool!.undo();
   }
+
+  function loadNodes(show: boolean) {
+    if (show && $showAllNodesGj.features.length == 0) {
+      $showAllNodesGj = JSON.parse($routeTool!.inner.debugSnappableNodes());
+    }
+  }
+  $: loadNodes($showAllNodes);
 </script>
 
 <SecondaryButton disabled={$undoLength == 0} on:click={undo}>
@@ -15,6 +22,10 @@
     Undo ({$undoLength})
   {/if}
 </SecondaryButton>
+
+<Checkbox bind:checked={$showAllNodes}>
+  Show all snappable points (zoom in to see)
+</Checkbox>
 
 <ul>
   <li>
