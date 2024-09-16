@@ -28,6 +28,8 @@
 
   let showDeleteModal = false;
 
+  console.log(`started for ${scheme_reference}. got ${Object.keys($gjSchemes.schemes)} right now`);
+
   $: numErrors = $gjSchemes.features.filter(
     (f) =>
       f.properties.scheme_reference == scheme_reference &&
