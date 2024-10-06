@@ -5,12 +5,22 @@
   import { waypoints, snapMode, type Waypoint } from "./stores";
   import type { MapMouseEvent } from "maplibre-gl";
   import type { Writable } from "svelte/store";
-  import type { FeatureCollection } from "geojson";
+  import type { Feature, FeatureCollection } from "geojson";
   import { RouteTool } from "route-snapper-ts";
+  import { Radio } from "govuk-svelte";
 
   export let gjSchemes: Writable<Schemes<F, S>>;
 
+  let drawMode: "append-start" | "append-end" | "adjust" = "append-end";
+
   $: routesGj = calculateRoutes($routeTool, $waypoints);
+
+  let hoveredLine: Feature | null = null;
+  interface ExtraNode {
+    point: [number, number];
+    insertIdx: number;
+  }
+  $: extraNodes = getExtraNodes($routeTool, $waypoints, hoveredLine, drawMode);
 
   function isActive(mode: Mode): boolean {
     if (mode.mode == "edit-geometry") {
@@ -28,10 +38,17 @@
     }
 
     waypoints.update((w) => {
-      w.push({
-        point: e.detail.lngLat.toArray(),
-        snapped: $snapMode,
-      });
+      if (drawMode == "append-start") {
+        w.splice(0, 0, {
+          point: e.detail.lngLat.toArray(),
+          snapped: $snapMode,
+        });
+      } else if (drawMode == "append-end") {
+        w.push({
+          point: e.detail.lngLat.toArray(),
+          snapped: $snapMode,
+        });
+      }
       return w;
     });
   }
@@ -76,7 +93,72 @@
     let out = routeTool.inner.toFinalFeature();
     return out ? JSON.parse(out) : emptyGj;
   }
+
+  function getExtraNodes(
+    routeTool: RouteTool | null,
+    waypoints: Waypoint[],
+    feature: Feature | null,
+    drawMode: "append-start" | "append-end" | "adjust",
+  ): ExtraNode[] {
+    if (!routeTool || drawMode != "adjust") {
+      return [];
+    }
+
+    // TODO New WASM API, and only grab nodes for the particular line
+    routeTool.inner.editExisting(
+      waypoints.map((w) => {
+        return {
+          lon: w.point[0],
+          lat: w.point[1],
+          snapped: w.snapped,
+        };
+      }),
+    );
+    let gj = JSON.parse(routeTool.inner.renderGeojson());
+    let nodes = [];
+    let insertIdx = 0;
+    for (let f of gj.features) {
+      if (f.geometry.type != "Point") {
+        continue;
+      }
+      // TODO Need a new WASM API, the order returned won't work
+      if (!f.properties.type) {
+        insertIdx++;
+      } else if (f.properties.type == "node") {
+        nodes.push({
+          point: f.geometry.coordinates,
+          insertIdx,
+        });
+      }
+    }
+    return nodes;
+  }
+
+  function addNode(node: ExtraNode) {
+    waypoints.update((w) => {
+      w.splice(node.insertIdx, 0, {
+        point: node.point,
+        snapped: true,
+      });
+      return w;
+    });
+  }
 </script>
+
+{#if isActive($mode)}
+  <div class="controls">
+    <Radio
+      label="Mode"
+      choices={[
+        ["append-start", "Extend from start"],
+        ["append-end", "Extend from end"],
+        ["adjust", "Drag middle points"],
+      ]}
+      bind:value={drawMode}
+      inlineSmall
+    />
+  </div>
+{/if}
 
 <MapEvents on:click={onMapClick} />
 
@@ -91,14 +173,22 @@
   </Marker>
 {/each}
 
-<GeoJSON data={routesGj}>
+<GeoJSON data={routesGj} generateId>
   <LineLayer
+    manageHoverState
+    bind:hovered={hoveredLine}
     paint={{
       "line-color": "black",
-      "line-width": 3,
+      "line-width": 10,
     }}
   />
 </GeoJSON>
+
+{#each extraNodes as node}
+  <Marker draggable bind:lngLat={node.point} on:click={() => addNode(node)}>
+    <span class="dot node">{node.insertIdx}</span>
+  </Marker>
+{/each}
 
 <style>
   .dot {
@@ -121,5 +211,24 @@
 
   .snapped {
     background-color: red;
+  }
+
+  .node {
+    width: 20px;
+    height: 20px;
+    background-color: grey;
+  }
+
+  .controls {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 90%;
+    background-color: white;
+    border: 1px solid black;
+    padding: 16px;
+
+    display: flex;
+    justify-content: space-between;
   }
 </style>
