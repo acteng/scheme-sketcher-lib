@@ -155,7 +155,7 @@
       {:else if $mode.mode == "split-route"}
         <SplitRouteMode {cfg} {gjSchemes} />
       {/if}
-      <RouteSnapperLayer {cfg} {gjSchemes} />
+      <RouteSnapperLayer {gjSchemes} />
       <PolygonToolLayer {cfg} />
     </MapLibre>
   </div>

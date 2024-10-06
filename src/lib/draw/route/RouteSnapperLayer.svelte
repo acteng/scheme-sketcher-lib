@@ -1,111 +1,125 @@
 <script lang="ts" generics="F, S">
-  import type { Feature } from "geojson";
-  import {
-    constructMatchExpression,
-    isLine,
-    isPoint,
-    isPolygon,
-    layerId,
-    type ConfigWithZorder,
-  } from "$lib/maplibre";
-  import {
-    CircleLayer,
-    FillLayer,
-    GeoJSON,
-    LineLayer,
-    MarkerLayer,
-  } from "svelte-maplibre";
-  import {
-    geocoderGj,
-    routeToolGj,
-    showAllNodes,
-    showAllNodesGj,
-  } from "./stores";
-  import { mode } from "$lib/draw/stores";
-  import type { Writable } from "svelte/store";
+  import { routeTool, mode } from "$lib/draw/stores";
+  import { Marker, MapEvents, GeoJSON, LineLayer } from "svelte-maplibre";
   import type { Schemes, Mode } from "$lib/draw/types";
+  import { waypoints, snapMode, type Waypoint } from "./stores";
+  import type { MapMouseEvent } from "maplibre-gl";
+  import type { Writable } from "svelte/store";
+  import type { FeatureCollection } from "geojson";
+  import { RouteTool } from "route-snapper-ts";
 
-  export let cfg: ConfigWithZorder;
   export let gjSchemes: Writable<Schemes<F, S>>;
 
-  const circleRadiusPixels = 10;
+  $: routesGj = calculateRoutes($routeTool, $waypoints);
 
-  function getNumber(feature: Feature): string {
-    return feature.properties?.number;
-  }
-
-  function showSnapping(mode: Mode): boolean {
+  function isActive(mode: Mode): boolean {
     if (mode.mode == "edit-geometry") {
       let feature = $gjSchemes.features.find((f) => f.id == mode.id)!;
-      return "waypoints" in feature.properties;
-    } else if (mode.mode == "new-snapped-polygon" || mode.mode == "new-route") {
+      return feature.geometry.type == "LineString";
+    } else if (mode.mode == "new-route") {
       return true;
     }
     return false;
   }
+
+  function onMapClick(e: CustomEvent<MapMouseEvent>) {
+    if (!isActive($mode)) {
+      return;
+    }
+
+    waypoints.update((w) => {
+      w.push({
+        point: e.detail.lngLat.toArray(),
+        snapped: $snapMode,
+      });
+      return w;
+    });
+  }
+
+  function toggleSnapped(idx: number) {
+    waypoints.update((w) => {
+      w[idx].snapped = !w[idx].snapped;
+      return w;
+    });
+  }
+
+  function removeWaypoint(idx: number) {
+    waypoints.update((w) => {
+      w.splice(idx, 1);
+      return w;
+    });
+  }
+
+  function calculateRoutes(
+    routeTool: RouteTool | null,
+    waypoints: Waypoint[],
+  ): FeatureCollection {
+    let emptyGj = {
+      type: "FeatureCollection" as const,
+      features: [],
+    };
+    if (!routeTool) {
+      return emptyGj;
+    }
+
+    // TODO Totally different WASM API, please -- much simpler stateless one
+    // TODO Match up directly
+    routeTool.inner.editExisting(
+      waypoints.map((w) => {
+        return {
+          lon: w.point[0],
+          lat: w.point[1],
+          snapped: w.snapped,
+        };
+      }),
+    );
+    let out = routeTool.inner.toFinalFeature();
+    return out ? JSON.parse(out) : emptyGj;
+  }
 </script>
 
-<GeoJSON data={$routeToolGj}>
-  <CircleLayer
-    {...layerId(cfg, "route-points")}
-    filter={isPoint}
-    paint={{
-      "circle-color": constructMatchExpression(
-        ["get", "type"],
-        {
-          "snapped-waypoint": "red",
-          "free-waypoint": "blue",
-        },
-        "black",
-      ),
-      "circle-opacity": ["case", ["has", "hovered"], 0.5, 1.0],
-      "circle-radius": constructMatchExpression(
-        ["get", "type"],
-        { node: circleRadiusPixels / 2.0 },
-        circleRadiusPixels,
-      ),
-    }}
-  />
+<MapEvents on:click={onMapClick} />
+
+{#each $waypoints as waypt, idx}
+  <Marker
+    draggable
+    bind:lngLat={waypt.point}
+    on:click={() => toggleSnapped(idx)}
+    on:contextmenu={() => removeWaypoint(idx)}
+  >
+    <span class="dot" class:snapped={waypt.snapped}>{idx + 1}</span>
+  </Marker>
+{/each}
+
+<GeoJSON data={routesGj}>
   <LineLayer
-    {...layerId(cfg, "route-lines")}
-    filter={isLine}
     paint={{
-      "line-color": ["case", ["get", "snapped"], "red", "blue"],
-      "line-width": 2.5,
-    }}
-  />
-  <FillLayer
-    {...layerId(cfg, "route-polygons")}
-    filter={isPolygon}
-    paint={{
-      "fill-color": "black",
-      "fill-opacity": 0.5,
+      "line-color": "black",
+      "line-width": 3,
     }}
   />
 </GeoJSON>
 
-<GeoJSON data={$showAllNodesGj}>
-  <CircleLayer
-    {...layerId(cfg, "route-debug-nodes")}
-    paint={{
-      "circle-opacity": 0,
-      "circle-radius": 5,
-      "circle-stroke-color": "black",
-      "circle-stroke-width": 1,
-    }}
-    layout={{
-      visibility: $showAllNodes && showSnapping($mode) ? "visible" : "none",
-    }}
-    minzoom={13}
-  />
-</GeoJSON>
+<style>
+  .dot {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-<GeoJSON data={$geocoderGj}>
-  <MarkerLayer let:feature>
-    <div
-      style="font-size: 30px; background: white; padding: 16px; border-radius: 50%;"
-    >
-      {getNumber(feature)}
-    </div>
-  </MarkerLayer>
-</GeoJSON>
+    color: white;
+    background-color: blue;
+    font-weight: bold;
+  }
+
+  .dot:hover {
+    border: 1px solid black;
+    cursor: pointer;
+  }
+
+  .snapped {
+    background-color: red;
+  }
+</style>

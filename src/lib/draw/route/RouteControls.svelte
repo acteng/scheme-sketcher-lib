@@ -20,7 +20,7 @@
   }
 
   function toggleSnap() {
-    $routeTool!.toggleSnapMode();
+    $snapMode = !$snapMode;
   }
 
   function loadNodes(show: boolean) {
