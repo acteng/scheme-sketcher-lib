@@ -11,16 +11,25 @@
 
   export let gjSchemes: Writable<Schemes<F, S>>;
 
+  let emptyGj = {
+    type: "FeatureCollection" as const,
+    features: [],
+  };
+
   let drawMode: "append-start" | "append-end" | "adjust" = "append-end";
 
   $: routesGj = calculateRoutes($routeTool, $waypoints);
 
+  // TODO Remove unless we start using this
   let hoveredLine: Feature | null = null;
   interface ExtraNode {
     point: [number, number];
     insertIdx: number;
   }
   $: extraNodes = getExtraNodes($routeTool, $waypoints, hoveredLine, drawMode);
+
+  let cursor: Waypoint | null = null;
+  $: previewGj = getPreview($routeTool, $waypoints, drawMode, cursor);
 
   function isActive(mode: Mode): boolean {
     if (mode.mode == "edit-geometry") {
@@ -53,6 +62,13 @@
     });
   }
 
+  function onMouseMove(e: CustomEvent<MapMouseEvent>) {
+    cursor = {
+      point: e.detail.lngLat.toArray(),
+      snapped: true,
+    };
+  }
+
   function toggleSnapped(idx: number) {
     waypoints.update((w) => {
       w[idx].snapped = !w[idx].snapped;
@@ -71,19 +87,37 @@
     routeTool: RouteTool | null,
     waypoints: Waypoint[],
   ): FeatureCollection {
-    let emptyGj = {
-      type: "FeatureCollection" as const,
-      features: [],
-    };
-    if (!routeTool) {
-      return emptyGj;
-    }
-
     try {
-      return JSON.parse(routeTool.inner.calculateRoute(waypoints));
-    } catch (err) {
-      return emptyGj;
-    }
+      if (routeTool) {
+        return JSON.parse(routeTool.inner.calculateRoute(waypoints));
+      }
+    } catch (err) {}
+    return emptyGj;
+  }
+
+  function getPreview(
+    routeTool: RouteTool | null,
+    waypoints: Waypoint[],
+    drawMode: "append-start" | "append-end" | "adjust",
+    cursor: Waypoint | null,
+  ): FeatureCollection {
+    try {
+      if (routeTool && waypoints.length > 0 && cursor) {
+        if (drawMode == "append-start") {
+          return JSON.parse(
+            routeTool.inner.calculateRoute([cursor, waypoints[0]]),
+          );
+        } else if (drawMode == "append-end") {
+          return JSON.parse(
+            routeTool.inner.calculateRoute([
+              waypoints[waypoints.length - 1],
+              cursor,
+            ]),
+          );
+        }
+      }
+    } catch (err) {}
+    return emptyGj;
   }
 
   function getExtraNodes(
@@ -142,7 +176,13 @@
   </div>
 {/if}
 
-<MapEvents on:click={onMapClick} />
+<MapEvents on:click={onMapClick} on:mousemove={onMouseMove} />
+
+{#each extraNodes as node}
+  <Marker draggable bind:lngLat={node.point} on:click={() => addNode(node)}>
+    <span class="dot node">{node.insertIdx}</span>
+  </Marker>
+{/each}
 
 {#each $waypoints as waypt, idx}
   <Marker
@@ -166,11 +206,14 @@
   />
 </GeoJSON>
 
-{#each extraNodes as node}
-  <Marker draggable bind:lngLat={node.point} on:click={() => addNode(node)}>
-    <span class="dot node">{node.insertIdx}</span>
-  </Marker>
-{/each}
+<GeoJSON data={previewGj}>
+  <LineLayer
+    paint={{
+      "line-color": "black",
+      "line-width": 3,
+    }}
+  />
+</GeoJSON>
 
 <style>
   .dot {
