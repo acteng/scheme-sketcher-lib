@@ -79,19 +79,11 @@
       return emptyGj;
     }
 
-    // TODO Totally different WASM API, please -- much simpler stateless one
-    // TODO Match up directly
-    routeTool.inner.editExisting(
-      waypoints.map((w) => {
-        return {
-          lon: w.point[0],
-          lat: w.point[1],
-          snapped: w.snapped,
-        };
-      }),
-    );
-    let out = routeTool.inner.toFinalFeature();
-    return out ? JSON.parse(out) : emptyGj;
+    try {
+      return JSON.parse(routeTool.inner.calculateRoute(waypoints));
+    } catch (err) {
+      return emptyGj;
+    }
   }
 
   function getExtraNodes(
@@ -104,33 +96,23 @@
       return [];
     }
 
-    // TODO New WASM API, and only grab nodes for the particular line
-    routeTool.inner.editExisting(
-      waypoints.map((w) => {
-        return {
-          lon: w.point[0],
-          lat: w.point[1],
-          snapped: w.snapped,
-        };
-      }),
-    );
-    let gj = JSON.parse(routeTool.inner.renderGeojson());
     let nodes = [];
-    let insertIdx = 0;
-    for (let f of gj.features) {
-      if (f.geometry.type != "Point") {
-        continue;
+    let insertIdx = 1;
+
+    // TODO try/catch
+    for (let i = 0; i < waypoints.length - 1; i++) {
+      // TODO Exclude the first/last in the WASM API, not here
+      let extra = JSON.parse(
+        routeTool.inner.getExtraNodes(waypoints[i], waypoints[i + 1]),
+      );
+      extra.shift();
+      extra.pop();
+      for (let point of extra) {
+        nodes.push({ point, insertIdx });
       }
-      // TODO Need a new WASM API, the order returned won't work
-      if (!f.properties.type) {
-        insertIdx++;
-      } else if (f.properties.type == "node") {
-        nodes.push({
-          point: f.geometry.coordinates,
-          insertIdx,
-        });
-      }
+      insertIdx++;
     }
+
     return nodes;
   }
 

@@ -7,7 +7,7 @@
     routeTool,
   } from "$lib/draw/stores";
   import { ButtonGroup, DefaultButton, SecondaryButton } from "govuk-svelte";
-  import { onDestroy, onMount } from "svelte";
+  import { onDestroy } from "svelte";
   import RouteControls from "./RouteControls.svelte";
   import { type Config } from "$lib/config";
   import type { FeatureWithID, Schemes } from "$lib/draw/types";
@@ -17,7 +17,6 @@
   export let cfg: Config<F, S>;
   export let gjSchemes: Writable<Schemes<F, S>>;
 
-  onMount(() => {});
   onDestroy(() => {
     $waypoints = [];
   });
@@ -43,18 +42,11 @@
     if (!$routeTool) {
       return;
     }
-    $routeTool.inner.editExisting(
-      $waypoints.map((w) => {
-        return {
-          lon: w.point[0],
-          lat: w.point[1],
-          snapped: w.snapped,
-        };
-      }),
-    );
-    let out = $routeTool.inner.toFinalFeature();
-    if (out) {
+    try {
+      let out = $routeTool.inner.calculateRoute($waypoints);
       onSuccess(JSON.parse(out));
+    } catch (err) {
+      console.warn(`Finishing route failed: ${err}`);
     }
   }
 </script>
