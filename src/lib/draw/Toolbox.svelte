@@ -137,6 +137,7 @@ repeatedly load anything. Make sure this is only created once, then just hidden.
     width: 90%;
     background-color: white;
     border: 1px solid black;
+    padding: 4px;
   }
 
   .toolbar {

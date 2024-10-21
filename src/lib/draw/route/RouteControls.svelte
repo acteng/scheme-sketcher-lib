@@ -44,32 +44,6 @@
     {/if}
   </SecondaryButton>
   <SecondaryButton on:click={cancel}>Cancel</SecondaryButton>
-</ButtonGroup>
-
-<div style="display: flex; justify-content: space-between;">
-  <Radio
-    label="Draw"
-    choices={[
-      ["snap", "Snap to roads"],
-      ["free", "Draw anywhere"],
-    ]}
-    value={$snapMode ? "snap" : "free"}
-    on:change={toggleSnap}
-  />
-
-  <CheckboxGroup small>
-    <Checkbox
-      bind:checked={extendRoute}
-      hint="Keep clicking to add more points to the end of the route"
-    >
-      Add points to end
-    </Checkbox>
-  </CheckboxGroup>
-
-  {#if maptilerApiKey}
-    <GeocoderControls {maptilerApiKey} />
-  {/if}
-
   <HelpModal>
     <ul>
       <li>
@@ -104,4 +78,29 @@
       </li>
     </ul>
   </HelpModal>
+</ButtonGroup>
+
+<div style="display: flex">
+  <Radio
+    label="Draw"
+    choices={[
+      ["snap", "Snap to roads"],
+      ["free", "Draw anywhere"],
+    ]}
+    value={$snapMode ? "snap" : "free"}
+    on:change={toggleSnap}
+  />
+
+  <CheckboxGroup small>
+    <Checkbox
+      bind:checked={extendRoute}
+      hint="Keep clicking to add more points to the end of the route"
+    >
+      Add points to end
+    </Checkbox>
+  </CheckboxGroup>
+
+  {#if maptilerApiKey}
+    <GeocoderControls {maptilerApiKey} />
+  {/if}
 </div>
