@@ -6,7 +6,6 @@
     newFeatureId,
     getArbitrarySchemeRef,
   } from "$lib/draw/stores";
-  import { SecondaryButton } from "govuk-svelte";
   import { onDestroy, onMount } from "svelte";
   import PointControls from "./PointControls.svelte";
   import { type Config } from "$lib/config";
@@ -46,6 +45,4 @@
   }
 </script>
 
-<SecondaryButton on:click={onFailure}>Cancel</SecondaryButton>
-
-<PointControls editingExisting={false} />
+<PointControls editingExisting={false} cancel={onFailure} />

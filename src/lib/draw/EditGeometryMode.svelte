@@ -2,7 +2,6 @@
   import type { Feature, LineString, Point, Polygon } from "geojson";
   import { mode, pointTool, polygonTool, routeTool } from "$lib/draw/stores";
   import type { FeatureWithID, Schemes } from "$lib/draw/types";
-  import { ButtonGroup, DefaultButton, SecondaryButton } from "govuk-svelte";
   import { type Config } from "$lib/config";
   import { onDestroy, onMount } from "svelte";
   import PointControls from "./point/PointControls.svelte";
@@ -142,17 +141,17 @@
 <!-- TODO move to sidebar -->
 <h2>Editing {name}</h2>
 
-<ButtonGroup>
-  <DefaultButton on:click={finish}>Finish</DefaultButton>
-  <SecondaryButton on:click={cancel}>Cancel</SecondaryButton>
-</ButtonGroup>
-
 {#if controls == "point"}
-  <PointControls editingExisting />
+  <PointControls editingExisting {cancel} />
 {:else if controls == "route"}
-  <RouteControls maptilerApiKey={cfg.maptilerApiKey} extendRoute={false} />
+  <RouteControls
+    maptilerApiKey={cfg.maptilerApiKey}
+    extendRoute={false}
+    {finish}
+    {cancel}
+  />
 {:else if controls == "freehand-polygon"}
-  <PolygonControls />
+  <PolygonControls {finish} {cancel} />
 {:else if controls == "snapped-polygon"}
-  <SnapPolygonControls />
+  <SnapPolygonControls {finish} {cancel} />
 {/if}
