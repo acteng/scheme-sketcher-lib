@@ -139,6 +139,7 @@
   }
 </script>
 
+<!-- TODO move to sidebar -->
 <h2>Editing {name}</h2>
 
 <ButtonGroup>
