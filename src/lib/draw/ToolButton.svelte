@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { IconButton } from "govuk-svelte";
   import { mode } from "./stores";
   import type { Mode } from "./types";
 
@@ -7,13 +6,23 @@
   export let disabled = false;
 </script>
 
-<IconButton
+<button
+  type="button"
+  class="govuk-button govuk-button--secondary"
+  data-module="govuk-button"
   on:click={() => mode.set(setMode)}
   disabled={disabled || $mode.mode != "list"}
+  style:margin-bottom={$mode.mode == "list" ? "0px" : undefined}
+  class:focused={$mode == setMode}
 >
-  {#if $mode == setMode}
-    <b><slot /></b>
-  {:else}
-    <slot />
-  {/if}
-</IconButton>
+  <slot />
+</button>
+
+<style>
+  /* Manually copied govuk-button:focus */
+  .focused {
+    border-color: #fd0;
+    outline: 3px solid transparent;
+    box-shadow: inset 0 0 0 1px #fd0;
+  }
+</style>
