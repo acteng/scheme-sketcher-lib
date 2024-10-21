@@ -48,9 +48,9 @@
   }
 </script>
 
-<ButtonGroup>
-  <DefaultButton on:click={finish}>Finish</DefaultButton>
-  <SecondaryButton on:click={onFailure}>Cancel</SecondaryButton>
-</ButtonGroup>
-
-<RouteControls maptilerApiKey={cfg.maptilerApiKey} extendRoute />
+<RouteControls
+  maptilerApiKey={cfg.maptilerApiKey}
+  extendRoute
+  {finish}
+  cancel={onFailure}
+/>

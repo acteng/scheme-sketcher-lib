@@ -15,18 +15,20 @@
 
 <StreetViewTool {cfg} map={$map} bind:enabled showControls={false} />
 
-<DefaultButton on:click={() => (enabled = false)}>Finish</DefaultButton>
+<div style="display: flex">
+  <DefaultButton on:click={() => (enabled = false)}>Finish</DefaultButton>
 
-<Radio
-  label="Source"
-  choices={[
-    ["google", "Google Street View"],
-    ["bing", "Bing Streetside"],
-  ]}
-  bind:value={$userSettings.streetViewImagery}
-  inlineSmall
-/>
+  <Radio
+    label="Source"
+    choices={[
+      ["google", "Google Street View"],
+      ["bing", "Bing Streetside"],
+    ]}
+    bind:value={$userSettings.streetViewImagery}
+    inlineSmall
+  />
 
-<HelpModal>
-  <StreetViewHelp />
-</HelpModal>
+  <HelpModal>
+    <StreetViewHelp />
+  </HelpModal>
+</div>
