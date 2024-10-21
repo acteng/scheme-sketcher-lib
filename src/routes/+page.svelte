@@ -6,15 +6,17 @@
   import { MapLibre } from "svelte-maplibre";
   import type { Map } from "maplibre-gl";
   import { type Config, map } from "$lib/config";
-  import ImageLayer from "$lib/draw/image/ImageLayer.svelte";
-  import InterventionLayer from "$lib/draw/InterventionLayer.svelte";
-  import PolygonToolLayer from "$lib/draw/polygon/PolygonToolLayer.svelte";
-  import RouteSnapperLayer from "$lib/draw/route/RouteSnapperLayer.svelte";
-  import SplitRouteMode from "$lib/draw/route/SplitRouteMode.svelte";
-  import BoundaryLayer from "$lib/draw/BoundaryLayer.svelte";
+  import {
+    ImageLayer,
+    InterventionLayer,
+    PolygonToolLayer,
+    RouteSnapperLayer,
+    SplitRouteMode,
+    BoundaryLayer,
+    Toolbox,
+  } from "$lib/draw";
   import { mode, emptySchemes } from "$lib/draw/stores";
-  import Toolbox from "$lib/draw/Toolbox.svelte";
-  import PerModeControls from "$lib/sidebar/PerModeControls.svelte";
+  import { ListMode, EditForm } from "$lib/sidebar";
   import ExampleFeatureForm from "./ExampleFeatureForm.svelte";
   import ExampleSchemeForm from "./ExampleSchemeForm.svelte";
   import { writable } from "svelte/store";
@@ -142,7 +144,11 @@
 
 <div style="display: flex; height: 100vh">
   <div class="sidebar">
-    <PerModeControls {cfg} {gjSchemes} {routeSnapperUrl} />
+    {#if $mode.mode == "list"}
+      <ListMode {cfg} {gjSchemes} />
+    {:else if $mode.mode == "edit-form"}
+      <EditForm {cfg} {gjSchemes} id={$mode.id} />
+    {/if}
   </div>
   <div class="map">
     <MapLibre
@@ -157,9 +163,8 @@
       <BoundaryLayer {cfg} {boundaryGeojson} fitBoundsAtStart />
       <InterventionLayer {cfg} {gjSchemes} />
       <ImageLayer {cfg} />
-      {#if $mode.mode == "list"}
-        <Toolbox {cfg} {gjSchemes} />
-      {:else if $mode.mode == "split-route"}
+      <Toolbox {cfg} {gjSchemes} {routeSnapperUrl} />
+      {#if $mode.mode == "split-route"}
         <SplitRouteMode {cfg} {gjSchemes} />
       {/if}
       <RouteSnapperLayer {cfg} />
