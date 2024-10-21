@@ -6,7 +6,6 @@
     newFeatureId,
     getArbitrarySchemeRef,
   } from "$lib/draw/stores";
-  import { ButtonGroup, DefaultButton, SecondaryButton } from "govuk-svelte";
   import { onDestroy, onMount } from "svelte";
   import SnapPolygonControls from "./SnapPolygonControls.svelte";
   import { type Config } from "$lib/config";
@@ -50,9 +49,4 @@
   }
 </script>
 
-<ButtonGroup>
-  <DefaultButton on:click={finish}>Finish</DefaultButton>
-  <SecondaryButton on:click={onFailure}>Cancel</SecondaryButton>
-</ButtonGroup>
-
-<SnapPolygonControls />
+<SnapPolygonControls {finish} cancel={onFailure} />
