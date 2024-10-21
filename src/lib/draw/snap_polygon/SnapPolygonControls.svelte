@@ -2,6 +2,7 @@
   import { routeTool } from "$lib/draw/stores";
   import { SecondaryButton } from "govuk-svelte";
   import { undoLength } from "../route/stores";
+  import HelpModal from "../HelpModal.svelte";
 
   function undo() {
     $routeTool!.undo();
@@ -16,31 +17,33 @@
   {/if}
 </SecondaryButton>
 
-<ul>
-  <li>
-    <b>Click</b>
-    the map to add points
-  </li>
-  <li>
-    <b>Click and drag</b>
-    any point to move it
-  </li>
-  <li>
-    <b>Click</b>
-    a waypoint to delete it
-  </li>
-  <li>
-    Press <b>Control+Z</b>
-    to undo your last change
-  </li>
-  <li>
-    Press <b>Enter</b>
-    or
-    <b>double click</b>
-    to finish
-  </li>
-  <li>
-    Press <b>Escape</b>
-    to cancel
-  </li>
-</ul>
+<HelpModal>
+  <ul>
+    <li>
+      <b>Click</b>
+      the map to add points
+    </li>
+    <li>
+      <b>Click and drag</b>
+      any point to move it
+    </li>
+    <li>
+      <b>Click</b>
+      a waypoint to delete it
+    </li>
+    <li>
+      Press <b>Control+Z</b>
+      to undo your last change
+    </li>
+    <li>
+      Press <b>Enter</b>
+      or
+      <b>double click</b>
+      to finish
+    </li>
+    <li>
+      Press <b>Escape</b>
+      to cancel
+    </li>
+  </ul>
+</HelpModal>

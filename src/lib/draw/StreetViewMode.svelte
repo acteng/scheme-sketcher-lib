@@ -3,6 +3,7 @@
   import { mode, userSettings } from "$lib/draw/stores";
   import { DefaultButton, Radio } from "govuk-svelte";
   import { type Config, map } from "$lib/config";
+  import HelpModal from "./HelpModal.svelte";
 
   export let cfg: Config<F, S>;
 
@@ -26,4 +27,6 @@
   inlineSmall
 />
 
-<StreetViewHelp />
+<HelpModal>
+  <StreetViewHelp />
+</HelpModal>
