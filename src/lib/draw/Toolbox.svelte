@@ -1,6 +1,6 @@
 <script lang="ts" generics="F, S">
   import { mode, pointTool, polygonTool, routeTool } from "./stores";
-  import { IconButton, DefaultButton } from "govuk-svelte";
+  import { DefaultButton } from "govuk-svelte";
   import imageIcon from "$lib/assets/image.svg";
   import pointIcon from "$lib/assets/point.svg";
   import polygonFreehandIcon from "$lib/assets/polygon_freehand.svg";
@@ -24,6 +24,7 @@
   import { PolygonTool } from "maplibre-draw-polygon";
   import RouteSnapperLoader from "./route/RouteSnapperLoader.svelte";
   import HelpModal from "./HelpModal.svelte";
+  import ToolButton from "./ToolButton.svelte";
 
   export let cfg: Config<F, S>;
   export let gjSchemes: Writable<Schemes<F, S>>;
@@ -54,64 +55,55 @@ repeatedly load anything. Make sure this is only created once, then just hidden.
     {/if}
   </div>
 
-  {#if $mode.mode == "list"}
-    <IconButton
-      on:click={() => mode.set({ mode: "new-point" })}
-      disabled={!$pointTool}
-    >
+  <div class="toolbar">
+    <ToolButton setMode={{ mode: "new-point" }} disabled={!$pointTool}>
       <img src={pointIcon} alt="New point" />
       New point
-    </IconButton>
-    <IconButton
-      on:click={() => mode.set({ mode: "new-route" })}
-      disabled={!$routeTool}
-    >
+    </ToolButton>
+    <ToolButton setMode={{ mode: "new-route" }} disabled={!$routeTool}>
       <img src={routeIcon} alt="New route" />
       New route
-    </IconButton>
-    <IconButton
-      on:click={() => mode.set({ mode: "new-freehand-polygon" })}
+    </ToolButton>
+    <ToolButton
+      setMode={{ mode: "new-freehand-polygon" }}
       disabled={!$polygonTool}
     >
       <img src={polygonFreehandIcon} alt="New polygon (freehand)" />
       New polygon (freehand)
-    </IconButton>
-    <IconButton
-      on:click={() => mode.set({ mode: "new-snapped-polygon" })}
+    </ToolButton>
+    <ToolButton
+      setMode={{ mode: "new-snapped-polygon" }}
       disabled={!$routeTool}
     >
       <img src={polygonSnappedIcon} alt="New polygon (snapped)" />
       New polygon (snapped)
-    </IconButton>
-    <IconButton on:click={() => mode.set({ mode: "split-route" })}>
+    </ToolButton>
+    <ToolButton setMode={{ mode: "split-route" }}>
       <img src={splitRouteIcon} alt="Split route" />
       Split route
-    </IconButton>
-    <IconButton on:click={() => mode.set({ mode: "set-image" })}>
+    </ToolButton>
+    <ToolButton setMode={{ mode: "set-image" }}>
       <!-- svelte-ignore a11y-img-redundant-alt -->
       <img src={imageIcon} alt="Georeference image" />
       Georeference image
-    </IconButton>
-    <IconButton on:click={() => mode.set({ mode: "streetview" })}>
+    </ToolButton>
+    <ToolButton setMode={{ mode: "streetview" }}>
       <img src={streetViewIcon} alt="StreetView" />
       StreetView
-    </IconButton>
-  {:else if $mode.mode == "edit-geometry"}
+    </ToolButton>
+  </div>
+
+  {#if $mode.mode == "edit-geometry"}
     <EditGeometryMode {cfg} {gjSchemes} id={$mode.id} />
   {:else if $mode.mode == "new-point"}
-    <h2>New point</h2>
     <PointMode {cfg} {gjSchemes} />
   {:else if $mode.mode == "new-route"}
-    <h2>New route</h2>
     <RouteMode {cfg} {gjSchemes} />
   {:else if $mode.mode == "new-freehand-polygon"}
-    <h2>New polygon (freehand)</h2>
     <PolygonMode {cfg} {gjSchemes} />
   {:else if $mode.mode == "new-snapped-polygon"}
-    <h2>New polygon (snapped)</h2>
     <SnapPolygonMode {cfg} {gjSchemes} />
   {:else if $mode.mode == "split-route"}
-    <h2>Split route</h2>
     <DefaultButton on:click={() => mode.set({ mode: "list" })}>
       Finish
     </DefaultButton>
@@ -131,10 +123,8 @@ repeatedly load anything. Make sure this is only created once, then just hidden.
       </ul>
     </HelpModal>
   {:else if $mode.mode == "set-image"}
-    <h2>Georeference image</h2>
     <ImageMode />
   {:else if $mode.mode == "streetview"}
-    <h2>StreetView</h2>
     <StreetViewMode {cfg} />
   {/if}
 </div>
@@ -147,7 +137,9 @@ repeatedly load anything. Make sure this is only created once, then just hidden.
     width: 90%;
     background-color: white;
     border: 1px solid black;
+  }
 
+  .toolbar {
     display: flex;
     justify-content: space-between;
   }
