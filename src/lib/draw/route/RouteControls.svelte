@@ -1,6 +1,11 @@
 <script lang="ts">
   import { routeTool, userSettings } from "$lib/draw/stores";
-  import { Checkbox, CheckboxGroup, SecondaryButton } from "govuk-svelte";
+  import {
+    Checkbox,
+    CheckboxGroup,
+    SecondaryButton,
+    Radio,
+  } from "govuk-svelte";
   import GeocoderControls from "./GeocoderControls.svelte";
   import { snapMode, undoLength } from "./stores";
   import HelpModal from "../HelpModal.svelte";
@@ -10,9 +15,8 @@
   // route or editing an existing.
   export let extendRoute: boolean;
 
-  // TODO When editing, we should save in the route and use the previous value
   $: $routeTool!.setRouteConfig({
-    avoid_doubling_back: $userSettings.avoidDoublingBack,
+    avoid_doubling_back: false,
     extend_route: extendRoute,
   });
 
@@ -33,19 +37,15 @@
   {/if}
 </SecondaryButton>
 
-{#if $snapMode}
-  <p style="background: red; color: white; padding: 8px;">
-    Snapping to existing roads. Press <b>s</b>
-    or click below to draw anywhere
-  </p>
-  <SecondaryButton on:click={toggleSnap}>Draw anywhere</SecondaryButton>
-{:else}
-  <p style="background: blue; color: white; padding: 8px;">
-    Drawing points anywhere. Press <b>s</b>
-    or click below to snap to roads
-  </p>
-  <SecondaryButton on:click={toggleSnap}>Snap to roads</SecondaryButton>
-{/if}
+<Radio
+  label="Draw"
+  choices={[
+    ["snap", "Snap to roads"],
+    ["free", "Draw anywhere"],
+  ]}
+  value={$snapMode ? "snap" : "free"}
+  on:change={toggleSnap}
+/>
 
 <CheckboxGroup small>
   <Checkbox
@@ -53,12 +53,6 @@
     hint="Keep clicking to add more points to the end of the route"
   >
     Add points to end
-  </Checkbox>
-  <Checkbox
-    bind:checked={$userSettings.avoidDoublingBack}
-    hint="Try to make the route avoid using the same streets with multiple waypoints"
-  >
-    Avoid doubling back
   </Checkbox>
 </CheckboxGroup>
 
