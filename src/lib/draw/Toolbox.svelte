@@ -23,6 +23,7 @@
   import { PointTool } from "../draw/point/point_tool";
   import { PolygonTool } from "maplibre-draw-polygon";
   import RouteSnapperLoader from "./route/RouteSnapperLoader.svelte";
+  import HelpModal from "./HelpModal.svelte";
 
   export let cfg: Config<F, S>;
   export let gjSchemes: Writable<Schemes<F, S>>;
@@ -115,18 +116,20 @@ repeatedly load anything. Make sure this is only created once, then just hidden.
       Finish
     </DefaultButton>
 
-    <ul>
-      <li>
-        <b>Click</b>
-        on a route to split it
-      </li>
-      <li>
-        <b>Click</b>
-        on the map or press
-        <b>Escape</b>
-        to cancel
-      </li>
-    </ul>
+    <HelpModal>
+      <ul>
+        <li>
+          <b>Click</b>
+          on a route to split it
+        </li>
+        <li>
+          <b>Click</b>
+          on the map or press
+          <b>Escape</b>
+          to cancel
+        </li>
+      </ul>
+    </HelpModal>
   {:else if $mode.mode == "set-image"}
     <h2>Georeference image</h2>
     <ImageMode />
