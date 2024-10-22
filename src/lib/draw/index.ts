@@ -5,6 +5,5 @@ export { default as HoverLayer } from "./HoverLayer.svelte";
 export { default as InterventionLayer } from "./InterventionLayer.svelte";
 export { default as PolygonToolLayer } from "./polygon/PolygonToolLayer.svelte";
 export { default as RouteSnapperLayer } from "./route/RouteSnapperLayer.svelte";
-export { default as SplitRouteMode } from "./route/SplitRouteMode.svelte";
 export { default as StreetViewMode } from "./StreetViewMode.svelte";
 export { default as Toolbox } from "./Toolbox.svelte";

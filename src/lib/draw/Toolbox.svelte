@@ -1,6 +1,5 @@
 <script lang="ts" generics="F, S">
   import { mode, pointTool, polygonTool, routeTool } from "./stores";
-  import { DefaultButton } from "govuk-svelte";
   import imageIcon from "$lib/assets/image.svg";
   import pointIcon from "$lib/assets/point.svg";
   import polygonFreehandIcon from "$lib/assets/polygon_freehand.svg";
@@ -17,13 +16,13 @@
   import PointMode from "./point/PointMode.svelte";
   import PolygonMode from "./polygon/PolygonMode.svelte";
   import RouteMode from "./route/RouteMode.svelte";
+  import SplitRouteMode from "./route/SplitRouteMode.svelte";
   import SnapPolygonMode from "./snap_polygon/SnapPolygonMode.svelte";
   import StreetViewMode from "./StreetViewMode.svelte";
   import { onDestroy } from "svelte";
   import { PointTool } from "../draw/point/point_tool";
   import { PolygonTool } from "maplibre-draw-polygon";
   import RouteSnapperLoader from "./route/RouteSnapperLoader.svelte";
-  import { HelpButton } from "$lib/common";
   import ToolButton from "./ToolButton.svelte";
 
   export let cfg: Config<F, S>;
@@ -104,24 +103,7 @@ repeatedly load anything. Make sure this is only created once, then just hidden.
   {:else if $mode.mode == "new-snapped-polygon"}
     <SnapPolygonMode {cfg} {gjSchemes} />
   {:else if $mode.mode == "split-route"}
-    <DefaultButton on:click={() => mode.set({ mode: "list" })}>
-      Finish
-    </DefaultButton>
-
-    <HelpButton>
-      <ul>
-        <li>
-          <b>Click</b>
-          on a route to split it
-        </li>
-        <li>
-          <b>Click</b>
-          on the map or press
-          <b>Escape</b>
-          to cancel
-        </li>
-      </ul>
-    </HelpButton>
+    <SplitRouteMode {cfg} {gjSchemes} />
   {:else if $mode.mode == "set-image"}
     <ImageMode />
   {:else if $mode.mode == "streetview"}

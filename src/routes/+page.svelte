@@ -11,7 +11,6 @@
     InterventionLayer,
     PolygonToolLayer,
     RouteSnapperLayer,
-    SplitRouteMode,
     BoundaryLayer,
     Toolbox,
   } from "$lib/draw";
@@ -164,9 +163,6 @@
       <InterventionLayer {cfg} {gjSchemes} />
       <ImageLayer {cfg} />
       <Toolbox {cfg} {gjSchemes} {routeSnapperUrl} />
-      {#if $mode.mode == "split-route"}
-        <SplitRouteMode {cfg} {gjSchemes} />
-      {/if}
       <RouteSnapperLayer {cfg} />
       <PolygonToolLayer {cfg} />
     </MapLibre>

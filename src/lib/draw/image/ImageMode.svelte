@@ -7,6 +7,7 @@
     WarningButton,
   } from "govuk-svelte";
   import { imgSrc, opacity } from "./stores";
+  import { HelpButton } from "$lib/common";
 
   let fileInput: HTMLInputElement;
 
@@ -31,35 +32,41 @@
 
 <svelte:window on:keydown={onKeyDown} />
 
-<ButtonGroup>
-  <DefaultButton on:click={() => mode.set({ mode: "list" })}>
-    Save
-  </DefaultButton>
-  <WarningButton on:click={deleteImage} disabled={!$imgSrc}>
-    Delete
-  </WarningButton>
-</ButtonGroup>
+<div style="display: flex;">
+  <FormElement label="Load an image" id="load-image">
+    <input
+      bind:this={fileInput}
+      on:change={fileLoaded}
+      class="govuk-file-upload"
+      id="load-image"
+      type="file"
+    />
+  </FormElement>
 
-<FormElement label="Load an image" id="load-image">
-  <input
-    bind:this={fileInput}
-    on:change={fileLoaded}
-    class="govuk-file-upload"
-    id="load-image"
-    type="file"
-  />
-</FormElement>
+  {#if $imgSrc}
+    <div>
+      <label>
+        <input type="range" min="0" max="100" bind:value={$opacity} />
+        <br />
+        Opacity: {$opacity}%
+      </label>
+    </div>
+  {/if}
 
-{#if $imgSrc}
-  <div>
-    <label>
-      <input type="range" min="0" max="100" bind:value={$opacity} />
-      Opacity: {$opacity}%
-    </label>
+  <div style="margin-left: auto">
+    <ButtonGroup>
+      <DefaultButton on:click={() => mode.set({ mode: "list" })}>
+        Save
+      </DefaultButton>
+      <WarningButton on:click={deleteImage} disabled={!$imgSrc}>
+        Delete
+      </WarningButton>
+      <HelpButton>
+        <p>
+          Note this image isn't saved as part of this scheme. When you close
+          this page, it'll be lost.
+        </p>
+      </HelpButton>
+    </ButtonGroup>
   </div>
-{/if}
-
-<p>
-  Note this image isn't saved as part of this scheme. When you close this page,
-  it'll be lost.
-</p>
+</div>
