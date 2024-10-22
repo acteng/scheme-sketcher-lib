@@ -1,7 +1,7 @@
 <script lang="ts" generics="F, S">
   import { StreetViewHelp, StreetViewTool } from "$lib/common";
   import { mode, userSettings } from "$lib/draw/stores";
-  import { DefaultButton, Radio } from "govuk-svelte";
+  import { ButtonGroup, DefaultButton, Radio } from "govuk-svelte";
   import { type Config, map } from "$lib/config";
   import { HelpButton } from "$lib/common";
 
@@ -16,8 +16,6 @@
 <StreetViewTool {cfg} map={$map} bind:enabled showControls={false} />
 
 <div style="display: flex">
-  <DefaultButton on:click={() => (enabled = false)}>Finish</DefaultButton>
-
   <Radio
     label="Source"
     choices={[
@@ -28,7 +26,12 @@
     inlineSmall
   />
 
-  <HelpButton>
-    <StreetViewHelp />
-  </HelpButton>
+  <div style="margin-left: auto">
+    <ButtonGroup>
+      <DefaultButton on:click={() => (enabled = false)}>Finish</DefaultButton>
+      <HelpButton>
+        <StreetViewHelp />
+      </HelpButton>
+    </ButtonGroup>
+  </div>
 </div>
