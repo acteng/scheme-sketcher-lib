@@ -1,3 +1,4 @@
+export { default as HelpButton } from "./HelpButton.svelte";
 export { default as Modal } from "./Modal.svelte";
 export { default as StreetViewHelp } from "./StreetViewHelp.svelte";
 export { default as StreetViewTool } from "./StreetViewTool.svelte";
