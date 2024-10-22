@@ -13,6 +13,7 @@
     RouteSnapperLayer,
     BoundaryLayer,
     Toolbox,
+    NewFeatureForm,
   } from "$lib/draw";
   import { mode, emptySchemes } from "$lib/draw/stores";
   import { ListMode, EditForm } from "$lib/sidebar";
@@ -147,6 +148,8 @@
       <ListMode {cfg} {gjSchemes} />
     {:else if $mode.mode == "edit-form"}
       <EditForm {cfg} {gjSchemes} id={$mode.id} />
+    {:else if $mode.mode == "new-point" || $mode.mode == "new-freehand-polygon" || $mode.mode == "new-snapped-polygon" || $mode.mode == "new-route"}
+      <NewFeatureForm {cfg} {gjSchemes} />
     {/if}
   </div>
   <div class="map">
