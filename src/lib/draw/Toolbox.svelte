@@ -117,7 +117,7 @@ repeatedly load anything. Make sure this is only created once, then just hidden.
     top: 10px;
     right: 10px;
     width: 90%;
-    background-color: white;
+    background-color: #d9d9d9;
     border: 1px solid black;
     padding: 4px;
   }
@@ -125,5 +125,6 @@ repeatedly load anything. Make sure this is only created once, then just hidden.
   .toolbar {
     display: flex;
     justify-content: space-between;
+    background-color: white;
   }
 </style>
