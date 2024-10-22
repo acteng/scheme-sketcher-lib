@@ -1,5 +1,5 @@
 <script lang="ts">
-  import HelpModal from "../HelpModal.svelte";
+  import { HelpButton } from "$lib/common";
   import { ButtonGroup, SecondaryButton } from "govuk-svelte";
 
   export let editingExisting: boolean;
@@ -9,7 +9,7 @@
 <ButtonGroup>
   <SecondaryButton on:click={cancel}>Cancel</SecondaryButton>
 
-  <HelpModal>
+  <HelpButton>
     <ul>
       {#if editingExisting}
         <li>Click to move the point here</li>
@@ -21,5 +21,5 @@
         to cancel
       </li>
     </ul>
-  </HelpModal>
+  </HelpButton>
 </ButtonGroup>

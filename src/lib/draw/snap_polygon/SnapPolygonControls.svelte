@@ -2,7 +2,7 @@
   import { routeTool } from "$lib/draw/stores";
   import { DefaultButton, ButtonGroup, SecondaryButton } from "govuk-svelte";
   import { undoLength } from "../route/stores";
-  import HelpModal from "../HelpModal.svelte";
+  import { HelpButton } from "$lib/common";
 
   export let finish: () => void;
   export let cancel: () => void;
@@ -24,7 +24,7 @@
   </SecondaryButton>
   <SecondaryButton on:click={cancel}>Cancel</SecondaryButton>
 
-  <HelpModal>
+  <HelpButton>
     <ul>
       <li>
         <b>Click</b>
@@ -53,5 +53,5 @@
         to cancel
       </li>
     </ul>
-  </HelpModal>
+  </HelpButton>
 </ButtonGroup>
