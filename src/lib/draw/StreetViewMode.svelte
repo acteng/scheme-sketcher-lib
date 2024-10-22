@@ -24,6 +24,7 @@
     ]}
     bind:value={$userSettings.streetViewImagery}
     inlineSmall
+    leftLabel
   />
 
   <div style="margin-left: auto">

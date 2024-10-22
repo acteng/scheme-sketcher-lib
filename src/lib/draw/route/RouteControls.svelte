@@ -43,6 +43,7 @@
     ]}
     value={$snapMode ? "snap" : "free"}
     on:change={toggleSnap}
+    leftLabel
   />
 
   <div style="display: flex; flex-direction: column">
