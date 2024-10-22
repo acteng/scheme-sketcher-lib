@@ -15,6 +15,8 @@
   import splitIcon from "$lib/assets/split_route.svg";
   import type { FeatureWithID, Schemes } from "$lib/draw/types";
   import type { Writable } from "svelte/store";
+  import { DefaultButton } from "govuk-svelte";
+  import { HelpButton } from "$lib/common";
 
   export let cfg: Config<F, S>;
   export let gjSchemes: Writable<Schemes<F, S>>;
@@ -160,3 +162,24 @@
     paint={{ "circle-color": "black", "circle-radius": circleRadiusPixels }}
   />
 </GeoJSON>
+
+<div style="float: right">
+  <DefaultButton on:click={() => mode.set({ mode: "list" })}>
+    Finish
+  </DefaultButton>
+
+  <HelpButton>
+    <ul>
+      <li>
+        <b>Click</b>
+        on a route to split it
+      </li>
+      <li>
+        <b>Click</b>
+        on the map or press
+        <b>Escape</b>
+        to cancel
+      </li>
+    </ul>
+  </HelpButton>
+</div>
