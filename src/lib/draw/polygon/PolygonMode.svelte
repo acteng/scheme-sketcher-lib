@@ -5,6 +5,7 @@
     polygonTool,
     newFeatureId,
     getArbitrarySchemeRef,
+    newFeatureProps,
   } from "$lib/draw/stores";
   import { onDestroy, onMount } from "svelte";
   import PolygonControls from "./PolygonControls.svelte";
@@ -29,6 +30,7 @@
   function onSuccess(feature: Feature<Polygon>) {
     feature.properties ||= {};
     let f = feature as FeatureWithID<F, Polygon>;
+    f.properties = { ...f.properties, ...$newFeatureProps };
     gjSchemes.update((gj) => {
       f.id = newFeatureId(gj);
       f.properties.scheme_reference = getArbitrarySchemeRef(gj);

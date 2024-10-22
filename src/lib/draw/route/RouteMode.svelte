@@ -5,6 +5,7 @@
     routeTool,
     newFeatureId,
     getArbitrarySchemeRef,
+    newFeatureProps,
   } from "$lib/draw/stores";
   import { ButtonGroup, DefaultButton, SecondaryButton } from "govuk-svelte";
   import { onDestroy, onMount } from "svelte";
@@ -28,6 +29,7 @@
 
   function onSuccess(feature: Feature<LineString | Polygon>) {
     let f = feature as FeatureWithID<F, LineString>;
+    f.properties = { ...f.properties, ...$newFeatureProps };
     gjSchemes.update((gj) => {
       f.id = newFeatureId(gj);
       f.properties.scheme_reference = getArbitrarySchemeRef(gj);

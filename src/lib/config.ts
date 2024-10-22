@@ -27,11 +27,12 @@ export interface Config<F, S> {
 
   interventionWarning: (feature: FeatureWithID<F>) => string | null;
 
+  // When id is null, a new feature is being created
   editFeatureForm: null | ComponentType<
     SvelteComponent<{
       cfg: Config<F, S>;
       gjSchemes: Writable<Schemes<F, S>>;
-      id: number;
+      id: number | null;
       props: FeatureProps<F>;
     }>
   >;
