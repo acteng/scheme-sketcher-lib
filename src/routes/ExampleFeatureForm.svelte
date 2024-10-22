@@ -7,7 +7,7 @@
 
   export let cfg: Config<ExampleFeature, ExampleScheme>;
   export let gjSchemes: Writable<Schemes<ExampleFeature, ExampleScheme>>;
-  export let id: number;
+  export let id: number | null;
   export let props: FeatureProps<ExampleFeature>;
 
   // Hide svelte-check warning

@@ -1,11 +1,16 @@
 import { type Config } from "$lib/config";
 import { writable, type Writable } from "svelte/store";
-import type { Mode, Schemes } from "./types";
+import {
+  type Mode,
+  type Schemes,
+  type FeatureProps,
+  type UserSettings,
+  isStreetViewImagery,
+} from "./types";
 import { PointTool } from "./point/point_tool";
 import { PolygonTool } from "maplibre-draw-polygon";
 import { RouteTool } from "route-snapper-ts";
 import type { Position } from "geojson";
-import { isStreetViewImagery, type UserSettings } from "./types";
 import { v4 as uuidv4 } from "uuid";
 import { randomSchemeColor } from "./colors";
 
@@ -22,6 +27,10 @@ export const hideSchemes: Writable<Set<string>> = writable(new Set());
 export const sidebarHover: Writable<number | null> = writable(null);
 
 export const mode: Writable<Mode> = writable({ mode: "list" });
+
+// While creating a new feature, the form fills this out. Upon success, each
+// geometry mode then uses these. Note the generic parameter isn't known here.
+export const newFeatureProps: Writable<FeatureProps<any>> = writable({});
 
 // All feature IDs must:
 //
