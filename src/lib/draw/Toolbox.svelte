@@ -23,7 +23,7 @@
   import { PointTool } from "../draw/point/point_tool";
   import { PolygonTool } from "maplibre-draw-polygon";
   import RouteSnapperLoader from "./route/RouteSnapperLoader.svelte";
-  import HelpModal from "./HelpModal.svelte";
+  import { HelpButton } from "$lib/common";
   import ToolButton from "./ToolButton.svelte";
 
   export let cfg: Config<F, S>;
@@ -108,7 +108,7 @@ repeatedly load anything. Make sure this is only created once, then just hidden.
       Finish
     </DefaultButton>
 
-    <HelpModal>
+    <HelpButton>
       <ul>
         <li>
           <b>Click</b>
@@ -121,7 +121,7 @@ repeatedly load anything. Make sure this is only created once, then just hidden.
           to cancel
         </li>
       </ul>
-    </HelpModal>
+    </HelpButton>
   {:else if $mode.mode == "set-image"}
     <ImageMode />
   {:else if $mode.mode == "streetview"}

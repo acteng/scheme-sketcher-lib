@@ -10,7 +10,7 @@
   } from "govuk-svelte";
   import GeocoderControls from "./GeocoderControls.svelte";
   import { snapMode, undoLength } from "./stores";
-  import HelpModal from "../HelpModal.svelte";
+  import { HelpButton } from "$lib/common";
 
   export let maptilerApiKey: string;
   // Start with this enabled or disabled, based on whether we're drawing a new
@@ -44,7 +44,7 @@
     {/if}
   </SecondaryButton>
   <SecondaryButton on:click={cancel}>Cancel</SecondaryButton>
-  <HelpModal>
+  <HelpButton>
     <ul>
       <li>
         <b>Click</b>
@@ -77,7 +77,7 @@
         to cancel
       </li>
     </ul>
-  </HelpModal>
+  </HelpButton>
 </ButtonGroup>
 
 <div style="display: flex">
