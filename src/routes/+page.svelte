@@ -1,4 +1,8 @@
 <script lang="ts">
+  import "../style/main.css";
+  // @ts-expect-error no declarations
+  import { initAll } from "govuk-frontend";
+  import { onMount } from "svelte";
   import { MapLibre } from "svelte-maplibre";
   import type { Map } from "maplibre-gl";
   import { type Config, map } from "$lib/config";
@@ -16,6 +20,10 @@
   import { writable } from "svelte/store";
   import type { ExampleFeature, ExampleScheme } from "./types";
   import type { SchemeData } from "$lib/draw/types";
+
+  onMount(() => {
+    initAll();
+  });
 
   // Use your own key (for MapTiler or another basemap service)
   let apiKey = "MZEJTanw3WpxRvt7qDfo";

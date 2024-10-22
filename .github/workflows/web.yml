@@ -20,6 +20,7 @@ jobs:
       - name: Build web app
         run: |
           npm ci
+          npm run setup-govuk
           BASE_PATH=/scheme-sketcher-lib npm run build
 
       - name: Publish

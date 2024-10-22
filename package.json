@@ -12,7 +12,8 @@
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "lint": "prettier --check .",
-    "fmt": "prettier --write ."
+    "fmt": "prettier --write .",
+    "setup-govuk": "sass src/style/main.sass src/style/main.css; rm -rf static/assets; mkdir -p static/assets; cp -R node_modules/govuk-frontend/dist/govuk/assets/ static/"
   },
   "exports": {
     ".": {
@@ -89,11 +90,13 @@
     "@maptiler/geocoding-control": "1.2.3",
     "@turf/mask": "^7.0.0",
     "@turf/nearest-point-on-line": "^7.0.0",
+    "govuk-frontend": "^5.4.1",
     "govuk-svelte": "github:acteng/govuk-svelte",
     "maplibre-draw-polygon": "github:dabreegster/maplibre-draw-polygon",
     "maplibre-gl": "^4.0.2",
     "route-snapper": "^0.4.1",
     "route-snapper-ts": "^0.0.5",
+    "sass": "^1.77.8",
     "svelte-maplibre": "^0.9.7",
     "uuid": "^10.0.0"
   },
