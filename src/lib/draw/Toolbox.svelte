@@ -11,7 +11,7 @@
   import type { Schemes } from "$lib/draw/types";
   import type { Writable } from "svelte/store";
   import { map, type Config } from "$lib/config";
-  import EditGeometryMode from "./EditGeometryMode.svelte";
+  import EditMode from "./EditMode.svelte";
   import ImageMode from "./image/ImageMode.svelte";
   import PointMode from "./point/PointMode.svelte";
   import PolygonMode from "./polygon/PolygonMode.svelte";
@@ -92,8 +92,8 @@ repeatedly load anything. Make sure this is only created once, then just hidden.
     </ToolButton>
   </div>
 
-  {#if $mode.mode == "edit-geometry"}
-    <EditGeometryMode {cfg} {gjSchemes} id={$mode.id} />
+  {#if $mode.mode == "edit"}
+    <EditMode {cfg} {gjSchemes} id={$mode.id} />
   {:else if $mode.mode == "new-point"}
     <PointMode {cfg} {gjSchemes} />
   {:else if $mode.mode == "new-route"}
