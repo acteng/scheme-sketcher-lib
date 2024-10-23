@@ -103,7 +103,10 @@
     if (e.detail.features[0]) {
       // We just clicked a feature, so the cursor would've been different
       $map.getCanvas().style.cursor = "inherit";
-      mode.set({ mode: "edit-geometry", id: e.detail.features[0].id as number });
+      mode.set({
+        mode: "edit-geometry",
+        id: e.detail.features[0].id as number,
+      });
     }
   }
 
