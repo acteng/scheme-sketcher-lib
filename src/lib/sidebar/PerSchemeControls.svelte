@@ -64,7 +64,7 @@
       });
     }
 
-    mode.set({ mode: "edit-geometry", id });
+    mode.set({ mode: "edit", id });
   }
 
   function unhover(id: number) {

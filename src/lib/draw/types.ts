@@ -7,11 +7,7 @@ export type Mode =
       mode: "list";
     }
   | {
-      mode: "edit-form";
-      id: number;
-    }
-  | {
-      mode: "edit-geometry";
+      mode: "edit";
       id: number;
     }
   | { mode: "new-point" }
