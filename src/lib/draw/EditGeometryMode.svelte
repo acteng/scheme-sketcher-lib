@@ -94,7 +94,7 @@
     feature.properties ??= {};
     // Let onDestroy apply the update
     unsavedFeature = feature as FeatureWithID<F>;
-    mode.set({ mode: "edit-form", id });
+    mode.set({ mode: "list" });
   }
 
   function onUpdate(feature: Feature<Polygon | LineString>) {
@@ -107,7 +107,7 @@
   function onFailure() {
     // User canceled in the tool, so throw away unsaved updates
     unsavedFeature = null;
-    mode.set({ mode: "edit-form", id });
+    mode.set({ mode: "list" });
   }
 
   // Copy geometry and properties from source to destination
@@ -129,12 +129,12 @@
   }
 
   function finish() {
-    mode.set({ mode: "edit-form", id });
+    mode.set({ mode: "list" });
   }
 
   function cancel() {
     unsavedFeature = null;
-    mode.set({ mode: "edit-form", id });
+    mode.set({ mode: "list" });
   }
 </script>
 
