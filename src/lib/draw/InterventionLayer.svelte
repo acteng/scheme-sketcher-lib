@@ -61,10 +61,7 @@
   let color: DataDrivenPropertyValueSpecification<string>;
   $: {
     let fadeColor = "grey";
-    if ($mode.mode == "edit-form") {
-      // @ts-ignore Can't figure out the problem
-      color = ["case", ["==", ["id"], $mode.id], colorInterventions, fadeColor];
-    } else if ($mode.mode == "list") {
+    if ($mode.mode == "list") {
       color = colorInterventions;
     } else if ($mode.mode == "split-route") {
       color = [
@@ -104,7 +101,7 @@
       // We just clicked a feature, so the cursor would've been different
       $map.getCanvas().style.cursor = "inherit";
       mode.set({
-        mode: "edit-geometry",
+        mode: "edit",
         id: e.detail.features[0].id as number,
       });
     }

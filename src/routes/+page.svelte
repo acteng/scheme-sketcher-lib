@@ -148,7 +148,7 @@
       <ListMode {cfg} {gjSchemes} />
     {:else if $mode.mode == "new-point" || $mode.mode == "new-freehand-polygon" || $mode.mode == "new-snapped-polygon" || $mode.mode == "new-route"}
       <NewFeatureForm {cfg} {gjSchemes} />
-    {:else if $mode.mode == "edit-geometry"}
+    {:else if $mode.mode == "edit"}
       <EditFeatureForm {cfg} {gjSchemes} id={$mode.id} />
     {/if}
   </div>
