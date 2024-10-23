@@ -15,7 +15,6 @@
   export let gjSchemes: Writable<Schemes<F, S>>;
   export let id: number;
 
-  let name = "";
   let controls = "";
 
   // As a feature is being edited, store the latest version
@@ -30,7 +29,6 @@
       return gj;
     });
     let feature = maybeFeature!;
-    name = cfg.interventionName(feature);
 
     if (feature.geometry.type == "LineString") {
       // TODO Update route-snapper-ts to use Except<route_name> or otherwise pick the important properties
@@ -137,9 +135,6 @@
     mode.set({ mode: "list" });
   }
 </script>
-
-<!-- TODO move to sidebar -->
-<h2>Editing {name}</h2>
 
 {#if controls == "point"}
   <PointControls editingExisting {cancel} />
