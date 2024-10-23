@@ -74,7 +74,11 @@
     $polygonTool?.clearEventListeners();
 
     gjSchemes.update((gj) => {
-      let featureToBeUpdated = gj.features.find((f) => f.id == id)!;
+      let featureToBeUpdated = gj.features.find((f) => f.id == id);
+      // If the feature was deleted, stop
+      if (!featureToBeUpdated) {
+        return gj;
+      }
 
       // Show the feature again
       delete featureToBeUpdated.properties.hide_while_editing;
