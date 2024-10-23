@@ -39,7 +39,7 @@
       return gj;
     });
 
-    mode.set({ mode: "edit-form", id: f.id as number });
+    mode.set({ mode: "list" });
   }
 
   function onFailure() {
