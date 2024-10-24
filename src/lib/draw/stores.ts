@@ -28,9 +28,10 @@ export const sidebarHover: Writable<number | null> = writable(null);
 
 export const mode: Writable<Mode> = writable({ mode: "list" });
 
-// While creating a new feature, the form fills this out. Upon success, each
-// geometry mode then uses these. Note the generic parameter isn't known here.
-export const newFeatureProps: Writable<FeatureProps<any>> = writable({});
+// While creating a new or editing an existing feature, the form fills this
+// out. Upon success, each geometry mode or the edit mode then uses these. Note
+// the generic parameter isn't known here.
+export const featureProps: Writable<FeatureProps<any>> = writable({});
 
 // All feature IDs must:
 //

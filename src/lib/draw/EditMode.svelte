@@ -1,6 +1,12 @@
 <script lang="ts" generics="F, S">
   import type { Feature, LineString, Point, Polygon } from "geojson";
-  import { mode, pointTool, polygonTool, routeTool } from "$lib/draw/stores";
+  import {
+    mode,
+    pointTool,
+    polygonTool,
+    routeTool,
+    featureProps,
+  } from "$lib/draw/stores";
   import type { FeatureWithID, Schemes } from "$lib/draw/types";
   import { type Config } from "$lib/config";
   import { onDestroy, onMount } from "svelte";
@@ -118,6 +124,8 @@
     source: FeatureWithID<F>,
   ) {
     destination.geometry = source.geometry;
+
+    destination.properties = { ...$featureProps };
 
     // Copy properties that may come from routeTool. Not all tools or cases
     // will produce all of these.
