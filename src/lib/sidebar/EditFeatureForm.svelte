@@ -1,5 +1,5 @@
 <script lang="ts" generics="F, S">
-  import { deleteIntervention, mode } from "$lib/draw/stores";
+  import { deleteIntervention, mode, featureProps } from "$lib/draw/stores";
   import { ErrorMessage, WarningButton } from "govuk-svelte";
   import { type Config } from "$lib/config";
   import type { FeatureWithID, Schemes } from "$lib/draw/types";
@@ -11,11 +11,8 @@
 
   let feature = $gjSchemes.features.find((f) => f.id == id)!;
 
-  // Because of how properties are bound individually, updates to $gjScheme aren't seen. Force them.
-  function featureUpdated(feature: FeatureWithID<F>) {
-    $gjSchemes = $gjSchemes;
-  }
-  $: featureUpdated(feature);
+  // Copy, since the form would otherwise immediately edit these
+  $featureProps = JSON.parse(JSON.stringify(feature.properties));
 
   function onKeydown(e: KeyboardEvent) {
     if (e.key == "Delete") {
@@ -46,5 +43,5 @@
   {cfg}
   {gjSchemes}
   {id}
-  bind:props={feature.properties}
+  bind:props={$featureProps}
 />

@@ -3,17 +3,17 @@
   import { onDestroy, onMount } from "svelte";
   import type { Schemes } from "$lib/draw/types";
   import type { Writable } from "svelte/store";
-  import { newFeatureProps } from "./stores";
+  import { featureProps } from "./stores";
 
   export let cfg: Config<F, S>;
   export let gjSchemes: Writable<Schemes<F, S>>;
 
   // Always start with blank properties
   onMount(() => {
-    $newFeatureProps = {};
+    $featureProps = {};
   });
   onDestroy(() => {
-    $newFeatureProps = {};
+    $featureProps = {};
   });
 </script>
 
@@ -24,5 +24,5 @@
   {cfg}
   {gjSchemes}
   id={null}
-  bind:props={$newFeatureProps}
+  bind:props={$featureProps}
 />

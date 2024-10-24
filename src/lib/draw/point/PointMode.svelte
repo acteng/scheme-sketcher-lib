@@ -5,7 +5,7 @@
     pointTool,
     newFeatureId,
     getArbitrarySchemeRef,
-    newFeatureProps,
+    featureProps,
   } from "$lib/draw/stores";
   import { onDestroy, onMount } from "svelte";
   import PointControls from "./PointControls.svelte";
@@ -30,7 +30,7 @@
   function onSuccess(feature: Feature<Point>) {
     feature.properties ||= {};
     let f = feature as FeatureWithID<F, Point>;
-    f.properties = { ...f.properties, ...$newFeatureProps };
+    f.properties = { ...f.properties, ...$featureProps };
     gjSchemes.update((gj) => {
       f.id = newFeatureId(gj);
       f.properties.scheme_reference = getArbitrarySchemeRef(gj);
