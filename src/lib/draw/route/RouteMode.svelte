@@ -5,6 +5,7 @@
     routeTool,
     newFeatureId,
     getArbitrarySchemeRef,
+    featureProps,
   } from "$lib/draw/stores";
   import { ButtonGroup, DefaultButton, SecondaryButton } from "govuk-svelte";
   import { onDestroy, onMount } from "svelte";
@@ -28,6 +29,7 @@
 
   function onSuccess(feature: Feature<LineString | Polygon>) {
     let f = feature as FeatureWithID<F, LineString>;
+    f.properties = { ...f.properties, ...$featureProps };
     gjSchemes.update((gj) => {
       f.id = newFeatureId(gj);
       f.properties.scheme_reference = getArbitrarySchemeRef(gj);
@@ -36,7 +38,7 @@
       return gj;
     });
 
-    mode.set({ mode: "edit-form", id: f.id as number });
+    mode.set({ mode: "list" });
   }
 
   function onFailure() {
@@ -48,9 +50,4 @@
   }
 </script>
 
-<ButtonGroup>
-  <DefaultButton on:click={finish}>Finish</DefaultButton>
-  <SecondaryButton on:click={onFailure}>Cancel</SecondaryButton>
-</ButtonGroup>
-
-<RouteControls maptilerApiKey={cfg.maptilerApiKey} extendRoute />
+<RouteControls extendRoute {finish} cancel={onFailure} />

@@ -5,8 +5,8 @@
     routeTool,
     newFeatureId,
     getArbitrarySchemeRef,
+    featureProps,
   } from "$lib/draw/stores";
-  import { ButtonGroup, DefaultButton, SecondaryButton } from "govuk-svelte";
   import { onDestroy, onMount } from "svelte";
   import SnapPolygonControls from "./SnapPolygonControls.svelte";
   import { type Config } from "$lib/config";
@@ -30,6 +30,7 @@
   function onSuccess(feature: Feature<LineString | Polygon>) {
     // We did startArea, so we know it's a Polygon
     let f = feature as FeatureWithID<F, Polygon>;
+    f.properties = { ...f.properties, ...$featureProps };
     gjSchemes.update((gj) => {
       f.id = newFeatureId(gj);
       f.properties.scheme_reference = getArbitrarySchemeRef(gj);
@@ -38,7 +39,7 @@
       return gj;
     });
 
-    mode.set({ mode: "edit-form", id: f.id as number });
+    mode.set({ mode: "list" });
   }
 
   function onFailure() {
@@ -50,9 +51,4 @@
   }
 </script>
 
-<ButtonGroup>
-  <DefaultButton on:click={finish}>Finish</DefaultButton>
-  <SecondaryButton on:click={onFailure}>Cancel</SecondaryButton>
-</ButtonGroup>
-
-<SnapPolygonControls />
+<SnapPolygonControls {finish} cancel={onFailure} />

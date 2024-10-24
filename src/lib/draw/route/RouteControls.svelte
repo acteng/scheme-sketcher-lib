@@ -1,17 +1,25 @@
 <script lang="ts">
   import { routeTool, userSettings } from "$lib/draw/stores";
-  import { Checkbox, CheckboxGroup, SecondaryButton } from "govuk-svelte";
-  import GeocoderControls from "./GeocoderControls.svelte";
+  import {
+    Checkbox,
+    CheckboxGroup,
+    SecondaryButton,
+    Radio,
+    DefaultButton,
+    ButtonGroup,
+  } from "govuk-svelte";
   import { snapMode, undoLength } from "./stores";
+  import { HelpButton } from "$lib/common";
 
-  export let maptilerApiKey: string;
   // Start with this enabled or disabled, based on whether we're drawing a new
   // route or editing an existing.
   export let extendRoute: boolean;
 
-  // TODO When editing, we should save in the route and use the previous value
+  export let finish: () => void;
+  export let cancel: () => void;
+
   $: $routeTool!.setRouteConfig({
-    avoid_doubling_back: $userSettings.avoidDoublingBack,
+    avoid_doubling_back: false,
     extend_route: extendRoute,
   });
 
@@ -24,76 +32,73 @@
   }
 </script>
 
-<SecondaryButton disabled={$undoLength == 0} on:click={undo}>
-  {#if $undoLength == 0}
-    Undo
-  {:else}
-    Undo ({$undoLength})
-  {/if}
-</SecondaryButton>
+<div style="display: flex;">
+  <Radio
+    label="Draw"
+    choices={[
+      ["snap", "Snap to roads"],
+      ["free", "Draw anywhere"],
+    ]}
+    value={$snapMode ? "snap" : "free"}
+    on:change={toggleSnap}
+    inlineSmall
+    leftLabel
+  />
 
-{#if $snapMode}
-  <p style="background: red; color: white; padding: 8px;">
-    Snapping to existing roads. Press <b>s</b>
-    or click below to draw anywhere
-  </p>
-  <SecondaryButton on:click={toggleSnap}>Draw anywhere</SecondaryButton>
-{:else}
-  <p style="background: blue; color: white; padding: 8px;">
-    Drawing points anywhere. Press <b>s</b>
-    or click below to snap to roads
-  </p>
-  <SecondaryButton on:click={toggleSnap}>Snap to roads</SecondaryButton>
-{/if}
+  <CheckboxGroup small>
+    <Checkbox
+      bind:checked={extendRoute}
+      hint="Keep clicking to add more points to the end of the route"
+    >
+      Add points to end
+    </Checkbox>
+  </CheckboxGroup>
 
-<ul>
-  <li>
-    <b>Click</b>
-    the map to add points
-  </li>
-  <li>
-    Press <b>s</b>
-    to switch between snapping points to existing roads and drawing anywhere
-  </li>
-  <li>
-    <b>Click and drag</b>
-    any point to move it
-  </li>
-  <li>
-    <b>Click</b>
-    a waypoint to delete it
-  </li>
-  <li>
-    Press <b>Control+Z</b>
-    to undo your last change
-  </li>
-  <li>
-    Press <b>Enter</b>
-    or
-    <b>double click</b>
-    to finish
-  </li>
-  <li>
-    Press <b>Escape</b>
-    to cancel
-  </li>
-</ul>
-
-<CheckboxGroup small>
-  <Checkbox
-    bind:checked={extendRoute}
-    hint="Keep clicking to add more points to the end of the route"
-  >
-    Add points to end
-  </Checkbox>
-  <Checkbox
-    bind:checked={$userSettings.avoidDoublingBack}
-    hint="Try to make the route avoid using the same streets with multiple waypoints"
-  >
-    Avoid doubling back
-  </Checkbox>
-</CheckboxGroup>
-
-{#if maptilerApiKey}
-  <GeocoderControls {maptilerApiKey} />
-{/if}
+  <div style="margin-left: auto">
+    <ButtonGroup>
+      <DefaultButton on:click={finish}>Finish</DefaultButton>
+      <SecondaryButton disabled={$undoLength == 0} on:click={undo}>
+        {#if $undoLength == 0}
+          Undo
+        {:else}
+          Undo ({$undoLength})
+        {/if}
+      </SecondaryButton>
+      <SecondaryButton on:click={cancel}>Cancel</SecondaryButton>
+      <HelpButton>
+        <ul>
+          <li>
+            <b>Click</b>
+            the map to add points
+          </li>
+          <li>
+            Press <b>s</b>
+            to switch between snapping points to existing roads and drawing anywhere
+          </li>
+          <li>
+            <b>Click and drag</b>
+            any point to move it
+          </li>
+          <li>
+            <b>Click</b>
+            a waypoint to delete it
+          </li>
+          <li>
+            Press <b>Control+Z</b>
+            to undo your last change
+          </li>
+          <li>
+            Press <b>Enter</b>
+            or
+            <b>double click</b>
+            to finish
+          </li>
+          <li>
+            Press <b>Escape</b>
+            to cancel
+          </li>
+        </ul>
+      </HelpButton>
+    </ButtonGroup>
+  </div>
+</div>

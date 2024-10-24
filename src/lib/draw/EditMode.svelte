@@ -1,8 +1,13 @@
 <script lang="ts" generics="F, S">
   import type { Feature, LineString, Point, Polygon } from "geojson";
-  import { mode, pointTool, polygonTool, routeTool } from "$lib/draw/stores";
+  import {
+    mode,
+    pointTool,
+    polygonTool,
+    routeTool,
+    featureProps,
+  } from "$lib/draw/stores";
   import type { FeatureWithID, Schemes } from "$lib/draw/types";
-  import { ButtonGroup, DefaultButton, SecondaryButton } from "govuk-svelte";
   import { type Config } from "$lib/config";
   import { onDestroy, onMount } from "svelte";
   import PointControls from "./point/PointControls.svelte";
@@ -16,7 +21,6 @@
   export let gjSchemes: Writable<Schemes<F, S>>;
   export let id: number;
 
-  let name = "";
   let controls = "";
 
   // As a feature is being edited, store the latest version
@@ -31,7 +35,6 @@
       return gj;
     });
     let feature = maybeFeature!;
-    name = cfg.interventionName(feature);
 
     if (feature.geometry.type == "LineString") {
       // TODO Update route-snapper-ts to use Except<route_name> or otherwise pick the important properties
@@ -77,7 +80,11 @@
     $polygonTool?.clearEventListeners();
 
     gjSchemes.update((gj) => {
-      let featureToBeUpdated = gj.features.find((f) => f.id == id)!;
+      let featureToBeUpdated = gj.features.find((f) => f.id == id);
+      // If the feature was deleted, stop
+      if (!featureToBeUpdated) {
+        return gj;
+      }
 
       // Show the feature again
       delete featureToBeUpdated.properties.hide_while_editing;
@@ -95,7 +102,7 @@
     feature.properties ??= {};
     // Let onDestroy apply the update
     unsavedFeature = feature as FeatureWithID<F>;
-    mode.set({ mode: "edit-form", id });
+    mode.set({ mode: "list" });
   }
 
   function onUpdate(feature: Feature<Polygon | LineString>) {
@@ -108,7 +115,7 @@
   function onFailure() {
     // User canceled in the tool, so throw away unsaved updates
     unsavedFeature = null;
-    mode.set({ mode: "edit-form", id });
+    mode.set({ mode: "list" });
   }
 
   // Copy geometry and properties from source to destination
@@ -117,6 +124,8 @@
     source: FeatureWithID<F>,
   ) {
     destination.geometry = source.geometry;
+
+    destination.properties = { ...$featureProps };
 
     // Copy properties that may come from routeTool. Not all tools or cases
     // will produce all of these.
@@ -130,28 +139,21 @@
   }
 
   function finish() {
-    mode.set({ mode: "edit-form", id });
+    mode.set({ mode: "list" });
   }
 
   function cancel() {
     unsavedFeature = null;
-    mode.set({ mode: "edit-form", id });
+    mode.set({ mode: "list" });
   }
 </script>
 
-<h2>Editing {name}</h2>
-
-<ButtonGroup>
-  <DefaultButton on:click={finish}>Finish</DefaultButton>
-  <SecondaryButton on:click={cancel}>Cancel</SecondaryButton>
-</ButtonGroup>
-
 {#if controls == "point"}
-  <PointControls editingExisting />
+  <PointControls editingExisting {cancel} />
 {:else if controls == "route"}
-  <RouteControls maptilerApiKey={cfg.maptilerApiKey} extendRoute={false} />
+  <RouteControls extendRoute={false} {finish} {cancel} />
 {:else if controls == "freehand-polygon"}
-  <PolygonControls />
+  <PolygonControls {finish} {cancel} />
 {:else if controls == "snapped-polygon"}
-  <SnapPolygonControls />
+  <SnapPolygonControls {finish} {cancel} />
 {/if}

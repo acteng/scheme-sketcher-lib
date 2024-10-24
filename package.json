@@ -95,7 +95,7 @@
     "maplibre-draw-polygon": "github:dabreegster/maplibre-draw-polygon",
     "maplibre-gl": "^4.0.2",
     "route-snapper": "^0.4.1",
-    "route-snapper-ts": "^0.0.5",
+    "route-snapper-ts": "^0.0.8",
     "sass": "^1.77.8",
     "svelte-maplibre": "^0.9.7",
     "uuid": "^10.0.0"

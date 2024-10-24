@@ -5,8 +5,8 @@
     pointTool,
     newFeatureId,
     getArbitrarySchemeRef,
+    featureProps,
   } from "$lib/draw/stores";
-  import { SecondaryButton } from "govuk-svelte";
   import { onDestroy, onMount } from "svelte";
   import PointControls from "./PointControls.svelte";
   import { type Config } from "$lib/config";
@@ -30,6 +30,7 @@
   function onSuccess(feature: Feature<Point>) {
     feature.properties ||= {};
     let f = feature as FeatureWithID<F, Point>;
+    f.properties = { ...f.properties, ...$featureProps };
     gjSchemes.update((gj) => {
       f.id = newFeatureId(gj);
       f.properties.scheme_reference = getArbitrarySchemeRef(gj);
@@ -38,7 +39,7 @@
       return gj;
     });
 
-    mode.set({ mode: "edit-form", id: f.id as number });
+    mode.set({ mode: "list" });
   }
 
   function onFailure() {
@@ -46,6 +47,4 @@
   }
 </script>
 
-<SecondaryButton on:click={onFailure}>Cancel</SecondaryButton>
-
-<PointControls editingExisting={false} />
+<PointControls editingExisting={false} cancel={onFailure} />

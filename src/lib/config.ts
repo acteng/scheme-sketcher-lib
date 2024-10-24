@@ -27,11 +27,12 @@ export interface Config<F, S> {
 
   interventionWarning: (feature: FeatureWithID<F>) => string | null;
 
+  // When id is null, a new feature is being created
   editFeatureForm: null | ComponentType<
     SvelteComponent<{
       cfg: Config<F, S>;
       gjSchemes: Writable<Schemes<F, S>>;
-      id: number;
+      id: number | null;
       props: FeatureProps<F>;
     }>
   >;
@@ -53,9 +54,6 @@ export interface Config<F, S> {
     destination: FeatureWithID<F>,
     source: FeatureWithID<F>,
   ) => void;
-
-  // Required for the geocoder in the route mote to work
-  maptilerApiKey: string;
 
   // When the StreetView tool is activated, line layers with these IDs will be
   // highlighted. This depends on the basemap.

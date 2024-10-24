@@ -61,7 +61,7 @@
       });
     }
 
-    mode.set({ mode: "edit-form", id });
+    mode.set({ mode: "edit", id });
   }
 
   function unhover(id: number) {
