@@ -45,9 +45,11 @@
 
 <TextInput label="Add waypoint by search" bind:value={query} />
 
-<ol class="govuk-list govuk-list--number">
-  {#each $geocoderGj.features as f}
-    <!-- svelte-ignore a11y-invalid-attribute -->
-    <li><a href="#" on:click={(e) => add(e, f.center)}>{f.place_name}</a></li>
-  {/each}
-</ol>
+{#if $geocoderGj.features.length > 0}
+  <ol class="govuk-list govuk-list--number">
+    {#each $geocoderGj.features as f}
+      <!-- svelte-ignore a11y-invalid-attribute -->
+      <li><a href="#" on:click={(e) => add(e, f.center)}>{f.place_name}</a></li>
+    {/each}
+  </ol>
+{/if}
