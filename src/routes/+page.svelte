@@ -144,7 +144,7 @@
 
 <div style="display: flex; height: 100vh">
   <div class="sidebar">
-    {#if $mode.mode == "list"}
+    {#if $mode.mode == "list" || $mode.mode == "split-route" || $mode.mode == "set-image" || $mode.mode == "streetview"}
       <ListMode {cfg} {gjSchemes} />
     {:else if $mode.mode == "new-point" || $mode.mode == "new-freehand-polygon" || $mode.mode == "new-snapped-polygon" || $mode.mode == "new-route"}
       <NewFeatureForm {cfg} {gjSchemes} />
