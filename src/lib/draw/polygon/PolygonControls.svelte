@@ -30,15 +30,15 @@
       <ul>
         <li>
           <b>Click</b>
-          the map to add a vertex
+          the map to add a point
         </li>
         <li>
           <b>Click</b>
-          a vertex to delete it
+          a point to delete it
         </li>
         <li>
           <b>Drag</b>
-          a vertex or the polygon to move it
+          a point or the area to move it
         </li>
         <li>
           Press <b>Control+Z</b>
