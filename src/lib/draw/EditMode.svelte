@@ -151,12 +151,7 @@
 {#if controls == "point"}
   <PointControls editingExisting {cancel} />
 {:else if controls == "route"}
-  <RouteControls
-    maptilerApiKey={cfg.maptilerApiKey}
-    extendRoute={false}
-    {finish}
-    {cancel}
-  />
+  <RouteControls extendRoute={false} {finish} {cancel} />
 {:else if controls == "freehand-polygon"}
   <PolygonControls {finish} {cancel} />
 {:else if controls == "snapped-polygon"}

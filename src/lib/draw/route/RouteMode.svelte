@@ -50,9 +50,4 @@
   }
 </script>
 
-<RouteControls
-  maptilerApiKey={cfg.maptilerApiKey}
-  extendRoute
-  {finish}
-  cancel={onFailure}
-/>
+<RouteControls extendRoute {finish} cancel={onFailure} />
