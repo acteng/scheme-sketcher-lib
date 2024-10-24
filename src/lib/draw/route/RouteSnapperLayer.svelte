@@ -8,14 +8,8 @@
     layerId,
     type ConfigWithZorder,
   } from "$lib/maplibre";
-  import {
-    CircleLayer,
-    FillLayer,
-    GeoJSON,
-    LineLayer,
-    MarkerLayer,
-  } from "svelte-maplibre";
-  import { geocoderGj, routeToolGj } from "./stores";
+  import { CircleLayer, FillLayer, GeoJSON, LineLayer } from "svelte-maplibre";
+  import { routeToolGj } from "./stores";
 
   export let cfg: ConfigWithZorder;
 
@@ -63,14 +57,4 @@
       "fill-opacity": 0.5,
     }}
   />
-</GeoJSON>
-
-<GeoJSON data={$geocoderGj}>
-  <MarkerLayer let:feature>
-    <div
-      style="font-size: 30px; background: white; padding: 16px; border-radius: 50%;"
-    >
-      {getNumber(feature)}
-    </div>
-  </MarkerLayer>
 </GeoJSON>

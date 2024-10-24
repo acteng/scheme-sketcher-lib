@@ -97,8 +97,6 @@
 
     updateFeature: (destination, source) => {},
 
-    maptilerApiKey: apiKey,
-
     // Just one from the dataviz basemap, as an example
     getStreetViewRoadLayerNames: (map) => ["Road network"],
 

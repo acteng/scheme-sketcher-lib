@@ -8,11 +8,9 @@
     DefaultButton,
     ButtonGroup,
   } from "govuk-svelte";
-  import GeocoderControls from "./GeocoderControls.svelte";
   import { snapMode, undoLength } from "./stores";
   import { HelpButton } from "$lib/common";
 
-  export let maptilerApiKey: string;
   // Start with this enabled or disabled, based on whether we're drawing a new
   // route or editing an existing.
   export let extendRoute: boolean;
@@ -43,23 +41,18 @@
     ]}
     value={$snapMode ? "snap" : "free"}
     on:change={toggleSnap}
+    inlineSmall
     leftLabel
   />
 
-  <div style="display: flex; flex-direction: column">
-    {#if maptilerApiKey}
-      <GeocoderControls {maptilerApiKey} />
-    {/if}
-
-    <CheckboxGroup small>
-      <Checkbox
-        bind:checked={extendRoute}
-        hint="Keep clicking to add more points to the end of the route"
-      >
-        Add points to end
-      </Checkbox>
-    </CheckboxGroup>
-  </div>
+  <CheckboxGroup small>
+    <Checkbox
+      bind:checked={extendRoute}
+      hint="Keep clicking to add more points to the end of the route"
+    >
+      Add points to end
+    </Checkbox>
+  </CheckboxGroup>
 
   <div style="margin-left: auto">
     <ButtonGroup>
