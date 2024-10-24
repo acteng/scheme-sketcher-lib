@@ -12,7 +12,7 @@
   data-module="govuk-button"
   on:click={() => mode.set(setMode)}
   disabled={disabled || $mode.mode != "list"}
-  style:margin-bottom={$mode.mode == "list" ? "0px" : undefined}
+  style:margin-bottom={$mode.mode == "list" ? "0px" : "8px"}
   class:focused={$mode == setMode}
 >
   <slot />
