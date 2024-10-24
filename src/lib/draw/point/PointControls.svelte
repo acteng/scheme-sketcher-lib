@@ -8,7 +8,9 @@
 
 <div style="float: right">
   <ButtonGroup>
-    <SecondaryButton on:click={cancel}>Cancel</SecondaryButton>
+    <SecondaryButton on:click={cancel} style="margin-bottom: 0px">
+      Cancel
+    </SecondaryButton>
 
     <HelpButton>
       <ul>

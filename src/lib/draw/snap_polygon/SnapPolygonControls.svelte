@@ -14,16 +14,24 @@
 
 <div style="float: right">
   <ButtonGroup>
-    <DefaultButton on:click={finish}>Finish</DefaultButton>
+    <DefaultButton on:click={finish} style="margin-bottom: 0px">
+      Finish
+    </DefaultButton>
 
-    <SecondaryButton disabled={$undoLength == 0} on:click={undo}>
+    <SecondaryButton
+      disabled={$undoLength == 0}
+      on:click={undo}
+      style="margin-bottom: 0px"
+    >
       {#if $undoLength == 0}
         Undo
       {:else}
         Undo ({$undoLength})
       {/if}
     </SecondaryButton>
-    <SecondaryButton on:click={cancel}>Cancel</SecondaryButton>
+    <SecondaryButton on:click={cancel} style="margin-bottom: 0px">
+      Cancel
+    </SecondaryButton>
 
     <HelpButton>
       <ul>

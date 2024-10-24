@@ -46,18 +46,20 @@
     leftLabel
   />
 
-  {#if maptilerApiKey}
-    <GeocoderControls {maptilerApiKey} />
-  {/if}
+  <div style="display: flex; flex-direction: column">
+    {#if maptilerApiKey}
+      <GeocoderControls {maptilerApiKey} />
+    {/if}
 
-  <CheckboxGroup small>
-    <Checkbox
-      bind:checked={extendRoute}
-      hint="Keep clicking to add more points to the end of the route"
-    >
-      Add points to end
-    </Checkbox>
-  </CheckboxGroup>
+    <CheckboxGroup small>
+      <Checkbox
+        bind:checked={extendRoute}
+        hint="Keep clicking to add more points to the end of the route"
+      >
+        Add points to end
+      </Checkbox>
+    </CheckboxGroup>
+  </div>
 
   <div style="margin-left: auto">
     <ButtonGroup>

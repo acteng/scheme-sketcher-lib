@@ -164,7 +164,10 @@
 </GeoJSON>
 
 <div style="float: right">
-  <DefaultButton on:click={() => mode.set({ mode: "list" })}>
+  <DefaultButton
+    on:click={() => mode.set({ mode: "list" })}
+    style="margin-bottom: 0px"
+  >
     Finish
   </DefaultButton>
 
