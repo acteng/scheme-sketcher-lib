@@ -58,9 +58,6 @@ export interface Config<F, S> {
     source: FeatureWithID<F>,
   ) => void;
 
-  // Required for the geocoder in the route mote to work
-  maptilerApiKey: string;
-
   // When the StreetView tool is activated, line layers with these IDs will be
   // highlighted. This depends on the basemap.
   getStreetViewRoadLayerNames: (map: Map) => string[];
