@@ -67,15 +67,15 @@ repeatedly load anything. Make sure this is only created once, then just hidden.
       setMode={{ mode: "new-freehand-polygon" }}
       disabled={!$polygonTool}
     >
-      <img src={polygonFreehandIcon} alt="New polygon (freehand)" />
-      New polygon (freehand)
+      <img src={polygonFreehandIcon} alt="New area (freehand)" />
+      New area (freehand)
     </ToolButton>
     <ToolButton
       setMode={{ mode: "new-snapped-polygon" }}
       disabled={!$routeTool}
     >
-      <img src={polygonSnappedIcon} alt="New polygon (snapped)" />
-      New polygon (snapped)
+      <img src={polygonSnappedIcon} alt="New area (snapped)" />
+      New area (snapped)
     </ToolButton>
     <ToolButton setMode={{ mode: "split-route" }}>
       <img src={splitRouteIcon} alt="Split route" />
