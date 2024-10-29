@@ -9,10 +9,12 @@
   import {
     ButtonGroup,
     Checkbox,
+    CheckboxGroup,
     ErrorMessage,
     SecondaryButton,
     Select,
     WarningButton,
+    DefaultButton,
   } from "govuk-svelte";
   import { bbox } from "$lib/maplibre";
   import { map, type Config } from "$lib/config";
@@ -25,6 +27,7 @@
   export let gjSchemes: Writable<Schemes<F, S>>;
   export let scheme_reference: string;
 
+  let showEditModal = false;
   let showDeleteModal = false;
 
   $: numErrors = $gjSchemes.features.filter(
@@ -123,47 +126,87 @@
       return set;
     });
   }
+
+  function onKeyDown(e: KeyboardEvent) {
+    if (showEditModal && e.key == "Escape") {
+      e.stopPropagation();
+      showEditModal = false;
+    }
+  }
 </script>
 
-<h3>
-  {cfg.schemeName($gjSchemes.schemes[scheme_reference])}
-  <input type="color" bind:value={$gjSchemes.schemes[scheme_reference].color} />
-  <WarningButton on:click={() => (showDeleteModal = true)}>
-    <img src={deleteIcon} alt="Delete scheme" />
-    Delete
-  </WarningButton>
-</h3>
-<Checkbox bind:checked={showScheme} on:change={showOrHide}>Show</Checkbox>
-<slot />
-<svelte:component this={cfg.editSchemeForm} {gjSchemes} {scheme_reference} />
+<svelte:window on:keydown={onKeyDown} />
 
-{#if numErrors == 1}
-  <ErrorMessage errorMessage="There's a problem with one intervention below" />
-{:else if numErrors > 0}
-  <ErrorMessage
-    errorMessage="There's a problem with {numErrors} interventions below"
-  />
+<CheckboxGroup small>
+  <Checkbox bind:checked={showScheme} on:change={showOrHide}>
+    <b>{cfg.schemeName($gjSchemes.schemes[scheme_reference])}</b>
+  </Checkbox>
+</CheckboxGroup>
+
+<div style="display: flex; justify-content: space-between;">
+  <input type="color" bind:value={$gjSchemes.schemes[scheme_reference].color} />
+  <div>
+    <slot />
+    <SecondaryButton on:click={() => (showEditModal = true)} noBottomMargin>
+      Edit
+    </SecondaryButton>
+  </div>
+</div>
+
+{#if showScheme}
+  {#if numErrors == 1}
+    <ErrorMessage
+      errorMessage="There's a problem with one intervention below"
+    />
+  {:else if numErrors > 0}
+    <ErrorMessage
+      errorMessage="There's a problem with {numErrors} interventions below"
+    />
+  {/if}
+
+  {#if numFeatures == 0}
+    <p>There are no interventions in this scheme</p>
+  {/if}
+
+  <ol class="govuk-list govuk-list--number">
+    {#each $gjSchemes.features.filter((f) => f.properties.scheme_reference == scheme_reference) as feature (feature.id)}
+      {@const warning = cfg.interventionWarning(feature)}
+      <li>
+        <!-- svelte-ignore a11y-invalid-attribute -->
+        <a
+          href="#"
+          on:click={(e) => edit(e, feature.id)}
+          on:mouseenter={() => sidebarHover.set(feature.id)}
+          on:mouseleave={() => unhover(feature.id)}
+        >
+          {#if warning}
+            <WarningIcon text={warning} />
+          {/if}
+          {cfg.interventionName(feature)}
+        </a>
+      </li>
+    {/each}
+  </ol>
 {/if}
 
-<ol class="govuk-list govuk-list--number">
-  {#each $gjSchemes.features.filter((f) => f.properties.scheme_reference == scheme_reference) as feature (feature.id)}
-    {@const warning = cfg.interventionWarning(feature)}
-    <li>
-      <!-- svelte-ignore a11y-invalid-attribute -->
-      <a
-        href="#"
-        on:click={(e) => edit(e, feature.id)}
-        on:mouseenter={() => sidebarHover.set(feature.id)}
-        on:mouseleave={() => unhover(feature.id)}
-      >
-        {#if warning}
-          <WarningIcon text={warning} />
-        {/if}
-        {cfg.interventionName(feature)}
-      </a>
-    </li>
-  {/each}
-</ol>
+<Modal title="Edit scheme" bind:open={showEditModal}>
+  <svelte:component this={cfg.editSchemeForm} {gjSchemes} {scheme_reference} />
+
+  <ButtonGroup>
+    <DefaultButton on:click={() => (showEditModal = false)}>
+      Save changes
+    </DefaultButton>
+    <WarningButton
+      on:click={() => {
+        showEditModal = false;
+        showDeleteModal = true;
+      }}
+    >
+      <img src={deleteIcon} alt="Delete scheme" />
+      Delete
+    </WarningButton>
+  </ButtonGroup>
+</Modal>
 
 <Modal
   title="Delete this scheme?"

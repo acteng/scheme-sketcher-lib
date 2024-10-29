@@ -90,30 +90,30 @@
   }
 </script>
 
-<SecondaryButton on:click={newBlankScheme}>
-  Add new blank scheme
-</SecondaryButton>
-<FileInput label="Add scheme from file" onLoad={mergeSchemesFromFile} />
+<div style="display: flex; justify-content: space-between;">
+  <SecondaryButton on:click={newBlankScheme}>Add blank scheme</SecondaryButton>
+  <FileInput label="Add scheme from file" onLoad={mergeSchemesFromFile} />
+</div>
 <ErrorMessage errorMessage={errorFromFile} />
 
 <hr />
 
 {#each Object.keys($gjSchemes.schemes) as scheme_reference, i (scheme_reference)}
   <PerSchemeControls {cfg} {gjSchemes} {scheme_reference}>
-    {#if Object.keys($gjSchemes.schemes).length > 1}
-      <SecondaryButton
-        on:click={() => moveSchemeInList(scheme_reference, -1)}
-        disabled={i == 0}
-      >
-        Move up
-      </SecondaryButton>
-      <SecondaryButton
-        on:click={() => moveSchemeInList(scheme_reference, 1)}
-        disabled={i == Object.keys($gjSchemes.schemes).length - 1}
-      >
-        Move down
-      </SecondaryButton>
-    {/if}
+    <SecondaryButton
+      on:click={() => moveSchemeInList(scheme_reference, -1)}
+      disabled={i == 0}
+      noBottomMargin
+    >
+      &uarr;
+    </SecondaryButton>
+    <SecondaryButton
+      on:click={() => moveSchemeInList(scheme_reference, 1)}
+      disabled={i == Object.keys($gjSchemes.schemes).length - 1}
+      noBottomMargin
+    >
+      &darr;
+    </SecondaryButton>
   </PerSchemeControls>
   <hr />
 {/each}

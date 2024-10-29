@@ -73,7 +73,7 @@
   let cfg: Config<ExampleFeature, ExampleScheme> = {
     interventionName: (f) => `some ${f.geometry.type} feature`,
 
-    schemeName: (s) => s.scheme_name,
+    schemeName: (s) => s.scheme_name || "untitled scheme",
 
     backfill: (json) => json,
 
