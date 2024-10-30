@@ -36,6 +36,9 @@ export interface Config<F, S> {
     }>
   >;
 
+  // This component will only be instantiated when the user opens the modal to
+  // edit the scheme, so it can rely on onDestroy to finalize any
+  // changes.
   editSchemeForm: null | ComponentType<
     SvelteComponent<{
       gjSchemes: Writable<Schemes<F, S>>;
