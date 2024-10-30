@@ -4,6 +4,7 @@
   import { ButtonGroup, DefaultButton, Radio } from "govuk-svelte";
   import { type Config, map } from "$lib/config";
   import { HelpButton } from "$lib/common";
+  import ToolControls from "./ToolControls.svelte";
 
   export let cfg: Config<F, S>;
 
@@ -15,7 +16,7 @@
 
 <StreetViewTool {cfg} map={$map} bind:enabled showControls={false} />
 
-<div style="display: flex">
+<div class="flex-container">
   <Radio
     label="Source"
     choices={[
@@ -28,11 +29,24 @@
   />
 
   <div style="margin-left: auto">
-    <ButtonGroup>
+    <div class="govuk-button-group">
       <DefaultButton on:click={() => (enabled = false)}>Finish</DefaultButton>
       <HelpButton>
         <StreetViewHelp />
       </HelpButton>
-    </ButtonGroup>
+    </div>
   </div>
 </div>
+
+
+  <style>
+    .flex-container {
+      display: flex;
+      margin-top: 1em;
+      justify-content: space-between;
+    }
+  
+    .govuk-button-group {
+      margin-right: 0;
+    }
+  </style>

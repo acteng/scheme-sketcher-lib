@@ -8,6 +8,7 @@
   } from "govuk-svelte";
   import { imgSrc, opacity } from "./stores";
   import { HelpButton } from "$lib/common";
+  import ToolControls from "../ToolControls.svelte";
 
   let fileInput: HTMLInputElement;
 
@@ -32,7 +33,7 @@
 
 <svelte:window on:keydown={onKeyDown} />
 
-<div style="display: flex;">
+<ToolControls>
   <FormElement label="Load an image" id="load-image">
     <input
       bind:this={fileInput}
@@ -54,7 +55,7 @@
   {/if}
 
   <div style="margin-left: auto">
-    <ButtonGroup>
+    <div class="govuk-button-group">
       <DefaultButton on:click={() => mode.set({ mode: "list" })}>
         Save
       </DefaultButton>
@@ -67,6 +68,12 @@
           this page, it'll be lost.
         </p>
       </HelpButton>
-    </ButtonGroup>
+    </div>
   </div>
-</div>
+</ToolControls>
+
+<style>
+  .govuk-button-group {
+    margin-right: 0;
+  }
+</style>
