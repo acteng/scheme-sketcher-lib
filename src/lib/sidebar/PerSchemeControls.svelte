@@ -190,7 +190,13 @@
 {/if}
 
 <Modal title="Edit scheme" bind:open={showEditModal}>
-  <svelte:component this={cfg.editSchemeForm} {gjSchemes} {scheme_reference} />
+  {#if showEditModal}
+    <svelte:component
+      this={cfg.editSchemeForm}
+      {gjSchemes}
+      {scheme_reference}
+    />
+  {/if}
 
   <ButtonGroup>
     <DefaultButton on:click={() => (showEditModal = false)}>
