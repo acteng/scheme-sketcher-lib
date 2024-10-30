@@ -1,13 +1,18 @@
 <script lang="ts">
   import { HelpButton } from "$lib/common";
-  import { ButtonGroup, SecondaryButton } from "govuk-svelte";
+  import { DefaultButton, SecondaryButton } from "govuk-svelte";
+  import ToolControls from "../ToolControls.svelte";
 
   export let editingExisting: boolean;
   export let cancel: () => void;
 </script>
 
-<div style="float: right">
-  <ButtonGroup>
+<ToolControls>
+  <div class="govuk-button-group">
+    <DefaultButton >
+      Finish
+    </DefaultButton>
+
     <SecondaryButton on:click={cancel} style="margin-bottom: 0px">
       Cancel
     </SecondaryButton>
@@ -25,5 +30,17 @@
         </li>
       </ul>
     </HelpButton>
-  </ButtonGroup>
-</div>
+  </div>
+</ToolControls>
+
+<style>
+  .flex-container {
+    display: flex;
+    margin-top: 1em;
+    justify-content: flex-end;
+  }
+
+  .govuk-button-group {
+    margin-right: 0;
+  }
+</style>

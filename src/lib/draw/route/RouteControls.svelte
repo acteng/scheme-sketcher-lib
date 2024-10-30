@@ -6,10 +6,11 @@
     SecondaryButton,
     Radio,
     DefaultButton,
-    ButtonGroup,
   } from "govuk-svelte";
   import { snapMode, undoLength } from "./stores";
   import { HelpButton } from "$lib/common";
+  import ToolControls from "../ToolControls.svelte";
+
 
   // Start with this enabled or disabled, based on whether we're drawing a new
   // route or editing an existing.
@@ -32,7 +33,7 @@
   }
 </script>
 
-<div style="display: flex;">
+<ToolControls>
   <Radio
     label="Draw"
     choices={[
@@ -55,7 +56,7 @@
   </CheckboxGroup>
 
   <div style="margin-left: auto">
-    <ButtonGroup>
+    <div class="govuk-button-group">
       <DefaultButton on:click={finish}>Finish</DefaultButton>
       <SecondaryButton disabled={$undoLength == 0} on:click={undo}>
         {#if $undoLength == 0}
@@ -99,6 +100,12 @@
           </li>
         </ul>
       </HelpButton>
-    </ButtonGroup>
+    </div>
   </div>
-</div>
+</ToolControls>
+
+<style>
+  .govuk-button-group {
+    margin-right: 0;
+  }
+</style>
