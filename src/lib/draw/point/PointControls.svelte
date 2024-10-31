@@ -42,5 +42,6 @@
 
   .govuk-button-group {
     margin-right: 0;
+    flex-wrap: nowrap;
   }
 </style>

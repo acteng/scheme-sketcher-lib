@@ -68,3 +68,10 @@
     </div>
   </div>
 </ToolControls>
+
+<style>
+  .govuk-button-group {
+    margin-right: 0;
+    flex-wrap: nowrap;
+  }
+</style>
