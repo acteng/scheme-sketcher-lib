@@ -38,15 +38,15 @@
   </div>
 </div>
 
+<style>
+  .flex-container {
+    display: flex;
+    margin-top: 1em;
+    justify-content: space-between;
+  }
 
-  <style>
-    .flex-container {
-      display: flex;
-      margin-top: 1em;
-      justify-content: space-between;
-    }
-  
-    .govuk-button-group {
-      margin-right: 0;
-    }
-  </style>
+  .govuk-button-group {
+    margin-right: 0;
+    flex-wrap: nowrap;
+  }
+</style>

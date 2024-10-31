@@ -43,6 +43,7 @@
     value={$snapMode ? "snap" : "free"}
     on:change={toggleSnap}
     inlineSmall
+    nowrap
     leftLabel
   />
 
@@ -107,5 +108,6 @@
 <style>
   .govuk-button-group {
     margin-right: 0;
+    flex-wrap: nowrap;
   }
 </style>
