@@ -1,5 +1,5 @@
 <div class="flex-container">
-    <slot/>
+  <slot />
 </div>
 
 <style>

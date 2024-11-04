@@ -11,7 +11,6 @@
   import { HelpButton } from "$lib/common";
   import ToolControls from "../ToolControls.svelte";
 
-
   // Start with this enabled or disabled, based on whether we're drawing a new
   // route or editing an existing.
   export let extendRoute: boolean;
