@@ -3,6 +3,7 @@
   import { DefaultButton, FormElement, WarningButton } from "govuk-svelte";
   import { imgSrc, opacity } from "./stores";
   import { HelpButton } from "$lib/common";
+  import FixedButtonGroup from "../FixedButtonGroup.svelte";
 
   let fileInput: HTMLInputElement;
 
@@ -49,7 +50,7 @@
   {/if}
 
   <div style="margin-left: auto">
-    <div class="govuk-button-group">
+    <FixedButtonGroup>
       <DefaultButton on:click={() => mode.set({ mode: "list" })}>
         Save
       </DefaultButton>
@@ -62,13 +63,6 @@
           this page, it'll be lost.
         </p>
       </HelpButton>
-    </div>
+    </FixedButtonGroup>
   </div>
 </div>
-
-<style>
-  .govuk-button-group {
-    margin-right: 0;
-    flex-wrap: nowrap;
-  }
-</style>

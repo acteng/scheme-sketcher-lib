@@ -5,6 +5,7 @@
   import { HelpButton } from "$lib/common";
   import TinyRadio from "../TinyRadio.svelte";
   import { v4 as uuidv4 } from "uuid";
+  import FixedButtonGroup from "../FixedButtonGroup.svelte";
 
   // Start with this enabled or disabled, based on whether we're drawing a new
   // route or editing an existing.
@@ -60,7 +61,7 @@
   </fieldset>
 
   <div style="margin-left: auto">
-    <div class="govuk-button-group">
+    <FixedButtonGroup>
       <DefaultButton on:click={finish} style="margin-bottom: 0px">
         Finish
       </DefaultButton>
@@ -110,13 +111,6 @@
           </li>
         </ul>
       </HelpButton>
-    </div>
+    </FixedButtonGroup>
   </div>
 </div>
-
-<style>
-  .govuk-button-group {
-    margin-right: 0;
-    flex-wrap: nowrap;
-  }
-</style>

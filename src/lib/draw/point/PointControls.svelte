@@ -1,13 +1,14 @@
 <script lang="ts">
   import { HelpButton } from "$lib/common";
   import { DefaultButton, SecondaryButton } from "govuk-svelte";
+  import FixedButtonGroup from "../FixedButtonGroup.svelte";
 
   export let editingExisting: boolean;
   export let cancel: () => void;
 </script>
 
 <div style="float: right">
-  <div class="govuk-button-group">
+  <FixedButtonGroup>
     <DefaultButton style="margin-bottom: 0px">Finish</DefaultButton>
 
     <SecondaryButton on:click={cancel} noBottomMargin>Cancel</SecondaryButton>
@@ -25,12 +26,5 @@
         </li>
       </ul>
     </HelpButton>
-  </div>
+  </FixedButtonGroup>
 </div>
-
-<style>
-  .govuk-button-group {
-    margin-right: 0;
-    flex-wrap: nowrap;
-  }
-</style>
