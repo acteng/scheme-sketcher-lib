@@ -9,11 +9,9 @@
 
 <ToolControls>
   <div class="govuk-button-group">
-    <DefaultButton>Finish</DefaultButton>
+    <DefaultButton style="margin-bottom: 0px">Finish</DefaultButton>
 
-    <SecondaryButton on:click={cancel} style="margin-bottom: 0px">
-      Cancel
-    </SecondaryButton>
+    <SecondaryButton on:click={cancel} noBottomMargin>Cancel</SecondaryButton>
 
     <HelpButton>
       <ul>

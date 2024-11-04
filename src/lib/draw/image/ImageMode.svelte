@@ -1,11 +1,6 @@
 <script lang="ts">
   import { mode } from "$lib/draw/stores";
-  import {
-    ButtonGroup,
-    DefaultButton,
-    FormElement,
-    WarningButton,
-  } from "govuk-svelte";
+  import { DefaultButton, FormElement, WarningButton } from "govuk-svelte";
   import { imgSrc, opacity } from "./stores";
   import { HelpButton } from "$lib/common";
   import ToolControls from "../ToolControls.svelte";

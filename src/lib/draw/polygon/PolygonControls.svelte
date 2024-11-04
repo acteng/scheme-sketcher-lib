@@ -1,6 +1,6 @@
 <script lang="ts">
   import { polygonTool } from "$lib/draw/stores";
-  import { DefaultButton, ButtonGroup, SecondaryButton } from "govuk-svelte";
+  import { DefaultButton, SecondaryButton } from "govuk-svelte";
   import { undoLength } from "maplibre-draw-polygon";
   import { HelpButton } from "$lib/common";
   import ToolControls from "../ToolControls.svelte";

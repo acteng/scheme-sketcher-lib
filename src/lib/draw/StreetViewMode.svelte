@@ -5,6 +5,7 @@
   import { type Config, map } from "$lib/config";
   import { HelpButton } from "$lib/common";
   import ToolControls from "./ToolControls.svelte";
+  import TinyRadio from "./TinyRadio.svelte";
 
   export let cfg: Config<F, S>;
 
@@ -17,20 +18,22 @@
 <StreetViewTool {cfg} map={$map} bind:enabled showControls={false} />
 
 <div class="flex-container">
-  <Radio
-    label="Source"
+  <TinyRadio
     choices={[
       ["google", "Google Street View"],
       ["bing", "Bing Streetside"],
     ]}
     bind:value={$userSettings.streetViewImagery}
-    inlineSmall
-    leftLabel
   />
 
   <div style="margin-left: auto">
     <div class="govuk-button-group">
-      <DefaultButton on:click={() => (enabled = false)}>Finish</DefaultButton>
+      <DefaultButton
+        on:click={() => (enabled = false)}
+        style="margin-bottom: 0px"
+      >
+        Finish
+      </DefaultButton>
       <HelpButton>
         <StreetViewHelp />
       </HelpButton>
