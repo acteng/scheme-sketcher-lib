@@ -5,6 +5,7 @@
   import { type Config, map } from "$lib/config";
   import { HelpButton } from "$lib/common";
   import TinyRadio from "./TinyRadio.svelte";
+  import FixedButtonGroup from "./FixedButtonGroup.svelte";
 
   export let cfg: Config<F, S>;
 
@@ -26,7 +27,7 @@
   />
 
   <div style="margin-left: auto">
-    <div class="govuk-button-group">
+    <FixedButtonGroup>
       <DefaultButton
         on:click={() => (enabled = false)}
         style="margin-bottom: 0px"
@@ -36,13 +37,6 @@
       <HelpButton>
         <StreetViewHelp />
       </HelpButton>
-    </div>
+    </FixedButtonGroup>
   </div>
 </div>
-
-<style>
-  .govuk-button-group {
-    margin-right: 0;
-    flex-wrap: nowrap;
-  }
-</style>

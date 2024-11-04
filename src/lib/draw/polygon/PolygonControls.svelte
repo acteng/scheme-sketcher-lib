@@ -3,6 +3,7 @@
   import { DefaultButton, SecondaryButton } from "govuk-svelte";
   import { undoLength } from "maplibre-draw-polygon";
   import { HelpButton } from "$lib/common";
+  import FixedButtonGroup from "../FixedButtonGroup.svelte";
 
   export let finish: () => void;
   export let cancel: () => void;
@@ -13,7 +14,7 @@
 </script>
 
 <div style="float: right">
-  <div class="govuk-button-group">
+  <FixedButtonGroup>
     <DefaultButton on:click={finish} style="margin-bottom: 0px">
       Finish
     </DefaultButton>
@@ -64,12 +65,5 @@
         </li>
       </ul>
     </HelpButton>
-  </div>
+  </FixedButtonGroup>
 </div>
-
-<style>
-  .govuk-button-group {
-    margin-right: 0;
-    flex-wrap: nowrap;
-  }
-</style>
