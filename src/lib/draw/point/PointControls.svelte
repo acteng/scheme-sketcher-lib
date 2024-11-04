@@ -9,9 +9,7 @@
 
 <ToolControls>
   <div class="govuk-button-group">
-    <DefaultButton >
-      Finish
-    </DefaultButton>
+    <DefaultButton>Finish</DefaultButton>
 
     <SecondaryButton on:click={cancel} style="margin-bottom: 0px">
       Cancel
@@ -34,12 +32,6 @@
 </ToolControls>
 
 <style>
-  .flex-container {
-    display: flex;
-    margin-top: 1em;
-    justify-content: flex-end;
-  }
-
   .govuk-button-group {
     margin-right: 0;
     flex-wrap: nowrap;
