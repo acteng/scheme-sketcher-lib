@@ -168,7 +168,7 @@
   <div style="float: right">
     <DefaultButton
       on:click={() => mode.set({ mode: "list" })}
-      style="margin-bottom: 0px"
+      style="margin-bottom: 15px"
     >
       Finish
     </DefaultButton>

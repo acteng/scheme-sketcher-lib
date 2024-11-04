@@ -1,6 +1,6 @@
 <script lang="ts">
   import { routeTool } from "$lib/draw/stores";
-  import { DefaultButton, ButtonGroup, SecondaryButton } from "govuk-svelte";
+  import { DefaultButton, SecondaryButton } from "govuk-svelte";
   import { undoLength } from "../route/stores";
   import { HelpButton } from "$lib/common";
   import ToolControls from "../ToolControls.svelte";

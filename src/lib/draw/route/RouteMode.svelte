@@ -7,7 +7,7 @@
     getArbitrarySchemeRef,
     featureProps,
   } from "$lib/draw/stores";
-  import { ButtonGroup, DefaultButton, SecondaryButton } from "govuk-svelte";
+  import { DefaultButton, SecondaryButton } from "govuk-svelte";
   import { onDestroy, onMount } from "svelte";
   import RouteControls from "./RouteControls.svelte";
   import { type Config } from "$lib/config";

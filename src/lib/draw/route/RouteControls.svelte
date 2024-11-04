@@ -1,15 +1,11 @@
 <script lang="ts">
   import { routeTool, userSettings } from "$lib/draw/stores";
-  import {
-    Checkbox,
-    CheckboxGroup,
-    SecondaryButton,
-    Radio,
-    DefaultButton,
-  } from "govuk-svelte";
+  import { SecondaryButton, Radio, DefaultButton } from "govuk-svelte";
   import { snapMode, undoLength } from "./stores";
   import { HelpButton } from "$lib/common";
   import ToolControls from "../ToolControls.svelte";
+  import TinyRadio from "../TinyRadio.svelte";
+  import { v4 as uuidv4 } from "uuid";
 
   // Start with this enabled or disabled, based on whether we're drawing a new
   // route or editing an existing.
@@ -17,6 +13,8 @@
 
   export let finish: () => void;
   export let cancel: () => void;
+
+  let checkboxId = uuidv4();
 
   $: $routeTool!.setRouteConfig({
     avoid_doubling_back: false,
@@ -33,39 +31,52 @@
 </script>
 
 <ToolControls>
-  <Radio
-    label="Draw"
+  <TinyRadio
     choices={[
       ["snap", "Snap to roads"],
       ["free", "Draw anywhere"],
     ]}
     value={$snapMode ? "snap" : "free"}
     on:change={toggleSnap}
-    inlineSmall
-    nowrap
-    leftLabel
   />
 
-  <CheckboxGroup small>
-    <Checkbox
-      bind:checked={extendRoute}
-      hint="Keep clicking to add more points to the end of the route"
-    >
-      Add points to end
-    </Checkbox>
-  </CheckboxGroup>
+  <fieldset class="govuk-fieldset">
+    <div class="govuk-checkboxes--small" data-module="govuk-checkboxes">
+      <div class="govuk-checkboxes__item">
+        <input
+          type="checkbox"
+          class="govuk-checkboxes__input"
+          id={checkboxId}
+          bind:checked={extendRoute}
+        />
+        <label
+          class="govuk-label govuk-checkboxes__label"
+          for={checkboxId}
+          style="max-width: 100%"
+        >
+          Add points to end
+        </label>
+      </div>
+    </div>
+  </fieldset>
 
   <div style="margin-left: auto">
     <div class="govuk-button-group">
-      <DefaultButton on:click={finish}>Finish</DefaultButton>
-      <SecondaryButton disabled={$undoLength == 0} on:click={undo}>
+      <DefaultButton on:click={finish} style="margin-bottom: 0px">
+        Finish
+      </DefaultButton>
+      <SecondaryButton
+        disabled={$undoLength == 0}
+        on:click={undo}
+        noBottomMargin
+      >
         {#if $undoLength == 0}
           Undo
         {:else}
           Undo ({$undoLength})
         {/if}
       </SecondaryButton>
-      <SecondaryButton on:click={cancel}>Cancel</SecondaryButton>
+      <SecondaryButton on:click={cancel} noBottomMargin>Cancel</SecondaryButton>
       <HelpButton>
         <ul>
           <li>
