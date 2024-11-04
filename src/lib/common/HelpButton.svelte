@@ -22,7 +22,7 @@
 <style>
   button {
     background: none;
-    border: none;
+    border: 1px solid rgba(0, 0, 0, 0);
   }
 
   button:hover {
