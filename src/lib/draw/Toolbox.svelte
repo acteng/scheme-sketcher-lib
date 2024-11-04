@@ -92,6 +92,10 @@ repeatedly load anything. Make sure this is only created once, then just hidden.
     </ToolButton>
   </div>
 
+  {#if $mode.mode != "list"}
+    <div style="height: 1em" />
+  {/if}
+
   {#if $mode.mode == "edit"}
     <EditMode {cfg} {gjSchemes} id={$mode.id} />
   {:else if $mode.mode == "new-point"}

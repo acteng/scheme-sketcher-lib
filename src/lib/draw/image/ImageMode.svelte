@@ -3,7 +3,6 @@
   import { DefaultButton, FormElement, WarningButton } from "govuk-svelte";
   import { imgSrc, opacity } from "./stores";
   import { HelpButton } from "$lib/common";
-  import ToolControls from "../ToolControls.svelte";
 
   let fileInput: HTMLInputElement;
 
@@ -28,7 +27,7 @@
 
 <svelte:window on:keydown={onKeyDown} />
 
-<ToolControls>
+<div style="display: flex">
   <FormElement label="Load an image" id="load-image">
     <input
       bind:this={fileInput}
@@ -65,7 +64,7 @@
       </HelpButton>
     </div>
   </div>
-</ToolControls>
+</div>
 
 <style>
   .govuk-button-group {

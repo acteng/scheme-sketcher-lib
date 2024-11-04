@@ -3,7 +3,6 @@
   import { SecondaryButton, Radio, DefaultButton } from "govuk-svelte";
   import { snapMode, undoLength } from "./stores";
   import { HelpButton } from "$lib/common";
-  import ToolControls from "../ToolControls.svelte";
   import TinyRadio from "../TinyRadio.svelte";
   import { v4 as uuidv4 } from "uuid";
 
@@ -30,7 +29,7 @@
   }
 </script>
 
-<ToolControls>
+<div style="display: flex">
   <TinyRadio
     choices={[
       ["snap", "Snap to roads"],
@@ -113,7 +112,7 @@
       </HelpButton>
     </div>
   </div>
-</ToolControls>
+</div>
 
 <style>
   .govuk-button-group {

@@ -17,7 +17,6 @@
   import type { Writable } from "svelte/store";
   import { DefaultButton } from "govuk-svelte";
   import { HelpButton } from "$lib/common";
-  import ToolControls from "../ToolControls.svelte";
 
   export let cfg: Config<F, S>;
   export let gjSchemes: Writable<Schemes<F, S>>;
@@ -164,28 +163,26 @@
   />
 </GeoJSON>
 
-<ToolControls>
-  <div style="float: right">
-    <DefaultButton
-      on:click={() => mode.set({ mode: "list" })}
-      style="margin-bottom: 15px"
-    >
-      Finish
-    </DefaultButton>
+<div style="float: right">
+  <DefaultButton
+    on:click={() => mode.set({ mode: "list" })}
+    style="margin-bottom: 15px"
+  >
+    Finish
+  </DefaultButton>
 
-    <HelpButton>
-      <ul>
-        <li>
-          <b>Click</b>
-          on a route to split it
-        </li>
-        <li>
-          <b>Click</b>
-          on the map or press
-          <b>Escape</b>
-          to cancel
-        </li>
-      </ul>
-    </HelpButton>
-  </div>
-</ToolControls>
+  <HelpButton>
+    <ul>
+      <li>
+        <b>Click</b>
+        on a route to split it
+      </li>
+      <li>
+        <b>Click</b>
+        on the map or press
+        <b>Escape</b>
+        to cancel
+      </li>
+    </ul>
+  </HelpButton>
+</div>

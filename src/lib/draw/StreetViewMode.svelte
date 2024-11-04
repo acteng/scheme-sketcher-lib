@@ -4,7 +4,6 @@
   import { ButtonGroup, DefaultButton, Radio } from "govuk-svelte";
   import { type Config, map } from "$lib/config";
   import { HelpButton } from "$lib/common";
-  import ToolControls from "./ToolControls.svelte";
   import TinyRadio from "./TinyRadio.svelte";
 
   export let cfg: Config<F, S>;
@@ -17,7 +16,7 @@
 
 <StreetViewTool {cfg} map={$map} bind:enabled showControls={false} />
 
-<div class="flex-container">
+<div style="display: flex">
   <TinyRadio
     choices={[
       ["google", "Google Street View"],
@@ -42,12 +41,6 @@
 </div>
 
 <style>
-  .flex-container {
-    display: flex;
-    margin-top: 1em;
-    justify-content: space-between;
-  }
-
   .govuk-button-group {
     margin-right: 0;
     flex-wrap: nowrap;
