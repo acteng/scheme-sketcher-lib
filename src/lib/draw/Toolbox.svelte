@@ -1,5 +1,5 @@
 <script lang="ts" generics="F, S">
-  import { mode, pointTool, polygonTool, routeTool } from "./stores";
+  import { mode, polygonTool, routeTool } from "./stores";
   import imageIcon from "$lib/assets/image.svg";
   import pointIcon from "$lib/assets/point.svg";
   import polygonFreehandIcon from "$lib/assets/polygon_freehand.svg";
@@ -20,7 +20,6 @@
   import SnapPolygonMode from "./snap_polygon/SnapPolygonMode.svelte";
   import StreetViewMode from "./StreetViewMode.svelte";
   import { onDestroy } from "svelte";
-  import { PointTool } from "../draw/point/point_tool";
   import { PolygonTool } from "maplibre-draw-polygon";
   import RouteSnapperLoader from "./route/RouteSnapperLoader.svelte";
   import ToolButton from "./ToolButton.svelte";
@@ -29,15 +28,11 @@
   export let gjSchemes: Writable<Schemes<F, S>>;
   export let routeSnapperUrl: string;
 
-  $: if ($map && !$pointTool) {
-    pointTool.set(new PointTool($map));
-  }
   $: if ($map && !$polygonTool) {
     polygonTool.set(new PolygonTool($map));
   }
 
   onDestroy(() => {
-    $pointTool?.tearDown();
     $polygonTool?.tearDown();
     $routeTool?.tearDown();
   });
@@ -55,7 +50,7 @@ repeatedly load anything. Make sure this is only created once, then just hidden.
   </div>
 
   <div class="toolbar">
-    <ToolButton setMode={{ mode: "new-point" }} disabled={!$pointTool}>
+    <ToolButton setMode={{ mode: "new-point" }}>
       <img src={pointIcon} alt="New point" />
       New point
     </ToolButton>

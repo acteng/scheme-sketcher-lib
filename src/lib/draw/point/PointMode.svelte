@@ -1,36 +1,51 @@
 <script lang="ts" generics="F, S">
-  import type { Feature, Point } from "geojson";
+  import type { Point } from "geojson";
   import {
     mode,
-    pointTool,
     newFeatureId,
     getArbitrarySchemeRef,
     featureProps,
+    pointPosition,
+    setPrecision,
   } from "$lib/draw/stores";
-  import { onDestroy, onMount } from "svelte";
+  import { onMount, onDestroy } from "svelte";
   import PointControls from "./PointControls.svelte";
-  import { type Config } from "$lib/config";
-  import type { FeatureWithID } from "$lib/draw/types";
-  import type { Schemes } from "$lib/draw/types";
+  import { map, type Config } from "$lib/config";
+  import type { FeatureWithID, Schemes } from "$lib/draw/types";
   import type { Writable } from "svelte/store";
 
   export let cfg: Config<F, S>;
   export let gjSchemes: Writable<Schemes<F, S>>;
 
   onMount(() => {
-    $pointTool!.start();
-    $pointTool!.addEventListenerSuccess(onSuccess);
-    $pointTool!.addEventListenerFailure(onFailure);
+    if ($map) {
+      $map.getCanvas().style.cursor = "crosshair";
+    }
   });
   onDestroy(() => {
-    $pointTool!.stop();
-    $pointTool!.clearEventListeners();
+    $pointPosition = null;
+    if ($map) {
+      $map.getCanvas().style.cursor = "inherit";
+    }
   });
 
-  function onSuccess(feature: Feature<Point>) {
-    feature.properties ||= {};
-    let f = feature as FeatureWithID<F, Point>;
-    f.properties = { ...f.properties, ...$featureProps };
+  $: if ($pointPosition && $map) {
+    $map.getCanvas().style.cursor = "inherit";
+  }
+
+  function onSuccess() {
+    if (!$pointPosition) {
+      return;
+    }
+    let f = {
+      type: "Feature",
+      geometry: {
+        type: "Point",
+        coordinates: setPrecision($pointPosition),
+      },
+      properties: { ...$featureProps },
+    } as FeatureWithID<F, Point>;
+
     gjSchemes.update((gj) => {
       f.id = newFeatureId(gj);
       f.properties.scheme_reference = getArbitrarySchemeRef(gj);
@@ -47,4 +62,4 @@
   }
 </script>
 
-<PointControls editingExisting={false} cancel={onFailure} />
+<PointControls finish={onSuccess} cancel={onFailure} />

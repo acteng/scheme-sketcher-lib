@@ -7,18 +7,18 @@ import {
   type UserSettings,
   isStreetViewImagery,
 } from "./types";
-import { PointTool } from "./point/point_tool";
 import { PolygonTool } from "maplibre-draw-polygon";
 import { RouteTool } from "route-snapper-ts";
 import type { Position } from "geojson";
 import { v4 as uuidv4 } from "uuid";
 import { randomSchemeColor } from "./colors";
 
-export const pointTool: Writable<PointTool | null> = writable(null);
 export const polygonTool: Writable<PolygonTool | null> = writable(null);
 // A global singleton, with the route tool loaded for the current map. It's
 // null before it's loaded.
 export const routeTool: Writable<RouteTool | null> = writable(null);
+// When the point tool is active, represents the marker position, once it's set.
+export const pointPosition: Writable<[number, number] | null> = writable(null);
 
 // scheme_references to hide
 export const hideSchemes: Writable<Set<string>> = writable(new Set());

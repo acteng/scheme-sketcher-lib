@@ -2,10 +2,11 @@
   import type { Feature, LineString, Point, Polygon } from "geojson";
   import {
     mode,
-    pointTool,
     polygonTool,
     routeTool,
     featureProps,
+    pointPosition,
+    setPrecision,
   } from "$lib/draw/stores";
   import type { FeatureWithID, Schemes } from "$lib/draw/types";
   import { type Config } from "$lib/config";
@@ -63,18 +64,12 @@
         controls = "freehand-polygon";
       }
     } else if (feature.geometry.type == "Point") {
-      // No need to pass in the existing feature.geometry; it's the same as
-      // where the cursor is anyway
-      $pointTool?.start();
-      $pointTool?.addEventListenerSuccess(onSuccess);
-      // No auto-save for updates
-      $pointTool?.addEventListenerFailure(onFailure);
+      $pointPosition = JSON.parse(JSON.stringify(feature.geometry.coordinates));
       controls = "point";
     }
   });
   onDestroy(() => {
-    $pointTool?.stop();
-    $pointTool?.clearEventListeners();
+    $pointPosition = null;
 
     $routeTool?.stop();
     $routeTool?.clearEventListeners();
@@ -100,6 +95,14 @@
       return gj;
     });
   });
+
+  // Listen to updates for points
+  $: updatePoint($pointPosition);
+  function updatePoint(pt: [number, number] | null) {
+    if (unsavedFeature?.geometry.type == "Point" && pt) {
+      unsavedFeature.geometry.coordinates = setPrecision(pt);
+    }
+  }
 
   function onSuccess(feature: Feature<Point | Polygon | LineString>) {
     feature.properties ??= {};
@@ -152,7 +155,7 @@
 </script>
 
 {#if controls == "point"}
-  <PointControls editingExisting {cancel} />
+  <PointControls {finish} {cancel} />
 {:else if controls == "route"}
   <RouteControls extendRoute={false} {finish} {cancel} />
 {:else if controls == "freehand-polygon"}
