@@ -35,6 +35,9 @@
       return gj;
     });
     let feature = maybeFeature!;
+    // Immediately copy the feature, so that if no geometry edits happen and
+    // only form updates (through $featureProps), the edit is still used.
+    unsavedFeature = JSON.parse(JSON.stringify(feature));
 
     if (feature.geometry.type == "LineString") {
       // TODO Update route-snapper-ts to use Except<route_name> or otherwise pick the important properties

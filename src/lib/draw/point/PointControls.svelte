@@ -1,6 +1,6 @@
 <script lang="ts">
   import { HelpButton } from "$lib/common";
-  import { DefaultButton, SecondaryButton } from "govuk-svelte";
+  import { SecondaryButton } from "govuk-svelte";
   import FixedButtonGroup from "../FixedButtonGroup.svelte";
 
   export let editingExisting: boolean;
@@ -9,8 +9,6 @@
 
 <div style="float: right">
   <FixedButtonGroup>
-    <DefaultButton style="margin-bottom: 0px">Finish</DefaultButton>
-
     <SecondaryButton on:click={cancel} noBottomMargin>Cancel</SecondaryButton>
 
     <HelpButton>
