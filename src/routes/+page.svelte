@@ -9,7 +9,6 @@
   import {
     ImageLayer,
     InterventionLayer,
-    PointToolLayer,
     PolygonToolLayer,
     RouteSnapperLayer,
     BoundaryLayer,
@@ -166,7 +165,6 @@
       <ImageLayer {cfg} />
       <Toolbox {cfg} {gjSchemes} {routeSnapperUrl} />
       <RouteSnapperLayer {cfg} />
-      <PointToolLayer />
       <PolygonToolLayer {cfg} />
     </MapLibre>
   </div>

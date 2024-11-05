@@ -2,11 +2,45 @@
   import { HelpButton } from "$lib/common";
   import { DefaultButton, SecondaryButton } from "govuk-svelte";
   import FixedButtonGroup from "../FixedButtonGroup.svelte";
+  import { position } from "./stores";
+  import { MapEvents, Marker } from "svelte-maplibre";
+  import type { MapMouseEvent } from "maplibre-gl";
+  import { map } from "$lib/config";
+  import { onMount, onDestroy } from "svelte";
 
   export let editingExisting: boolean;
   export let finish: () => void;
   export let cancel: () => void;
+
+  onMount(() => {
+    if ($map) {
+      $map.doubleClickZoom.disable();
+    }
+  });
+  onDestroy(() => {
+    if ($map) {
+      $map.doubleClickZoom.enable();
+    }
+  });
+
+  function onClick(e: CustomEvent<MapMouseEvent>) {
+    if (!$position) {
+      $position = e.detail.lngLat.toArray();
+    }
+  }
+
+  function onDoubleClick() {
+    finish();
+  }
 </script>
+
+<MapEvents on:click={onClick} on:dblclick={onDoubleClick} />
+
+{#if $position}
+  <Marker draggable bind:lngLat={$position}>
+    <span class="dot" />
+  </Marker>
+{/if}
 
 <div style="float: right">
   <FixedButtonGroup>
@@ -30,3 +64,18 @@
     </HelpButton>
   </FixedButtonGroup>
 </div>
+
+<style>
+  .dot {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: inline-block;
+    background: red;
+  }
+
+  .dot:hover {
+    border: 1px solid black;
+    cursor: pointer;
+  }
+</style>

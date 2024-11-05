@@ -8,22 +8,30 @@
   } from "$lib/draw/stores";
   import { onMount, onDestroy } from "svelte";
   import PointControls from "./PointControls.svelte";
-  import { type Config } from "$lib/config";
+  import { map, type Config } from "$lib/config";
   import type { FeatureWithID } from "$lib/draw/types";
   import type { Schemes } from "$lib/draw/types";
   import type { Writable } from "svelte/store";
-  import { position, isActive } from "./stores";
+  import { position } from "./stores";
 
   export let cfg: Config<F, S>;
   export let gjSchemes: Writable<Schemes<F, S>>;
 
   onMount(() => {
-    $isActive = true;
+    if ($map) {
+      $map.getCanvas().style.cursor = "crosshair";
+    }
   });
   onDestroy(() => {
-    $isActive = false;
     $position = null;
+    if ($map) {
+      $map.getCanvas().style.cursor = "inherit";
+    }
   });
+
+  $: if ($position && $map) {
+    $map.getCanvas().style.cursor = "inherit";
+  }
 
   function keyDown(e: KeyboardEvent) {
     if (e.key === "Escape") {

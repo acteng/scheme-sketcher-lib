@@ -5,7 +5,7 @@
   import { type Config } from "$lib/config";
   import { onDestroy, onMount } from "svelte";
   import PointControls from "./point/PointControls.svelte";
-  import { position, isActive } from "./point/stores";
+  import { position } from "./point/stores";
   import PolygonControls from "./polygon/PolygonControls.svelte";
   import RouteControls from "./route/RouteControls.svelte";
   import SnapPolygonControls from "./snap_polygon/SnapPolygonControls.svelte";
@@ -59,7 +59,6 @@
       }
     } else if (feature.geometry.type == "Point") {
       $position = JSON.parse(JSON.stringify(feature.geometry.coordinates));
-      $isActive = true;
       controls = "point";
       // TODO plumb onSuccess, onUpdate, onFailure?
     }
@@ -67,7 +66,6 @@
   onDestroy(() => {
     if (controls == "point") {
       $position = null;
-      $isActive = false;
     }
 
     $routeTool?.stop();
@@ -98,7 +96,7 @@
   // Listen to updates for points
   $: updatePoint($position);
   function updatePoint(position: [number, number] | null) {
-    if (controls == "point" && position) {
+    if (controls == "point" && position && unsavedFeature) {
       unsavedFeature.geometry.coordinates = position;
     }
   }
