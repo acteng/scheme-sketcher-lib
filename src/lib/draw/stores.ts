@@ -17,6 +17,8 @@ export const polygonTool: Writable<PolygonTool | null> = writable(null);
 // A global singleton, with the route tool loaded for the current map. It's
 // null before it's loaded.
 export const routeTool: Writable<RouteTool | null> = writable(null);
+// When the point tool is active, represents the marker position, once it's set.
+export const pointPosition: Writable<[number, number] | null> = writable(null);
 
 // scheme_references to hide
 export const hideSchemes: Writable<Set<string>> = writable(new Set());

@@ -2,7 +2,7 @@
   import { HelpButton } from "$lib/common";
   import { DefaultButton, SecondaryButton } from "govuk-svelte";
   import FixedButtonGroup from "../FixedButtonGroup.svelte";
-  import { position } from "./stores";
+  import { pointPosition } from "$lib/draw/stores";
   import { MapEvents, Marker } from "svelte-maplibre";
   import type { MapMouseEvent } from "maplibre-gl";
   import { map } from "$lib/config";
@@ -23,8 +23,8 @@
   });
 
   function onClick(e: CustomEvent<MapMouseEvent>) {
-    if (!$position) {
-      $position = e.detail.lngLat.toArray();
+    if (!$pointPosition) {
+      $pointPosition = e.detail.lngLat.toArray();
     }
   }
 
@@ -44,8 +44,8 @@
 
 <MapEvents on:click={onClick} on:dblclick={onDoubleClick} />
 
-{#if $position}
-  <Marker draggable bind:lngLat={$position}>
+{#if $pointPosition}
+  <Marker draggable bind:lngLat={$pointPosition}>
     <span class="dot" />
   </Marker>
 {/if}
@@ -59,7 +59,7 @@
 
     <HelpButton>
       <ul>
-        {#if $position}
+        {#if $pointPosition}
           <li>Click and drag the point to move it</li>
         {:else}
           <li>Click the map to add a point</li>

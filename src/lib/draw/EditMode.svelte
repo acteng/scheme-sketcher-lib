@@ -5,13 +5,13 @@
     polygonTool,
     routeTool,
     featureProps,
+    pointPosition,
     setPrecision,
   } from "$lib/draw/stores";
   import type { FeatureWithID, Schemes } from "$lib/draw/types";
   import { type Config } from "$lib/config";
   import { onDestroy, onMount } from "svelte";
   import PointControls from "./point/PointControls.svelte";
-  import { position } from "./point/stores";
   import PolygonControls from "./polygon/PolygonControls.svelte";
   import RouteControls from "./route/RouteControls.svelte";
   import SnapPolygonControls from "./snap_polygon/SnapPolygonControls.svelte";
@@ -64,14 +64,12 @@
         controls = "freehand-polygon";
       }
     } else if (feature.geometry.type == "Point") {
-      $position = JSON.parse(JSON.stringify(feature.geometry.coordinates));
+      $pointPosition = JSON.parse(JSON.stringify(feature.geometry.coordinates));
       controls = "point";
     }
   });
   onDestroy(() => {
-    if (controls == "point") {
-      $position = null;
-    }
+    $pointPosition = null;
 
     $routeTool?.stop();
     $routeTool?.clearEventListeners();
@@ -99,10 +97,10 @@
   });
 
   // Listen to updates for points
-  $: updatePoint($position);
-  function updatePoint(position: [number, number] | null) {
-    if (unsavedFeature?.geometry.type == "Point" && position) {
-      unsavedFeature.geometry.coordinates = setPrecision(position);
+  $: updatePoint($pointPosition);
+  function updatePoint(pt: [number, number] | null) {
+    if (unsavedFeature?.geometry.type == "Point" && pt) {
+      unsavedFeature.geometry.coordinates = setPrecision(pt);
     }
   }
 

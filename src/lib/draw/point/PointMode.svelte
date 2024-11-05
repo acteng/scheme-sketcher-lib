@@ -5,6 +5,7 @@
     newFeatureId,
     getArbitrarySchemeRef,
     featureProps,
+    pointPosition,
     setPrecision,
   } from "$lib/draw/stores";
   import { onMount, onDestroy } from "svelte";
@@ -12,7 +13,6 @@
   import { map, type Config } from "$lib/config";
   import type { FeatureWithID, Schemes } from "$lib/draw/types";
   import type { Writable } from "svelte/store";
-  import { position } from "./stores";
 
   export let cfg: Config<F, S>;
   export let gjSchemes: Writable<Schemes<F, S>>;
@@ -23,25 +23,25 @@
     }
   });
   onDestroy(() => {
-    $position = null;
+    $pointPosition = null;
     if ($map) {
       $map.getCanvas().style.cursor = "inherit";
     }
   });
 
-  $: if ($position && $map) {
+  $: if ($pointPosition && $map) {
     $map.getCanvas().style.cursor = "inherit";
   }
 
   function onSuccess() {
-    if (!$position) {
+    if (!$pointPosition) {
       return;
     }
     let f = {
       type: "Feature",
       geometry: {
         type: "Point",
-        coordinates: setPrecision($position),
+        coordinates: setPrecision($pointPosition),
       },
       properties: { ...$featureProps },
     } as FeatureWithID<F, Point>;
