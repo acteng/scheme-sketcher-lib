@@ -5,12 +5,12 @@
     newFeatureId,
     getArbitrarySchemeRef,
     featureProps,
+    setPrecision,
   } from "$lib/draw/stores";
   import { onMount, onDestroy } from "svelte";
   import PointControls from "./PointControls.svelte";
   import { map, type Config } from "$lib/config";
-  import type { FeatureWithID } from "$lib/draw/types";
-  import type { Schemes } from "$lib/draw/types";
+  import type { FeatureWithID, Schemes } from "$lib/draw/types";
   import type { Writable } from "svelte/store";
   import { position } from "./stores";
 
@@ -33,13 +33,6 @@
     $map.getCanvas().style.cursor = "inherit";
   }
 
-  function keyDown(e: KeyboardEvent) {
-    if (e.key === "Escape") {
-      e.stopPropagation();
-      onFailure();
-    }
-  }
-
   function onSuccess() {
     if (!$position) {
       return;
@@ -48,7 +41,7 @@
       type: "Feature",
       geometry: {
         type: "Point",
-        coordinates: JSON.parse(JSON.stringify($position)),
+        coordinates: setPrecision($position),
       },
       properties: { ...$featureProps },
     } as FeatureWithID<F, Point>;
@@ -69,6 +62,4 @@
   }
 </script>
 
-<svelte:window on:keydown={keyDown} />
-
-<PointControls editingExisting={false} finish={onSuccess} cancel={onFailure} />
+<PointControls finish={onSuccess} cancel={onFailure} />

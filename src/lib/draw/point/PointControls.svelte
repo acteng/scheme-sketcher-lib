@@ -8,7 +8,6 @@
   import { map } from "$lib/config";
   import { onMount, onDestroy } from "svelte";
 
-  export let editingExisting: boolean;
   export let finish: () => void;
   export let cancel: () => void;
 
@@ -32,7 +31,16 @@
   function onDoubleClick() {
     finish();
   }
+
+  function keyDown(e: KeyboardEvent) {
+    if (e.key === "Escape") {
+      e.stopPropagation();
+      cancel();
+    }
+  }
 </script>
+
+<svelte:window on:keydown={keyDown} />
 
 <MapEvents on:click={onClick} on:dblclick={onDoubleClick} />
 
@@ -51,13 +59,15 @@
 
     <HelpButton>
       <ul>
-        {#if editingExisting}
-          <li>Click to move the point here</li>
+        {#if $position}
+          <li>Click and drag the point to move it</li>
         {:else}
-          <li>Click to add a new point</li>
+          <li>Click the map to add a point</li>
         {/if}
         <li>
-          Press <b>Escape</b>
+          <b>Double click</b>
+          the map to finish or press
+          <b>Escape</b>
           to cancel
         </li>
       </ul>

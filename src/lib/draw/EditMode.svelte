@@ -1,6 +1,12 @@
 <script lang="ts" generics="F, S">
   import type { Feature, LineString, Point, Polygon } from "geojson";
-  import { mode, polygonTool, routeTool, featureProps } from "$lib/draw/stores";
+  import {
+    mode,
+    polygonTool,
+    routeTool,
+    featureProps,
+    setPrecision,
+  } from "$lib/draw/stores";
   import type { FeatureWithID, Schemes } from "$lib/draw/types";
   import { type Config } from "$lib/config";
   import { onDestroy, onMount } from "svelte";
@@ -60,7 +66,6 @@
     } else if (feature.geometry.type == "Point") {
       $position = JSON.parse(JSON.stringify(feature.geometry.coordinates));
       controls = "point";
-      // TODO plumb onSuccess, onUpdate, onFailure?
     }
   });
   onDestroy(() => {
@@ -96,8 +101,8 @@
   // Listen to updates for points
   $: updatePoint($position);
   function updatePoint(position: [number, number] | null) {
-    if (controls == "point" && position && unsavedFeature) {
-      unsavedFeature.geometry.coordinates = position;
+    if (unsavedFeature?.geometry.type == "Point" && position) {
+      unsavedFeature.geometry.coordinates = setPrecision(position);
     }
   }
 
@@ -152,7 +157,7 @@
 </script>
 
 {#if controls == "point"}
-  <PointControls editingExisting {finish} {cancel} />
+  <PointControls {finish} {cancel} />
 {:else if controls == "route"}
   <RouteControls extendRoute={false} {finish} {cancel} />
 {:else if controls == "freehand-polygon"}
