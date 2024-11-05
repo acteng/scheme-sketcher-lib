@@ -85,7 +85,7 @@
       return s;
     },
 
-    interventionWarning: (feature) => null,
+    interventionWarning: (props) => null,
 
     editFeatureForm: ExampleFeatureForm,
 

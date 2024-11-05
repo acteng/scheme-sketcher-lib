@@ -25,7 +25,7 @@ export interface Config<F, S> {
 
   initializeEmptyScheme: (scheme: SchemeData) => SchemeData & S;
 
-  interventionWarning: (feature: FeatureWithID<F>) => string | null;
+  interventionWarning: (props: FeatureProps<F>) => string | null;
 
   // When id is null, a new feature is being created
   editFeatureForm: null | ComponentType<

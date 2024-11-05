@@ -33,7 +33,7 @@
   $: numErrors = $gjSchemes.features.filter(
     (f) =>
       f.properties.scheme_reference == scheme_reference &&
-      cfg.interventionWarning(f) != null,
+      cfg.interventionWarning(f.properties) != null,
   ).length;
   $: numFeatures = $gjSchemes.features.filter(
     (f) => f.properties.scheme_reference == scheme_reference,
@@ -170,7 +170,7 @@
 
   <ol class="govuk-list govuk-list--number">
     {#each $gjSchemes.features.filter((f) => f.properties.scheme_reference == scheme_reference) as feature (feature.id)}
-      {@const warning = cfg.interventionWarning(feature)}
+      {@const warning = cfg.interventionWarning(feature.properties)}
       <li>
         <!-- svelte-ignore a11y-invalid-attribute -->
         <a

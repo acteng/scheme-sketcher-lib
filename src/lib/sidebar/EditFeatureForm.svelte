@@ -36,7 +36,7 @@
   Delete
 </WarningButton>
 
-<ErrorMessage errorMessage={cfg.interventionWarning(feature)} />
+<ErrorMessage errorMessage={cfg.interventionWarning($featureProps)} />
 
 <svelte:component
   this={cfg.editFeatureForm}
