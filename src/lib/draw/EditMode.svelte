@@ -1,16 +1,11 @@
 <script lang="ts" generics="F, S">
   import type { Feature, LineString, Point, Polygon } from "geojson";
-  import {
-    mode,
-    pointTool,
-    polygonTool,
-    routeTool,
-    featureProps,
-  } from "$lib/draw/stores";
+  import { mode, polygonTool, routeTool, featureProps } from "$lib/draw/stores";
   import type { FeatureWithID, Schemes } from "$lib/draw/types";
   import { type Config } from "$lib/config";
   import { onDestroy, onMount } from "svelte";
   import PointControls from "./point/PointControls.svelte";
+  import { position, isActive } from "./point/stores";
   import PolygonControls from "./polygon/PolygonControls.svelte";
   import RouteControls from "./route/RouteControls.svelte";
   import SnapPolygonControls from "./snap_polygon/SnapPolygonControls.svelte";
@@ -63,18 +58,17 @@
         controls = "freehand-polygon";
       }
     } else if (feature.geometry.type == "Point") {
-      // No need to pass in the existing feature.geometry; it's the same as
-      // where the cursor is anyway
-      $pointTool?.start();
-      $pointTool?.addEventListenerSuccess(onSuccess);
-      // No auto-save for updates
-      $pointTool?.addEventListenerFailure(onFailure);
+      $position = JSON.parse(JSON.stringify(feature.geometry.coordinates));
+      $isActive = true;
       controls = "point";
+      // TODO plumb onSuccess, onUpdate, onFailure?
     }
   });
   onDestroy(() => {
-    $pointTool?.stop();
-    $pointTool?.clearEventListeners();
+    if (controls == "point") {
+      $position = null;
+      $isActive = false;
+    }
 
     $routeTool?.stop();
     $routeTool?.clearEventListeners();
@@ -100,6 +94,14 @@
       return gj;
     });
   });
+
+  // Listen to updates for points
+  $: updatePoint($position);
+  function updatePoint(position: [number, number] | null) {
+    if (controls == "point" && position) {
+      unsavedFeature.geometry.coordinates = position;
+    }
+  }
 
   function onSuccess(feature: Feature<Point | Polygon | LineString>) {
     feature.properties ??= {};
@@ -152,7 +154,7 @@
 </script>
 
 {#if controls == "point"}
-  <PointControls editingExisting {cancel} />
+  <PointControls editingExisting {finish} {cancel} />
 {:else if controls == "route"}
   <RouteControls extendRoute={false} {finish} {cancel} />
 {:else if controls == "freehand-polygon"}

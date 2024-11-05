@@ -1,36 +1,50 @@
 <script lang="ts" generics="F, S">
-  import type { Feature, Point } from "geojson";
+  import type { Point } from "geojson";
   import {
     mode,
-    pointTool,
     newFeatureId,
     getArbitrarySchemeRef,
     featureProps,
   } from "$lib/draw/stores";
-  import { onDestroy, onMount } from "svelte";
+  import { onMount, onDestroy } from "svelte";
   import PointControls from "./PointControls.svelte";
   import { type Config } from "$lib/config";
   import type { FeatureWithID } from "$lib/draw/types";
   import type { Schemes } from "$lib/draw/types";
   import type { Writable } from "svelte/store";
+  import { position, isActive } from "./stores";
 
   export let cfg: Config<F, S>;
   export let gjSchemes: Writable<Schemes<F, S>>;
 
   onMount(() => {
-    $pointTool!.start();
-    $pointTool!.addEventListenerSuccess(onSuccess);
-    $pointTool!.addEventListenerFailure(onFailure);
+    $isActive = true;
   });
   onDestroy(() => {
-    $pointTool!.stop();
-    $pointTool!.clearEventListeners();
+    $isActive = false;
+    $position = null;
   });
 
-  function onSuccess(feature: Feature<Point>) {
-    feature.properties ||= {};
-    let f = feature as FeatureWithID<F, Point>;
-    f.properties = { ...f.properties, ...$featureProps };
+  function keyDown(e: KeyboardEvent) {
+    if (e.key === "Escape") {
+      e.stopPropagation();
+      onFailure();
+    }
+  }
+
+  function onSuccess() {
+    if (!$position) {
+      return;
+    }
+    let f = {
+      type: "Feature",
+      geometry: {
+        type: "Point",
+        coordinates: JSON.parse(JSON.stringify($position)),
+      },
+      properties: { ...$featureProps },
+    } as FeatureWithID<F, Point>;
+
     gjSchemes.update((gj) => {
       f.id = newFeatureId(gj);
       f.properties.scheme_reference = getArbitrarySchemeRef(gj);
@@ -47,4 +61,6 @@
   }
 </script>
 
-<PointControls editingExisting={false} cancel={onFailure} />
+<svelte:window on:keydown={keyDown} />
+
+<PointControls editingExisting={false} finish={onSuccess} cancel={onFailure} />
