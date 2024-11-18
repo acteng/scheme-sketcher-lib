@@ -40,7 +40,15 @@
   $: extraNodes = getExtraNodes($routeTool, $waypoints, hoveredLine, drawMode);
 
   let cursor: Waypoint | null = null;
-  $: previewGj = getPreview($routeTool, $waypoints, drawMode, cursor);
+  let hoveringOnMarker = false;
+  let draggingMarker = false;
+  $: previewGj = getPreview(
+    $routeTool,
+    $waypoints,
+    drawMode,
+    cursor,
+    hoveringOnMarker || draggingMarker,
+  );
 
   let checkboxId = uuidv4();
 
@@ -133,7 +141,11 @@
     waypoints: Waypoint[],
     drawMode: "append-start" | "append-end" | "adjust",
     cursor: Waypoint | null,
+    suppress: boolean,
   ): FeatureCollection {
+    if (suppress) {
+      return emptyGj;
+    }
     try {
       if (routeTool && waypoints.length > 0 && cursor) {
         if (drawMode == "append-start") {
@@ -325,6 +337,10 @@
     bind:lngLat={waypt.point}
     on:click={() => toggleSnapped(idx)}
     on:contextmenu={() => removeWaypoint(idx)}
+    on:mouseenter={() => (hoveringOnMarker = true)}
+    on:mouseleave={() => (hoveringOnMarker = false)}
+    on:dragstart={() => (draggingMarker = true)}
+    on:dragend={() => (draggingMarker = false)}
   >
     <span class="dot" class:snapped={waypt.snapped}>{idx + 1}</span>
   </Marker>
