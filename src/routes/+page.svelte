@@ -10,7 +10,6 @@
     ImageLayer,
     InterventionLayer,
     PolygonToolLayer,
-    RouteSnapperLayer,
     BoundaryLayer,
     Toolbox,
     NewFeatureForm,
@@ -165,7 +164,6 @@
       <InterventionLayer {cfg} {gjSchemes} />
       <ImageLayer {cfg} />
       <Toolbox {cfg} {gjSchemes} {routeSnapperUrl} />
-      <RouteSnapperLayer {gjSchemes} />
       <PolygonToolLayer {cfg} />
     </MapLibre>
   </div>
