@@ -51,6 +51,9 @@
 
   function toggleSnap() {
     $snapMode = !$snapMode;
+    if (cursor) {
+      cursor.snapped = $snapMode;
+    }
   }
 
   function loadNodes(show: boolean) {
@@ -95,7 +98,7 @@
   function onMouseMove(e: CustomEvent<MapMouseEvent>) {
     cursor = {
       point: e.detail.lngLat.toArray(),
-      snapped: true,
+      snapped: $snapMode,
     };
   }
 
