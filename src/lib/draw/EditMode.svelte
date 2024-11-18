@@ -8,6 +8,7 @@
     pointPosition,
     setPrecision,
   } from "$lib/draw/stores";
+  import { waypoints } from "./route/stores";
   import type { FeatureWithID, Schemes } from "$lib/draw/types";
   import { type Config } from "$lib/config";
   import { onDestroy, onMount } from "svelte";
@@ -41,13 +42,13 @@
     unsavedFeature = JSON.parse(JSON.stringify(feature));
 
     if (feature.geometry.type == "LineString") {
-      // TODO Update route-snapper-ts to use Except<route_name> or otherwise pick the important properties
-      $routeTool?.editExistingRoute(
-        feature as unknown as Feature<LineString, RouteProps>,
-      );
-      $routeTool?.addEventListenerSuccess(onSuccess);
-      $routeTool?.addEventListenerUpdated(onUpdate);
-      $routeTool?.addEventListenerFailure(onFailure);
+      // Transform into the correct format
+      $waypoints = feature.properties.waypoints!.map((waypt) => {
+        return {
+          point: [waypt.lon, waypt.lat],
+          snapped: waypt.snapped,
+        };
+      });
       controls = "route";
     } else if (feature.geometry.type == "Polygon") {
       if (feature.properties.waypoints) {
@@ -148,6 +149,19 @@
     mode.set({ mode: "list" });
   }
 
+  function finishRoute() {
+    // Don't constantly update unsavedFeature for routes; it'll do unnecessary extra work.
+    if ($routeTool) {
+      try {
+        let out = $routeTool.inner.calculateRoute($waypoints);
+        unsavedFeature = JSON.parse(out);
+      } catch (err) {
+        console.warn(`Finishing route failed: ${err}`);
+      }
+    }
+    finish();
+  }
+
   function cancel() {
     unsavedFeature = null;
     mode.set({ mode: "list" });
@@ -157,7 +171,7 @@
 {#if controls == "point"}
   <PointControls {finish} {cancel} />
 {:else if controls == "route"}
-  <RouteControls {finish} {cancel} />
+  <RouteControls finish={finishRoute} {cancel} />
 {:else if controls == "freehand-polygon"}
   <PolygonControls {finish} {cancel} />
 {:else if controls == "snapped-polygon"}
