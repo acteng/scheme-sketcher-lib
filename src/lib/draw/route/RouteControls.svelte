@@ -31,13 +31,12 @@
 
   $: routesGj = calculateRoutes($routeTool, $waypoints);
 
-  // TODO Remove unless we start using this
-  let hoveredLine: Feature | null = null;
   interface ExtraNode {
     point: [number, number];
     insertIdx: number;
   }
-  $: extraNodes = getExtraNodes($routeTool, $waypoints, hoveredLine, drawMode);
+  let extraNodes: ExtraNode[] = [];
+  $: updateExtraNodes($routeTool, $waypoints, drawMode);
 
   let cursor: Waypoint | null = null;
   let hoveringOnMarker = false;
@@ -165,14 +164,14 @@
     return emptyGj;
   }
 
-  function getExtraNodes(
+  function updateExtraNodes(
     routeTool: RouteTool | null,
     waypoints: Waypoint[],
-    feature: Feature | null,
     drawMode: "append-start" | "append-end" | "adjust",
-  ): ExtraNode[] {
+  ) {
     if (!routeTool || drawMode != "adjust") {
-      return [];
+      extraNodes = [];
+      return;
     }
 
     let nodes = [];
@@ -192,7 +191,7 @@
       insertIdx++;
     }
 
-    return nodes;
+    extraNodes = nodes;
   }
 
   function addNode(node: ExtraNode) {
@@ -326,7 +325,7 @@
 <MapEvents on:click={onMapClick} on:mousemove={onMouseMove} />
 
 {#each extraNodes as node}
-  <Marker draggable bind:lngLat={node.point} on:click={() => addNode(node)}>
+  <Marker draggable bind:lngLat={node.point} on:dragend={() => addNode(node)}>
     <span class="dot node">{node.insertIdx}</span>
   </Marker>
 {/each}
@@ -349,7 +348,6 @@
 <GeoJSON data={routesGj} generateId>
   <LineLayer
     manageHoverState
-    bind:hovered={hoveredLine}
     paint={{
       "line-color": "black",
       "line-width": 10,
