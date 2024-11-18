@@ -192,6 +192,27 @@
       return w;
     });
   }
+
+  function keyDown(e: KeyboardEvent) {
+    let tag = (e.target as HTMLElement).tagName;
+    let formFocused = tag == "INPUT" || tag == "TEXTAREA";
+
+    if (e.key === "Enter" && !formFocused) {
+      e.stopPropagation();
+      finish();
+    } else if (e.key === "Escape") {
+      e.stopPropagation();
+      cancel();
+    } else if (e.key == "s" && !formFocused) {
+      toggleSnap();
+    } else if (e.key == "1" && !formFocused) {
+      drawMode = "append-start";
+    } else if (e.key == "2" && !formFocused) {
+      drawMode = "append-end";
+    } else if (e.key == "3" && !formFocused) {
+      drawMode = "adjust";
+    }
+  }
 </script>
 
 <div style="display: flex">
@@ -287,6 +308,8 @@
     </FixedButtonGroup>
   </div>
 </div>
+
+<svelte:window on:keydown={keyDown} />
 
 <MapEvents on:click={onMapClick} on:mousemove={onMouseMove} />
 
