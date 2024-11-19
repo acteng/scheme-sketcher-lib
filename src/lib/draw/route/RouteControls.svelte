@@ -36,11 +36,12 @@
     insertIdx: number;
   }
   let extraNodes: ExtraNode[] = [];
-  $: updateExtraNodes($routeTool, $waypoints, drawMode);
+  $: updateExtraNodes($routeTool, $waypoints, drawMode, draggingExtraNode);
 
   let cursor: Waypoint | null = null;
   let hoveringOnMarker = false;
   let draggingMarker = false;
+  let draggingExtraNode = false;
   $: previewGj = getPreview(
     $routeTool,
     $waypoints,
@@ -168,7 +169,11 @@
     routeTool: RouteTool | null,
     waypoints: Waypoint[],
     drawMode: "append-start" | "append-end" | "adjust",
+    draggingExtraNode: boolean,
   ) {
+    if (draggingExtraNode) {
+      return;
+    }
     if (!routeTool || drawMode != "adjust") {
       extraNodes = [];
       return;
@@ -202,6 +207,18 @@
       });
       return w;
     });
+    draggingExtraNode = true;
+  }
+
+  function updateDrag(node: ExtraNode) {
+    waypoints.update((w) => {
+      w[node.insertIdx].point = node.point;
+      return w;
+    });
+  }
+
+  function finalizeDrag() {
+    draggingExtraNode = false;
   }
 
   function keyDown(e: KeyboardEvent) {
@@ -325,8 +342,14 @@
 <MapEvents on:click={onMapClick} on:mousemove={onMouseMove} />
 
 {#each extraNodes as node}
-  <Marker draggable bind:lngLat={node.point} on:dragend={() => addNode(node)}>
-    <span class="dot node">{node.insertIdx}</span>
+  <Marker
+    draggable
+    bind:lngLat={node.point}
+    on:dragstart={() => addNode(node)}
+    on:drag={() => updateDrag(node)}
+    on:dragend={finalizeDrag}
+  >
+    <span class="dot node" class:hide={draggingExtraNode} />
   </Marker>
 {/each}
 
@@ -391,5 +414,9 @@
     width: 20px;
     height: 20px;
     background-color: grey;
+  }
+
+  .hide {
+    visibility: hidden;
   }
 </style>
