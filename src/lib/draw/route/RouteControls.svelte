@@ -252,43 +252,47 @@
 </script>
 
 <div style="display: flex">
-  <TinyRadio
-    choices={[
-      ["snap", "Snap to roads"],
-      ["free", "Draw anywhere"],
-    ]}
-    value={$snapMode ? "snap" : "free"}
-    on:change={toggleSnap}
-  />
+  <div style="display: flex; flex-direction: row">
+    <TinyRadio
+      style="flex-direction: column; border-right: 1px solid black"
+      choices={[
+        ["snap", "Snap to roads"],
+        ["free", "Draw anywhere"],
+      ]}
+      value={$snapMode ? "snap" : "free"}
+      on:change={toggleSnap}
+    />
 
-  <TinyRadio
-    choices={[
-      ["append-start", "Extend from start"],
-      ["append-end", "Extend from end"],
-      ["adjust", "Drag middle points"],
-    ]}
-    bind:value={drawMode}
-  />
+    <TinyRadio
+      style="flex-direction: column; margin-left: 8px"
+      choices={[
+        ["append-start", "Extend from start"],
+        ["append-end", "Extend from end"],
+        ["adjust", "Drag middle points"],
+      ]}
+      bind:value={drawMode}
+    />
 
-  <fieldset class="govuk-fieldset">
-    <div class="govuk-checkboxes--small" data-module="govuk-checkboxes">
-      <div class="govuk-checkboxes__item">
-        <input
-          type="checkbox"
-          class="govuk-checkboxes__input"
-          id={checkboxId}
-          bind:checked={$showAllNodes}
-        />
-        <label
-          class="govuk-label govuk-checkboxes__label"
-          for={checkboxId}
-          style="max-width: 100%"
-        >
-          Show all snappable points (zoom in to see)
-        </label>
+    <fieldset class="govuk-fieldset">
+      <div class="govuk-checkboxes--small" data-module="govuk-checkboxes">
+        <div class="govuk-checkboxes__item">
+          <input
+            type="checkbox"
+            class="govuk-checkboxes__input"
+            id={checkboxId}
+            bind:checked={$showAllNodes}
+          />
+          <label
+            class="govuk-label govuk-checkboxes__label"
+            for={checkboxId}
+            style="max-width: 100%"
+          >
+            Show all snappable points
+          </label>
+        </div>
       </div>
-    </div>
-  </fieldset>
+    </fieldset>
+  </div>
 
   <div style="margin-left: auto">
     <FixedButtonGroup>
