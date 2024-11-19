@@ -13,12 +13,20 @@
   import { v4 as uuidv4 } from "uuid";
   import FixedButtonGroup from "../FixedButtonGroup.svelte";
   import { DefaultButton, SecondaryButton } from "govuk-svelte";
-  import { Marker, MapEvents, GeoJSON, LineLayer } from "svelte-maplibre";
+  import {
+    Marker,
+    MapEvents,
+    GeoJSON,
+    LineLayer,
+    CircleLayer,
+  } from "svelte-maplibre";
   import type { Schemes, Mode } from "$lib/draw/types";
   import type { MapMouseEvent } from "maplibre-gl";
   import type { Feature, FeatureCollection } from "geojson";
   import { RouteTool } from "route-snapper-ts";
+  import { layerId, type ConfigWithZorder } from "$lib/maplibre";
 
+  export let cfg: ConfigWithZorder;
   export let finish: () => void;
   export let cancel: () => void;
 
@@ -384,6 +392,22 @@
       "line-color": "black",
       "line-width": 3,
     }}
+  />
+</GeoJSON>
+
+<GeoJSON data={$showAllNodesGj}>
+  <CircleLayer
+    {...layerId(cfg, "route-debug-nodes")}
+    paint={{
+      "circle-opacity": 0,
+      "circle-radius": 5,
+      "circle-stroke-color": "black",
+      "circle-stroke-width": 1,
+    }}
+    layout={{
+      visibility: $showAllNodes ? "visible" : "none",
+    }}
+    minzoom={13}
   />
 </GeoJSON>
 
