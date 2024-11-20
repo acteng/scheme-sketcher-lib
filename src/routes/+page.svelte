@@ -10,6 +10,7 @@
     ImageLayer,
     InterventionLayer,
     PolygonToolLayer,
+    RouteSnapperLayer,
     BoundaryLayer,
     Toolbox,
     NewFeatureForm,
@@ -124,7 +125,6 @@
       "route-points",
       "route-lines",
       "route-polygons",
-      "route-debug-nodes",
 
       // From the dataviz basemap
       "road_label",
@@ -164,6 +164,7 @@
       <InterventionLayer {cfg} {gjSchemes} />
       <ImageLayer {cfg} />
       <Toolbox {cfg} {gjSchemes} {routeSnapperUrl} />
+      <RouteSnapperLayer {cfg} />
       <PolygonToolLayer {cfg} />
     </MapLibre>
   </div>

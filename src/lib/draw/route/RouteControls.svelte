@@ -17,9 +17,15 @@
   import type { Feature, FeatureCollection } from "geojson";
   import { RouteTool } from "route-snapper-ts";
   import { layerId } from "$lib/maplibre";
+  import { onDestroy } from "svelte";
 
   export let finish: () => void;
   export let cancel: () => void;
+
+  onDestroy(() => {
+    $waypoints = [];
+    $routeTool?.stop();
+  });
 
   let emptyGj = {
     type: "FeatureCollection" as const,

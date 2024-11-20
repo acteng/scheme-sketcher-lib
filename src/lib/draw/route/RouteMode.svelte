@@ -8,7 +8,7 @@
     routeTool,
   } from "$lib/draw/stores";
   import { DefaultButton, SecondaryButton } from "govuk-svelte";
-  import { onDestroy, onMount } from "svelte";
+  import { onMount } from "svelte";
   import RouteControls from "./RouteControls.svelte";
   import { type Config } from "$lib/config";
   import type { FeatureWithID, Schemes } from "$lib/draw/types";
@@ -19,9 +19,6 @@
   export let gjSchemes: Writable<Schemes<F, S>>;
 
   onMount(() => {
-    $waypoints = [];
-  });
-  onDestroy(() => {
     $waypoints = [];
   });
 
