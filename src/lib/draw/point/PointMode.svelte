@@ -48,7 +48,7 @@
 
     gjSchemes.update((gj) => {
       f.id = newFeatureId(gj);
-      f.properties.scheme_reference = getArbitrarySchemeRef(gj);
+      f.properties.scheme_reference ||= getArbitrarySchemeRef(gj);
       cfg.newPointFeature(f);
       gj.features.push(f);
       return gj;
