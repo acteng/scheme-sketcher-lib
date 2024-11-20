@@ -464,6 +464,10 @@
     background-color: grey;
   }
 
+  .node:hover {
+    border: 3px solid red;
+  }
+
   .hide {
     visibility: hidden;
   }
