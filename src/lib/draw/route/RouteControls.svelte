@@ -1,16 +1,8 @@
 <script lang="ts">
   import { routeTool, mode, userSettings } from "$lib/draw/stores";
-  import {
-    snapMode,
-    undoLength,
-    showAllNodes,
-    showAllNodesGj,
-    waypoints,
-    type Waypoint,
-  } from "./stores";
+  import { snapMode, undoLength, waypoints, type Waypoint } from "./stores";
   import { HelpButton } from "$lib/common";
   import TinyRadio from "../TinyRadio.svelte";
-  import { v4 as uuidv4 } from "uuid";
   import FixedButtonGroup from "../FixedButtonGroup.svelte";
   import { DefaultButton, SecondaryButton } from "govuk-svelte";
   import {
@@ -24,9 +16,8 @@
   import type { MapMouseEvent } from "maplibre-gl";
   import type { Feature, FeatureCollection } from "geojson";
   import { RouteTool } from "route-snapper-ts";
-  import { layerId, type ConfigWithZorder } from "$lib/maplibre";
+  import { layerId } from "$lib/maplibre";
 
-  export let cfg: ConfigWithZorder;
   export let finish: () => void;
   export let cancel: () => void;
 
@@ -58,8 +49,6 @@
     hoveringOnMarker || draggingMarker,
   );
 
-  let checkboxId = uuidv4();
-
   // TODO some of these change now too
   function undo() {
     $routeTool!.undo();
@@ -71,28 +60,6 @@
       cursor.snapped = $snapMode;
     }
   }
-
-  function loadNodes(show: boolean) {
-    if (show && $showAllNodesGj.features.length == 0) {
-      $showAllNodesGj = JSON.parse($routeTool!.inner.debugSnappableNodes());
-    }
-  }
-  $: loadNodes($showAllNodes);
-
-  // Show snappable nodes when going from freehand to snapped
-  let first = true;
-  function freeToSnapped(snapped: boolean) {
-    if (first) {
-      first = false;
-      return;
-    }
-    if (snapped) {
-      $showAllNodes = true;
-      // TODO Not sure why, but this isn't triggering the reactive statement above
-      loadNodes(true);
-    }
-  }
-  $: freeToSnapped($snapMode);
 
   function onMapClick(e: CustomEvent<MapMouseEvent>) {
     waypoints.update((w) => {
@@ -268,30 +235,10 @@
       choices={[
         ["append-start", "Extend from start"],
         ["append-end", "Extend from end"],
-        ["adjust", "Drag middle points"],
+        ["adjust", "Adjust middle points"],
       ]}
       bind:value={drawMode}
     />
-
-    <fieldset class="govuk-fieldset">
-      <div class="govuk-checkboxes--small" data-module="govuk-checkboxes">
-        <div class="govuk-checkboxes__item">
-          <input
-            type="checkbox"
-            class="govuk-checkboxes__input"
-            id={checkboxId}
-            bind:checked={$showAllNodes}
-          />
-          <label
-            class="govuk-label govuk-checkboxes__label"
-            for={checkboxId}
-            style="max-width: 100%"
-          >
-            Show all snappable points
-          </label>
-        </div>
-      </div>
-    </fieldset>
   </div>
 
   <div style="margin-left: auto">
@@ -327,7 +274,7 @@
           </li>
           <li>
             <b>Right click</b>
-             a waypoint to delete it
+            a waypoint to delete it
           </li>
         </ul>
 
@@ -335,31 +282,31 @@
         <ul>
           <li>
             <b>1</b>
-             to extend from start
+            to extend from start
           </li>
           <li>
             <b>2</b>
-             to extend from end
+            to extend from end
           </li>
           <li>
             <b>3</b>
-             to drag middle points
+            to drag middle points
           </li>
           <li>
             <b>s</b>
-             to switch between snapping to roads and drawing anywhere
+            to switch between snapping to roads and drawing anywhere
           </li>
           <li>
             <b>Control+Z</b>
-             to undo your last change
+            to undo your last change
           </li>
           <li>
             <b>Enter</b>
-             to finish
+            to finish
           </li>
           <li>
             <b>Escape</b>
-             to cancel
+            to cancel
           </li>
         </ul>
       </HelpButton>
@@ -416,22 +363,6 @@
       "line-color": "black",
       "line-width": 3,
     }}
-  />
-</GeoJSON>
-
-<GeoJSON data={$showAllNodesGj}>
-  <CircleLayer
-    {...layerId(cfg, "route-debug-nodes")}
-    paint={{
-      "circle-opacity": 0,
-      "circle-radius": 5,
-      "circle-stroke-color": "black",
-      "circle-stroke-width": 1,
-    }}
-    layout={{
-      visibility: $showAllNodes ? "visible" : "none",
-    }}
-    minzoom={13}
   />
 </GeoJSON>
 

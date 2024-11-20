@@ -56,4 +56,4 @@
   }
 </script>
 
-<RouteControls {cfg} {finish} cancel={onFailure} />
+<RouteControls {finish} cancel={onFailure} />

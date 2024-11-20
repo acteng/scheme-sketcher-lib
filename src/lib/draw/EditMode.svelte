@@ -171,7 +171,7 @@
 {#if controls == "point"}
   <PointControls {finish} {cancel} />
 {:else if controls == "route"}
-  <RouteControls {cfg} finish={finishRoute} {cancel} />
+  <RouteControls finish={finishRoute} {cancel} />
 {:else if controls == "freehand-polygon"}
   <PolygonControls {finish} {cancel} />
 {:else if controls == "snapped-polygon"}
