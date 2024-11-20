@@ -315,11 +315,7 @@
         <ul>
           <li>
             <b>Click</b>
-            the map to add points
-          </li>
-          <li>
-            Press <b>s</b>
-            to switch between snapping points to existing roads and drawing anywhere
+            the map to add new points, while extending from the start or end
           </li>
           <li>
             <b>Click and drag</b>
@@ -327,21 +323,43 @@
           </li>
           <li>
             <b>Click</b>
-            a waypoint to delete it
+            a waypoint to toggle snapping
           </li>
           <li>
-            Press <b>Control+Z</b>
-            to undo your last change
+            <b>Right click</b>
+             a waypoint to delete it
+          </li>
+        </ul>
+
+        <p>Keyboard shortcuts:</p>
+        <ul>
+          <li>
+            <b>1</b>
+             to extend from start
           </li>
           <li>
-            Press <b>Enter</b>
-            or
-            <b>double click</b>
-            to finish
+            <b>2</b>
+             to extend from end
           </li>
           <li>
-            Press <b>Escape</b>
-            to cancel
+            <b>3</b>
+             to drag middle points
+          </li>
+          <li>
+            <b>s</b>
+             to switch between snapping to roads and drawing anywhere
+          </li>
+          <li>
+            <b>Control+Z</b>
+             to undo your last change
+          </li>
+          <li>
+            <b>Enter</b>
+             to finish
+          </li>
+          <li>
+            <b>Escape</b>
+             to cancel
           </li>
         </ul>
       </HelpButton>
