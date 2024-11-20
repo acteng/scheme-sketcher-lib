@@ -18,6 +18,9 @@
   export let cfg: Config<F, S>;
   export let gjSchemes: Writable<Schemes<F, S>>;
 
+  onMount(() => {
+    $waypoints = [];
+  });
   onDestroy(() => {
     $waypoints = [];
   });
