@@ -18,6 +18,7 @@
   import { RouteTool } from "route-snapper-ts";
   import { layerId } from "$lib/maplibre";
   import { onDestroy } from "svelte";
+  import { map } from "$lib/config";
 
   export let finish: () => void;
   export let cancel: () => void;
@@ -25,6 +26,9 @@
   onDestroy(() => {
     $waypoints = [];
     $routeTool?.stop();
+    if ($map) {
+      $map.getCanvas().style.cursor = "inherit";
+    }
   });
 
   let emptyGj = {
@@ -54,6 +58,14 @@
     cursor,
     hoveringOnMarker || draggingMarker,
   );
+
+  $: updateCursor($waypoints);
+  function updateCursor(waypoints: Waypoint[]) {
+    let cursor = waypoints.length == 0 ? "crosshair" : "inherit";
+    if ($map) {
+      $map.getCanvas().style.cursor = cursor;
+    }
+  }
 
   // TODO some of these change now too
   function undo() {
