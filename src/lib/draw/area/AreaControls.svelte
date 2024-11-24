@@ -109,6 +109,7 @@
       w.splice(idx, 1);
       return w;
     });
+    hoveringOnMarker = false;
   }
 
   function calculateRoutes(
