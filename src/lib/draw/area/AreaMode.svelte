@@ -2,33 +2,27 @@
   import type { Feature, LineString, Polygon } from "geojson";
   import {
     mode,
-    routeTool,
     newFeatureId,
     getArbitrarySchemeRef,
     featureProps,
+    routeTool,
   } from "$lib/draw/stores";
-  import { onDestroy, onMount } from "svelte";
-  import SnapPolygonControls from "./SnapPolygonControls.svelte";
+  import { DefaultButton, SecondaryButton } from "govuk-svelte";
+  import { onMount } from "svelte";
+  import AreaControls from "./AreaControls.svelte";
   import { type Config } from "$lib/config";
-  import type { FeatureWithID } from "$lib/draw/types";
-  import type { Schemes } from "$lib/draw/types";
+  import type { FeatureWithID, Schemes } from "$lib/draw/types";
   import type { Writable } from "svelte/store";
+  import { waypoints } from "./stores";
 
   export let cfg: Config<F, S>;
   export let gjSchemes: Writable<Schemes<F, S>>;
 
   onMount(() => {
-    $routeTool!.startArea();
-    $routeTool!.addEventListenerSuccess(onSuccess);
-    $routeTool!.addEventListenerFailure(onFailure);
-  });
-  onDestroy(() => {
-    $routeTool!.stop();
-    $routeTool!.clearEventListeners();
+    $waypoints = [];
   });
 
   function onSuccess(feature: Feature<LineString | Polygon>) {
-    // We did startArea, so we know it's a Polygon
     let f = feature as FeatureWithID<F, Polygon>;
     f.properties = { ...f.properties, ...$featureProps };
     gjSchemes.update((gj) => {
@@ -47,8 +41,22 @@
   }
 
   function finish() {
-    $routeTool!.finish();
+    if (!$routeTool) {
+      return;
+    }
+    try {
+      let out = JSON.parse($routeTool.inner.calculateRoute($waypoints));
+      // TODO Somthing diff here
+      out.geometry.type = "Polygon";
+      out.geometry.coordinates.push(
+        out.geometry.coordinates[out.geometry.coordinates.length - 1],
+      );
+      out.geometry.coordinates = [out.geometry.coordinates];
+      onSuccess(out);
+    } catch (err) {
+      console.warn(`Finishing area failed: ${err}`);
+    }
   }
 </script>
 
-<SnapPolygonControls {finish} cancel={onFailure} />
+<AreaControls {finish} cancel={onFailure} />

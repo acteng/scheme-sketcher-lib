@@ -15,7 +15,7 @@
   import PointMode from "./point/PointMode.svelte";
   import RouteMode from "./route/RouteMode.svelte";
   import SplitRouteMode from "./route/SplitRouteMode.svelte";
-  import SnapPolygonMode from "./snap_polygon/SnapPolygonMode.svelte";
+  import AreaMode from "./area/AreaMode.svelte";
   import StreetViewMode from "./StreetViewMode.svelte";
   import { onDestroy } from "svelte";
   import RouteSnapperLoader from "./route/RouteSnapperLoader.svelte";
@@ -80,7 +80,7 @@ repeatedly load anything. Make sure this is only created once, then just hidden.
   {:else if $mode.mode == "new-route"}
     <RouteMode {cfg} {gjSchemes} />
   {:else if $mode.mode == "new-area"}
-    <SnapPolygonMode {cfg} {gjSchemes} />
+    <AreaMode {cfg} {gjSchemes} />
   {:else if $mode.mode == "split-route"}
     <SplitRouteMode {cfg} {gjSchemes} />
   {:else if $mode.mode == "set-image"}

@@ -7,13 +7,14 @@
     pointPosition,
     setPrecision,
   } from "$lib/draw/stores";
-  import { waypoints } from "./route/stores";
+  import { waypoints as routeWaypoints } from "./route/stores";
+  import { waypoints as areaWaypoints } from "./area/stores";
   import type { FeatureWithID, Schemes } from "$lib/draw/types";
   import { type Config } from "$lib/config";
   import { onDestroy, onMount } from "svelte";
   import PointControls from "./point/PointControls.svelte";
   import RouteControls from "./route/RouteControls.svelte";
-  import SnapPolygonControls from "./snap_polygon/SnapPolygonControls.svelte";
+  import AreaControls from "./area/AreaControls.svelte";
   import type { AreaProps, RouteProps } from "route-snapper-ts";
   import type { Writable } from "svelte/store";
 
@@ -41,7 +42,7 @@
 
     if (feature.geometry.type == "LineString") {
       // Transform into the correct format
-      $waypoints = feature.properties.waypoints!.map((waypt) => {
+      $routeWaypoints = feature.properties.waypoints!.map((waypt) => {
         return {
           point: [waypt.lon, waypt.lat],
           snapped: waypt.snapped,
@@ -49,10 +50,13 @@
       });
       controls = "route";
     } else if (feature.geometry.type == "Polygon") {
-      $routeTool?.editExistingArea(feature as Feature<Polygon, AreaProps>);
-      $routeTool?.addEventListenerSuccess(onSuccess);
-      $routeTool?.addEventListenerUpdated(onUpdate);
-      $routeTool?.addEventListenerFailure(onFailure);
+      // Transform into the correct format
+      $areaWaypoints = feature.properties.waypoints!.map((waypt) => {
+        return {
+          point: [waypt.lon, waypt.lat],
+          snapped: waypt.snapped,
+        };
+      });
       controls = "area";
     } else if (feature.geometry.type == "Point") {
       $pointPosition = JSON.parse(JSON.stringify(feature.geometry.coordinates));
@@ -140,10 +144,29 @@
     // Don't constantly update unsavedFeature for routes; it'll do unnecessary extra work.
     if ($routeTool) {
       try {
-        let out = $routeTool.inner.calculateRoute($waypoints);
+        let out = $routeTool.inner.calculateRoute($routeWaypoints);
         unsavedFeature = JSON.parse(out);
       } catch (err) {
         console.warn(`Finishing route failed: ${err}`);
+      }
+    }
+    finish();
+  }
+
+  function finishArea() {
+    // Don't constantly update unsavedFeature for areas; it'll do unnecessary extra work.
+    if ($routeTool) {
+      try {
+        let out = JSON.parse($routeTool.inner.calculateRoute($areaWaypoints));
+        // TODO Somthing diff here
+        out.geometry.type = "Polygon";
+        out.geometry.coordinates.push(
+          out.geometry.coordinates[out.geometry.coordinates.length - 1],
+        );
+        out.geometry.coordinates = [out.geometry.coordinates];
+        unsavedFeature = out;
+      } catch (err) {
+        console.warn(`Finishing area failed: ${err}`);
       }
     }
     finish();
@@ -160,5 +183,5 @@
 {:else if controls == "route"}
   <RouteControls finish={finishRoute} {cancel} />
 {:else if controls == "area"}
-  <SnapPolygonControls {finish} {cancel} />
+  <AreaControls finish={finishArea} {cancel} />
 {/if}
