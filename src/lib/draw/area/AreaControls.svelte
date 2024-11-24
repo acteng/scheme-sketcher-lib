@@ -36,8 +36,6 @@
     features: [],
   };
 
-  let drawMode: "append-start" | "append-end" | "adjust" = "append-end";
-
   $: routesGj = calculateRoutes($routeTool, $waypoints);
 
   interface ExtraNode {
@@ -46,7 +44,7 @@
     snapped: boolean;
   }
   let extraNodes: ExtraNode[] = [];
-  $: updateExtraNodes($routeTool, $waypoints, drawMode, draggingExtraNode);
+  $: updateExtraNodes($routeTool, $waypoints, draggingExtraNode);
 
   let cursor: Waypoint | null = null;
   let hoveringOnMarker = false;
@@ -55,7 +53,6 @@
   $: previewGj = getPreview(
     $routeTool,
     $waypoints,
-    drawMode,
     cursor,
     hoveringOnMarker || draggingMarker,
   );
@@ -81,18 +78,14 @@
   }
 
   function onMapClick(e: CustomEvent<MapMouseEvent>) {
+    if ($waypoints.length >= 3) {
+      return;
+    }
     waypoints.update((w) => {
-      if (drawMode == "append-start") {
-        w.splice(0, 0, {
-          point: e.detail.lngLat.toArray(),
-          snapped: $snapMode,
-        });
-      } else if (drawMode == "append-end") {
-        w.push({
-          point: e.detail.lngLat.toArray(),
-          snapped: $snapMode,
-        });
-      }
+      w.push({
+        point: e.detail.lngLat.toArray(),
+        snapped: $snapMode,
+      });
       return w;
     });
   }
@@ -133,27 +126,20 @@
   function getPreview(
     routeTool: RouteTool | null,
     waypoints: Waypoint[],
-    drawMode: "append-start" | "append-end" | "adjust",
     cursor: Waypoint | null,
     suppress: boolean,
   ): FeatureCollection {
-    if (suppress) {
+    if (suppress || waypoints.length >= 3) {
       return emptyGj;
     }
     try {
       if (routeTool && waypoints.length > 0 && cursor) {
-        if (drawMode == "append-start") {
-          return JSON.parse(
-            routeTool.inner.calculateRoute([cursor, waypoints[0]]),
-          );
-        } else if (drawMode == "append-end") {
-          return JSON.parse(
-            routeTool.inner.calculateRoute([
-              waypoints[waypoints.length - 1],
-              cursor,
-            ]),
-          );
-        }
+        return JSON.parse(
+          routeTool.inner.calculateRoute([
+            waypoints[waypoints.length - 1],
+            cursor,
+          ]),
+        );
       }
     } catch (err) {}
     return emptyGj;
@@ -162,13 +148,12 @@
   function updateExtraNodes(
     routeTool: RouteTool | null,
     waypoints: Waypoint[],
-    drawMode: "append-start" | "append-end" | "adjust",
     draggingExtraNode: boolean,
   ) {
     if (draggingExtraNode) {
       return;
     }
-    if (!routeTool || drawMode != "adjust") {
+    if (!routeTool || waypoints.length < 3) {
       extraNodes = [];
       return;
     }
@@ -223,37 +208,26 @@
       cancel();
     } else if (e.key == "s" && !formFocused) {
       toggleSnap();
-    } else if (e.key == "1" && !formFocused) {
-      drawMode = "append-start";
-    } else if (e.key == "2" && !formFocused) {
-      drawMode = "append-end";
-    } else if (e.key == "3" && !formFocused) {
-      drawMode = "adjust";
     }
   }
 </script>
 
 <div style="display: flex">
   <div style="display: flex; flex-direction: row">
-    <TinyRadio
-      style="flex-direction: column; border-right: 1px solid black"
-      choices={[
-        ["snap", "Snap to roads"],
-        ["free", "Draw anywhere"],
-      ]}
-      value={$snapMode ? "snap" : "free"}
-      on:change={toggleSnap}
-    />
-
-    <TinyRadio
-      style="flex-direction: column; margin-left: 8px"
-      choices={[
-        ["append-start", "Extend from start"],
-        ["append-end", "Extend from end"],
-        ["adjust", "Adjust middle points"],
-      ]}
-      bind:value={drawMode}
-    />
+    {#if $waypoints.length < 3}
+      <TinyRadio
+        style="flex-direction: column; border-right: 1px solid black"
+        choices={[
+          ["snap", "Snap to roads"],
+          ["free", "Draw anywhere"],
+        ]}
+        value={$snapMode ? "snap" : "free"}
+        on:change={toggleSnap}
+      />
+      <i>Click to add at least 3 points</i>
+    {:else}
+      <i>Adjust the area</i>
+    {/if}
   </div>
 
   <div style="margin-left: auto">
@@ -295,18 +269,6 @@
 
         <p>Keyboard shortcuts:</p>
         <ul>
-          <li>
-            <b>1</b>
-            to extend from start
-          </li>
-          <li>
-            <b>2</b>
-            to extend from end
-          </li>
-          <li>
-            <b>3</b>
-            to drag middle points
-          </li>
           <li>
             <b>s</b>
             to switch between snapping to roads and drawing anywhere
