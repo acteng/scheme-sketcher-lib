@@ -7,13 +7,11 @@ import {
   type UserSettings,
   isStreetViewImagery,
 } from "./types";
-import { PolygonTool } from "maplibre-draw-polygon";
 import { RouteTool } from "route-snapper-ts";
 import type { Position } from "geojson";
 import { v4 as uuidv4 } from "uuid";
 import { randomSchemeColor } from "./colors";
 
-export const polygonTool: Writable<PolygonTool | null> = writable(null);
 // A global singleton, with the route tool loaded for the current map. It's
 // null before it's loaded.
 export const routeTool: Writable<RouteTool | null> = writable(null);

@@ -11,8 +11,7 @@ export type Mode =
       id: number;
     }
   | { mode: "new-point" }
-  | { mode: "new-freehand-polygon" }
-  | { mode: "new-snapped-polygon" }
+  | { mode: "new-area" }
   | { mode: "new-route" }
   | { mode: "split-route" }
   | { mode: "set-image" }

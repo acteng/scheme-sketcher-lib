@@ -1,9 +1,8 @@
 <script lang="ts" generics="F, S">
-  import { mode, polygonTool, routeTool } from "./stores";
+  import { mode, routeTool } from "./stores";
   import imageIcon from "$lib/assets/image.svg";
   import pointIcon from "$lib/assets/point.svg";
-  import polygonFreehandIcon from "$lib/assets/polygon_freehand.svg";
-  import polygonSnappedIcon from "$lib/assets/polygon_snapped.svg";
+  import areaIcon from "$lib/assets/area.svg";
   import routeIcon from "$lib/assets/route.svg";
   import splitRouteIcon from "$lib/assets/split_route.svg";
   import streetViewIcon from "$lib/assets/street_view.svg";
@@ -14,13 +13,11 @@
   import EditMode from "./EditMode.svelte";
   import ImageMode from "./image/ImageMode.svelte";
   import PointMode from "./point/PointMode.svelte";
-  import PolygonMode from "./polygon/PolygonMode.svelte";
   import RouteMode from "./route/RouteMode.svelte";
   import SplitRouteMode from "./route/SplitRouteMode.svelte";
   import SnapPolygonMode from "./snap_polygon/SnapPolygonMode.svelte";
   import StreetViewMode from "./StreetViewMode.svelte";
   import { onDestroy } from "svelte";
-  import { PolygonTool } from "maplibre-draw-polygon";
   import RouteSnapperLoader from "./route/RouteSnapperLoader.svelte";
   import ToolButton from "./ToolButton.svelte";
 
@@ -28,12 +25,7 @@
   export let gjSchemes: Writable<Schemes<F, S>>;
   export let routeSnapperUrl: string;
 
-  $: if ($map && !$polygonTool) {
-    polygonTool.set(new PolygonTool($map));
-  }
-
   onDestroy(() => {
-    $polygonTool?.tearDown();
     $routeTool?.tearDown();
   });
 </script>
@@ -58,19 +50,9 @@ repeatedly load anything. Make sure this is only created once, then just hidden.
       <img src={routeIcon} alt="New route" />
       New route
     </ToolButton>
-    <ToolButton
-      setMode={{ mode: "new-freehand-polygon" }}
-      disabled={!$polygonTool}
-    >
-      <img src={polygonFreehandIcon} alt="New area (freehand)" />
-      New area (freehand)
-    </ToolButton>
-    <ToolButton
-      setMode={{ mode: "new-snapped-polygon" }}
-      disabled={!$routeTool}
-    >
-      <img src={polygonSnappedIcon} alt="New area (snapped)" />
-      New area (snapped)
+    <ToolButton setMode={{ mode: "new-area" }} disabled={!$routeTool}>
+      <img src={areaIcon} alt="New area" />
+      New area
     </ToolButton>
     <ToolButton setMode={{ mode: "split-route" }}>
       <img src={splitRouteIcon} alt="Split route" />
@@ -97,9 +79,7 @@ repeatedly load anything. Make sure this is only created once, then just hidden.
     <PointMode {cfg} {gjSchemes} />
   {:else if $mode.mode == "new-route"}
     <RouteMode {cfg} {gjSchemes} />
-  {:else if $mode.mode == "new-freehand-polygon"}
-    <PolygonMode {cfg} {gjSchemes} />
-  {:else if $mode.mode == "new-snapped-polygon"}
+  {:else if $mode.mode == "new-area"}
     <SnapPolygonMode {cfg} {gjSchemes} />
   {:else if $mode.mode == "split-route"}
     <SplitRouteMode {cfg} {gjSchemes} />

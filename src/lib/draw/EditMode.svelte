@@ -2,7 +2,6 @@
   import type { Feature, LineString, Point, Polygon } from "geojson";
   import {
     mode,
-    polygonTool,
     routeTool,
     featureProps,
     pointPosition,
@@ -13,7 +12,6 @@
   import { type Config } from "$lib/config";
   import { onDestroy, onMount } from "svelte";
   import PointControls from "./point/PointControls.svelte";
-  import PolygonControls from "./polygon/PolygonControls.svelte";
   import RouteControls from "./route/RouteControls.svelte";
   import SnapPolygonControls from "./snap_polygon/SnapPolygonControls.svelte";
   import type { AreaProps, RouteProps } from "route-snapper-ts";
@@ -51,19 +49,11 @@
       });
       controls = "route";
     } else if (feature.geometry.type == "Polygon") {
-      if (feature.properties.waypoints) {
-        $routeTool?.editExistingArea(feature as Feature<Polygon, AreaProps>);
-        $routeTool?.addEventListenerSuccess(onSuccess);
-        $routeTool?.addEventListenerUpdated(onUpdate);
-        $routeTool?.addEventListenerFailure(onFailure);
-        controls = "snapped-polygon";
-      } else {
-        $polygonTool?.editExisting(feature as Feature<Polygon>);
-        $polygonTool?.addEventListenerSuccess(onSuccess);
-        $polygonTool?.addEventListenerUpdated(onUpdate);
-        $polygonTool?.addEventListenerFailure(onFailure);
-        controls = "freehand-polygon";
-      }
+      $routeTool?.editExistingArea(feature as Feature<Polygon, AreaProps>);
+      $routeTool?.addEventListenerSuccess(onSuccess);
+      $routeTool?.addEventListenerUpdated(onUpdate);
+      $routeTool?.addEventListenerFailure(onFailure);
+      controls = "area";
     } else if (feature.geometry.type == "Point") {
       $pointPosition = JSON.parse(JSON.stringify(feature.geometry.coordinates));
       controls = "point";
@@ -74,9 +64,6 @@
 
     $routeTool?.stop();
     $routeTool?.clearEventListeners();
-
-    $polygonTool?.stop();
-    $polygonTool?.clearEventListeners();
 
     gjSchemes.update((gj) => {
       let featureToBeUpdated = gj.features.find((f) => f.id == id);
@@ -172,8 +159,6 @@
   <PointControls {finish} {cancel} />
 {:else if controls == "route"}
   <RouteControls finish={finishRoute} {cancel} />
-{:else if controls == "freehand-polygon"}
-  <PolygonControls {finish} {cancel} />
-{:else if controls == "snapped-polygon"}
+{:else if controls == "area"}
   <SnapPolygonControls {finish} {cancel} />
 {/if}
