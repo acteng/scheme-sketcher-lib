@@ -368,7 +368,6 @@
 
 <GeoJSON data={calculateRoutes($routeTool, $waypoints)} generateId>
   <LineLayer
-    manageHoverState
     paint={{
       "line-color": "black",
       "line-width": 10,

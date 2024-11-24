@@ -17,6 +17,7 @@
     GeoJSON,
     LineLayer,
     CircleLayer,
+    FillLayer,
   } from "svelte-maplibre";
   import type { Schemes, Mode } from "$lib/draw/types";
   import type { MapMouseEvent } from "maplibre-gl";
@@ -339,12 +340,13 @@
 
 <GeoJSON data={calculateGj($routeTool, $waypoints)} generateId>
   <LineLayer
-    manageHoverState
     paint={{
       "line-color": "black",
       "line-width": 10,
     }}
   />
+
+  <FillLayer paint={{ "fill-color": "grey", "fill-opacity": 0.5 }} />
 </GeoJSON>
 
 <GeoJSON data={previewGj}>
