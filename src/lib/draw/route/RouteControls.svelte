@@ -343,7 +343,7 @@
     on:dragstart={() => addNode(node)}
     on:drag={() => updateDrag(node)}
     on:dragend={finalizeDrag}
-    zIndex={1}
+    zIndex={0}
   >
     <span class="dot node" class:hide={draggingExtraNode} />
   </Marker>
@@ -359,7 +359,7 @@
     on:mouseleave={() => (hoveringOnMarker = false)}
     on:dragstart={() => (draggingMarker = true)}
     on:dragend={() => (draggingMarker = false)}
-    zIndex={2}
+    zIndex={1}
   >
     <span class="dot" class:snapped={waypt.snapped}>{idx + 1}</span>
   </Marker>
