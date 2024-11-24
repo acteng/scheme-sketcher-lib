@@ -43,6 +43,7 @@
   interface ExtraNode {
     point: [number, number];
     insertIdx: number;
+    snapped: boolean;
   }
   let extraNodes: ExtraNode[] = [];
   $: updateExtraNodes($routeTool, $waypoints, drawMode, draggingExtraNode);
@@ -172,19 +173,15 @@
       return;
     }
 
-    let nodes = [];
+    let nodes: ExtraNode[] = [];
     let insertIdx = 1;
 
-    // TODO try/catch
     for (let i = 0; i < waypoints.length - 1; i++) {
-      // TODO Exclude the first/last in the WASM API, not here
       let extra = JSON.parse(
         routeTool.inner.getExtraNodes(waypoints[i], waypoints[i + 1]),
       );
-      extra.shift();
-      extra.pop();
-      for (let point of extra) {
-        nodes.push({ point, insertIdx });
+      for (let [x, y, snapped] of extra) {
+        nodes.push({ point: [x, y], snapped, insertIdx });
       }
       insertIdx++;
     }
@@ -196,7 +193,7 @@
     waypoints.update((w) => {
       w.splice(node.insertIdx, 0, {
         point: node.point,
-        snapped: true,
+        snapped: node.snapped,
       });
       return w;
     });
@@ -345,7 +342,12 @@
     on:dragend={finalizeDrag}
     zIndex={0}
   >
-    <span class="dot node" class:hide={draggingExtraNode} />
+    <span
+      class="dot"
+      class:snapped-node={node.snapped}
+      class:free-node={!node.snapped}
+      class:hide={draggingExtraNode}
+    />
   </Marker>
 {/each}
 
@@ -407,14 +409,19 @@
     background-color: red;
   }
 
-  .node {
+  .free-node,
+  .snapped-node {
     width: 20px;
     height: 20px;
     background-color: grey;
   }
 
-  .node:hover {
+  .snapped-node:hover {
     border: 3px solid red;
+  }
+
+  .free-node:hover {
+    border: 3px solid blue;
   }
 
   .hide {
