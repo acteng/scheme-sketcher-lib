@@ -13,7 +13,7 @@
   import { type Config } from "$lib/config";
   import type { FeatureWithID, Schemes } from "$lib/draw/types";
   import type { Writable } from "svelte/store";
-  import { waypoints } from "./stores";
+  import { waypoints, calculateArea } from "./stores";
 
   export let cfg: Config<F, S>;
   export let gjSchemes: Writable<Schemes<F, S>>;
@@ -41,18 +41,11 @@
   }
 
   function finish() {
-    if (!$routeTool) {
+    if (!$routeTool || $waypoints.length < 3) {
       return;
     }
     try {
-      let out = JSON.parse($routeTool.inner.calculateRoute($waypoints));
-      // TODO Somthing diff here
-      out.geometry.type = "Polygon";
-      out.geometry.coordinates.push(
-        out.geometry.coordinates[out.geometry.coordinates.length - 1],
-      );
-      out.geometry.coordinates = [out.geometry.coordinates];
-      onSuccess(out);
+      onSuccess(calculateArea($routeTool, $waypoints));
     } catch (err) {
       console.warn(`Finishing area failed: ${err}`);
     }

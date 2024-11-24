@@ -8,7 +8,7 @@
     setPrecision,
   } from "$lib/draw/stores";
   import { waypoints as routeWaypoints } from "./route/stores";
-  import { waypoints as areaWaypoints } from "./area/stores";
+  import { waypoints as areaWaypoints, calculateArea } from "./area/stores";
   import type { FeatureWithID, Schemes } from "$lib/draw/types";
   import { type Config } from "$lib/config";
   import { onDestroy, onMount } from "svelte";
@@ -155,16 +155,9 @@
 
   function finishArea() {
     // Don't constantly update unsavedFeature for areas; it'll do unnecessary extra work.
-    if ($routeTool) {
+    if ($routeTool && $areaWaypoints.length >= 3) {
       try {
-        let out = JSON.parse($routeTool.inner.calculateRoute($areaWaypoints));
-        // TODO Somthing diff here
-        out.geometry.type = "Polygon";
-        out.geometry.coordinates.push(
-          out.geometry.coordinates[out.geometry.coordinates.length - 1],
-        );
-        out.geometry.coordinates = [out.geometry.coordinates];
-        unsavedFeature = out;
+        unsavedFeature = calculateArea($routeTool, $areaWaypoints);
       } catch (err) {
         console.warn(`Finishing area failed: ${err}`);
       }
