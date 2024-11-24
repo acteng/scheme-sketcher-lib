@@ -38,8 +38,6 @@
 
   let drawMode: "append-start" | "append-end" | "adjust" = "append-end";
 
-  $: routesGj = calculateRoutes($routeTool, $waypoints);
-
   interface ExtraNode {
     point: [number, number];
     insertIdx: number;
@@ -368,7 +366,7 @@
   </Marker>
 {/each}
 
-<GeoJSON data={routesGj} generateId>
+<GeoJSON data={calculateRoutes($routeTool, $waypoints)} generateId>
   <LineLayer
     manageHoverState
     paint={{

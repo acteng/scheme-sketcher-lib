@@ -1,6 +1,12 @@
 <script lang="ts">
   import { routeTool, mode, userSettings } from "$lib/draw/stores";
-  import { snapMode, undoLength, waypoints, type Waypoint } from "./stores";
+  import {
+    snapMode,
+    undoLength,
+    waypoints,
+    calculateArea,
+    type Waypoint,
+  } from "./stores";
   import { HelpButton } from "$lib/common";
   import TinyRadio from "../TinyRadio.svelte";
   import FixedButtonGroup from "../FixedButtonGroup.svelte";
@@ -35,8 +41,6 @@
     type: "FeatureCollection" as const,
     features: [],
   };
-
-  $: routesGj = calculateRoutes($routeTool, $waypoints);
 
   interface ExtraNode {
     point: [number, number];
@@ -112,13 +116,13 @@
     hoveringOnMarker = false;
   }
 
-  function calculateRoutes(
+  function calculateGj(
     routeTool: RouteTool | null,
     waypoints: Waypoint[],
   ): FeatureCollection {
     try {
       if (routeTool) {
-        return JSON.parse(routeTool.inner.calculateRoute(waypoints));
+        return calculateArea(routeTool, waypoints);
       }
     } catch (err) {}
     return emptyGj;
@@ -162,9 +166,12 @@
     let nodes: ExtraNode[] = [];
     let insertIdx = 1;
 
-    for (let i = 0; i < waypoints.length - 1; i++) {
+    let copy = JSON.parse(JSON.stringify(waypoints));
+    copy.push(copy[0]);
+
+    for (let i = 0; i < copy.length - 1; i++) {
       let extra = JSON.parse(
-        routeTool.inner.getExtraNodes(waypoints[i], waypoints[i + 1]),
+        routeTool.inner.getExtraNodes(copy[i], copy[i + 1]),
       );
       for (let [x, y, snapped] of extra) {
         nodes.push({ point: [x, y], snapped, insertIdx });
@@ -330,7 +337,7 @@
   </Marker>
 {/each}
 
-<GeoJSON data={routesGj} generateId>
+<GeoJSON data={calculateGj($routeTool, $waypoints)} generateId>
   <LineLayer
     manageHoverState
     paint={{
