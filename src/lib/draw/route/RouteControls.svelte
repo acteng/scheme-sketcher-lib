@@ -1,6 +1,6 @@
 <script lang="ts">
   import { routeTool, mode, userSettings } from "$lib/draw/stores";
-  import { snapMode, undoLength, waypoints, type Waypoint } from "./stores";
+  import { waypoints, type Waypoint } from "./stores";
   import { HelpButton } from "$lib/common";
   import TinyRadio from "../TinyRadio.svelte";
   import FixedButtonGroup from "../FixedButtonGroup.svelte";
@@ -16,7 +16,7 @@
   import type { MapMouseEvent } from "maplibre-gl";
   import type { Feature, FeatureCollection } from "geojson";
   import { RouteTool } from "route-snapper-ts";
-  import { layerId } from "$lib/maplibre";
+  import { layerId, emptyGeojson } from "$lib/maplibre";
   import { onDestroy } from "svelte";
   import { map } from "$lib/config";
 
@@ -31,12 +31,9 @@
     }
   });
 
-  let emptyGj = {
-    type: "FeatureCollection" as const,
-    features: [],
-  };
-
   let drawMode: "append-start" | "append-end" | "adjust" = "append-end";
+  let snapMode = true;
+  let undoLength = 0;
 
   interface ExtraNode {
     point: [number, number];
@@ -66,15 +63,14 @@
     }
   }
 
-  // TODO some of these change now too
   function undo() {
-    $routeTool!.undo();
+    // TODO
   }
 
   function toggleSnap() {
-    $snapMode = !$snapMode;
+    snapMode = !snapMode;
     if (cursor) {
-      cursor.snapped = $snapMode;
+      cursor.snapped = snapMode;
     }
   }
 
@@ -83,12 +79,12 @@
       if (drawMode == "append-start") {
         w.splice(0, 0, {
           point: e.detail.lngLat.toArray(),
-          snapped: $snapMode,
+          snapped: snapMode,
         });
       } else if (drawMode == "append-end") {
         w.push({
           point: e.detail.lngLat.toArray(),
-          snapped: $snapMode,
+          snapped: snapMode,
         });
       }
       return w;
@@ -98,7 +94,7 @@
   function onMouseMove(e: CustomEvent<MapMouseEvent>) {
     cursor = {
       point: e.detail.lngLat.toArray(),
-      snapped: $snapMode,
+      snapped: snapMode,
     };
   }
 
@@ -126,7 +122,7 @@
         return JSON.parse(routeTool.inner.calculateRoute(waypoints));
       }
     } catch (err) {}
-    return emptyGj;
+    return emptyGeojson();
   }
 
   function getPreview(
@@ -137,7 +133,7 @@
     suppress: boolean,
   ): FeatureCollection {
     if (suppress) {
-      return emptyGj;
+      return emptyGeojson();
     }
     try {
       if (routeTool && waypoints.length > 0 && cursor) {
@@ -155,7 +151,7 @@
         }
       }
     } catch (err) {}
-    return emptyGj;
+    return emptyGeojson();
   }
 
   function updateExtraNodes(
@@ -240,7 +236,7 @@
         ["snap", "Snap to roads"],
         ["free", "Draw anywhere"],
       ]}
-      value={$snapMode ? "snap" : "free"}
+      value={snapMode ? "snap" : "free"}
       on:change={toggleSnap}
     />
 
@@ -265,14 +261,14 @@
         Finish
       </DefaultButton>
       <SecondaryButton
-        disabled={$undoLength == 0}
+        disabled={undoLength == 0}
         on:click={undo}
         noBottomMargin
       >
-        {#if $undoLength == 0}
+        {#if undoLength == 0}
           Undo
         {:else}
-          Undo ({$undoLength})
+          Undo ({undoLength})
         {/if}
       </SecondaryButton>
       <SecondaryButton on:click={cancel} noBottomMargin>Cancel</SecondaryButton>

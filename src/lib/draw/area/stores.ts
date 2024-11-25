@@ -1,13 +1,6 @@
-import type { GeoJSON } from "geojson";
-import { emptyGeojson } from "$lib/maplibre";
 import { writable, type Writable } from "svelte/store";
 import { RouteTool } from "route-snapper-ts";
 import type { Feature, Polygon } from "geojson";
-
-// These are necessary to communicate between components nested under the sidebar and map
-
-export const snapMode: Writable<boolean> = writable(true);
-export const undoLength: Writable<number> = writable(0);
 
 export interface Waypoint {
   point: [number, number];
