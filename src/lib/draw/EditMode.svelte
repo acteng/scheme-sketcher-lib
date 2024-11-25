@@ -41,22 +41,46 @@
     unsavedFeature = JSON.parse(JSON.stringify(feature));
 
     if (feature.geometry.type == "LineString") {
-      // Transform into the correct format
-      $routeWaypoints = feature.properties.waypoints!.map((waypt) => {
-        return {
-          point: [waypt.lon, waypt.lat],
-          snapped: waypt.snapped,
-        };
-      });
+      if (feature.properties.waypoints) {
+        // Transform into the correct format
+        $routeWaypoints = feature.properties.waypoints.map((waypt) => {
+          return {
+            point: [waypt.lon, waypt.lat],
+            snapped: waypt.snapped,
+          };
+        });
+      } else {
+        // Imported from another file. Assume every point is freehand; the user
+        // can manually turn into snapped if needed.
+        $routeWaypoints = feature.geometry.coordinates.map((pt) => {
+          return {
+            point: JSON.parse(JSON.stringify(pt)),
+            snapped: false,
+          };
+        });
+      }
       controls = "route";
     } else if (feature.geometry.type == "Polygon") {
-      // Transform into the correct format
-      $areaWaypoints = feature.properties.waypoints!.map((waypt) => {
-        return {
-          point: [waypt.lon, waypt.lat],
-          snapped: waypt.snapped,
-        };
-      });
+      if (feature.properties.waypoints) {
+        // Transform into the correct format
+        $areaWaypoints = feature.properties.waypoints.map((waypt) => {
+          return {
+            point: [waypt.lon, waypt.lat],
+            snapped: waypt.snapped,
+          };
+        });
+      } else {
+        // Imported from another file. Assume every point is freehand; the user
+        // can manually turn into snapped if needed. Ignore any holes.
+        $areaWaypoints = feature.geometry.coordinates[0].map((pt) => {
+          return {
+            point: JSON.parse(JSON.stringify(pt)),
+            snapped: false,
+          };
+        });
+        $areaWaypoints.pop();
+        $areaWaypoints = $areaWaypoints;
+      }
       controls = "area";
     } else if (feature.geometry.type == "Point") {
       $pointPosition = JSON.parse(JSON.stringify(feature.geometry.coordinates));
