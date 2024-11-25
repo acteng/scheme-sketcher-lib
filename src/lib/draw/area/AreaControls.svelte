@@ -230,7 +230,7 @@
       />
       <p>Click to add at least 3 points</p>
     {:else}
-      <p>Adjust the area</p>
+      <p>Drag to adjust. Click to toggle snapped. Right click to delete.</p>
     {/if}
   </div>
 
