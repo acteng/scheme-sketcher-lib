@@ -9,8 +9,6 @@
   import {
     ImageLayer,
     InterventionLayer,
-    PolygonToolLayer,
-    RouteSnapperLayer,
     BoundaryLayer,
     Toolbox,
     NewFeatureForm,
@@ -22,6 +20,7 @@
   import { writable } from "svelte/store";
   import type { ExampleFeature, ExampleScheme } from "./types";
   import type { SchemeData } from "$lib/draw/types";
+  import { SecondaryButton } from "govuk-svelte";
 
   onMount(() => {
     initAll();
@@ -116,15 +115,7 @@
       "hover-points",
       "interventions-points",
 
-      "edit-polygon-fill",
-      "edit-polygon-lines",
-      "edit-polygon-vertices",
-
       "draw-split-route",
-
-      "route-points",
-      "route-lines",
-      "route-polygons",
 
       // From the dataviz basemap
       "road_label",
@@ -138,13 +129,33 @@
   };
 
   let gjSchemes = writable(emptySchemes(cfg));
+
+  function exportGj() {
+    downloadGeneratedFile(
+      "sketch.geojson",
+      JSON.stringify($gjSchemes, null, "  "),
+    );
+  }
+
+  function downloadGeneratedFile(filename: string, textInput: string) {
+    let element = document.createElement("a");
+    element.setAttribute(
+      "href",
+      "data:text/plain;charset=utf-8," + encodeURIComponent(textInput),
+    );
+    element.setAttribute("download", filename);
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+  }
 </script>
 
 <div style="display: flex; height: 100vh">
   <div class="sidebar">
     {#if $mode.mode == "list" || $mode.mode == "split-route" || $mode.mode == "set-image" || $mode.mode == "streetview"}
+      <SecondaryButton on:click={exportGj}>Export GeoJSON</SecondaryButton>
       <ListMode {cfg} {gjSchemes} />
-    {:else if $mode.mode == "new-point" || $mode.mode == "new-freehand-polygon" || $mode.mode == "new-snapped-polygon" || $mode.mode == "new-route"}
+    {:else if $mode.mode == "new-point" || $mode.mode == "new-area" || $mode.mode == "new-route"}
       <NewFeatureForm {cfg} {gjSchemes} />
     {:else if $mode.mode == "edit"}
       <EditFeatureForm {cfg} {gjSchemes} id={$mode.id} />
@@ -164,8 +175,6 @@
       <InterventionLayer {cfg} {gjSchemes} />
       <ImageLayer {cfg} />
       <Toolbox {cfg} {gjSchemes} {routeSnapperUrl} />
-      <RouteSnapperLayer {cfg} />
-      <PolygonToolLayer {cfg} />
     </MapLibre>
   </div>
 </div>

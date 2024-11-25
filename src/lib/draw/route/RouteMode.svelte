@@ -2,29 +2,24 @@
   import type { Feature, LineString, Polygon } from "geojson";
   import {
     mode,
-    routeTool,
     newFeatureId,
     getArbitrarySchemeRef,
     featureProps,
+    routeTool,
   } from "$lib/draw/stores";
   import { DefaultButton, SecondaryButton } from "govuk-svelte";
-  import { onDestroy, onMount } from "svelte";
+  import { onMount } from "svelte";
   import RouteControls from "./RouteControls.svelte";
   import { type Config } from "$lib/config";
   import type { FeatureWithID, Schemes } from "$lib/draw/types";
   import type { Writable } from "svelte/store";
+  import { waypoints } from "./stores";
 
   export let cfg: Config<F, S>;
   export let gjSchemes: Writable<Schemes<F, S>>;
 
   onMount(() => {
-    $routeTool!.startRoute();
-    $routeTool!.addEventListenerSuccess(onSuccess);
-    $routeTool!.addEventListenerFailure(onFailure);
-  });
-  onDestroy(() => {
-    $routeTool!.stop();
-    $routeTool!.clearEventListeners();
+    $waypoints = [];
   });
 
   function onSuccess(feature: Feature<LineString | Polygon>) {
@@ -46,8 +41,16 @@
   }
 
   function finish() {
-    $routeTool!.finish();
+    if (!$routeTool) {
+      return;
+    }
+    try {
+      let out = $routeTool.inner.calculateRoute($waypoints);
+      onSuccess(JSON.parse(out));
+    } catch (err) {
+      console.warn(`Finishing route failed: ${err}`);
+    }
   }
 </script>
 
-<RouteControls extendRoute {finish} cancel={onFailure} />
+<RouteControls {finish} cancel={onFailure} />

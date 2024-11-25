@@ -2,19 +2,19 @@
   import type { Feature, LineString, Point, Polygon } from "geojson";
   import {
     mode,
-    polygonTool,
     routeTool,
     featureProps,
     pointPosition,
     setPrecision,
   } from "$lib/draw/stores";
+  import { waypoints as routeWaypoints } from "./route/stores";
+  import { waypoints as areaWaypoints, calculateArea } from "./area/stores";
   import type { FeatureWithID, Schemes } from "$lib/draw/types";
   import { type Config } from "$lib/config";
   import { onDestroy, onMount } from "svelte";
   import PointControls from "./point/PointControls.svelte";
-  import PolygonControls from "./polygon/PolygonControls.svelte";
   import RouteControls from "./route/RouteControls.svelte";
-  import SnapPolygonControls from "./snap_polygon/SnapPolygonControls.svelte";
+  import AreaControls from "./area/AreaControls.svelte";
   import type { AreaProps, RouteProps } from "route-snapper-ts";
   import type { Writable } from "svelte/store";
 
@@ -41,28 +41,47 @@
     unsavedFeature = JSON.parse(JSON.stringify(feature));
 
     if (feature.geometry.type == "LineString") {
-      // TODO Update route-snapper-ts to use Except<route_name> or otherwise pick the important properties
-      $routeTool?.editExistingRoute(
-        feature as unknown as Feature<LineString, RouteProps>,
-      );
-      $routeTool?.addEventListenerSuccess(onSuccess);
-      $routeTool?.addEventListenerUpdated(onUpdate);
-      $routeTool?.addEventListenerFailure(onFailure);
+      if (feature.properties.waypoints) {
+        // Transform into the correct format
+        $routeWaypoints = feature.properties.waypoints.map((waypt) => {
+          return {
+            point: [waypt.lon, waypt.lat],
+            snapped: waypt.snapped,
+          };
+        });
+      } else {
+        // Imported from another file. Assume every point is freehand; the user
+        // can manually turn into snapped if needed.
+        $routeWaypoints = feature.geometry.coordinates.map((pt) => {
+          return {
+            point: JSON.parse(JSON.stringify(pt)),
+            snapped: false,
+          };
+        });
+      }
       controls = "route";
     } else if (feature.geometry.type == "Polygon") {
       if (feature.properties.waypoints) {
-        $routeTool?.editExistingArea(feature as Feature<Polygon, AreaProps>);
-        $routeTool?.addEventListenerSuccess(onSuccess);
-        $routeTool?.addEventListenerUpdated(onUpdate);
-        $routeTool?.addEventListenerFailure(onFailure);
-        controls = "snapped-polygon";
+        // Transform into the correct format
+        $areaWaypoints = feature.properties.waypoints.map((waypt) => {
+          return {
+            point: [waypt.lon, waypt.lat],
+            snapped: waypt.snapped,
+          };
+        });
       } else {
-        $polygonTool?.editExisting(feature as Feature<Polygon>);
-        $polygonTool?.addEventListenerSuccess(onSuccess);
-        $polygonTool?.addEventListenerUpdated(onUpdate);
-        $polygonTool?.addEventListenerFailure(onFailure);
-        controls = "freehand-polygon";
+        // Imported from another file. Assume every point is freehand; the user
+        // can manually turn into snapped if needed. Ignore any holes.
+        $areaWaypoints = feature.geometry.coordinates[0].map((pt) => {
+          return {
+            point: JSON.parse(JSON.stringify(pt)),
+            snapped: false,
+          };
+        });
+        $areaWaypoints.pop();
+        $areaWaypoints = $areaWaypoints;
       }
+      controls = "area";
     } else if (feature.geometry.type == "Point") {
       $pointPosition = JSON.parse(JSON.stringify(feature.geometry.coordinates));
       controls = "point";
@@ -73,9 +92,6 @@
 
     $routeTool?.stop();
     $routeTool?.clearEventListeners();
-
-    $polygonTool?.stop();
-    $polygonTool?.clearEventListeners();
 
     gjSchemes.update((gj) => {
       let featureToBeUpdated = gj.features.find((f) => f.id == id);
@@ -148,6 +164,34 @@
     mode.set({ mode: "list" });
   }
 
+  function finishRoute() {
+    // Don't constantly update unsavedFeature for routes; it'll do unnecessary extra work.
+    if ($routeTool) {
+      try {
+        let out = $routeTool.inner.calculateRoute($routeWaypoints);
+        unsavedFeature = JSON.parse(out);
+      } catch (err) {
+        console.warn(`Finishing route failed: ${err}`);
+      }
+    }
+    finish();
+  }
+
+  function finishArea() {
+    // Don't constantly update unsavedFeature for areas; it'll do unnecessary extra work.
+    if ($routeTool && $areaWaypoints.length >= 3) {
+      try {
+        unsavedFeature = calculateArea(
+          $routeTool,
+          $areaWaypoints,
+        ) as FeatureWithID<F>;
+      } catch (err) {
+        console.warn(`Finishing area failed: ${err}`);
+      }
+    }
+    finish();
+  }
+
   function cancel() {
     unsavedFeature = null;
     mode.set({ mode: "list" });
@@ -157,9 +201,7 @@
 {#if controls == "point"}
   <PointControls {finish} {cancel} />
 {:else if controls == "route"}
-  <RouteControls extendRoute={false} {finish} {cancel} />
-{:else if controls == "freehand-polygon"}
-  <PolygonControls {finish} {cancel} />
-{:else if controls == "snapped-polygon"}
-  <SnapPolygonControls {finish} {cancel} />
+  <RouteControls finish={finishRoute} {cancel} />
+{:else if controls == "area"}
+  <AreaControls finish={finishArea} {cancel} />
 {/if}

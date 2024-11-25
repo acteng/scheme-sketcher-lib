@@ -1,6 +1,6 @@
 <script lang="ts">
   import { routeTool, mode, userSettings } from "$lib/draw/stores";
-  import { waypoints, type Waypoint } from "./stores";
+  import { waypoints, calculateArea, type Waypoint } from "./stores";
   import { HelpButton } from "$lib/common";
   import TinyRadio from "../TinyRadio.svelte";
   import FixedButtonGroup from "../FixedButtonGroup.svelte";
@@ -11,10 +11,15 @@
     GeoJSON,
     LineLayer,
     CircleLayer,
+    FillLayer,
   } from "svelte-maplibre";
   import type { Schemes, Mode } from "$lib/draw/types";
   import type { MapMouseEvent } from "maplibre-gl";
-  import type { Feature, FeatureCollection } from "geojson";
+  import type {
+    Feature,
+    FeatureCollection,
+    GeoJSON as GeoJSONType,
+  } from "geojson";
   import { RouteTool } from "route-snapper-ts";
   import { layerId, emptyGeojson } from "$lib/maplibre";
   import { onDestroy } from "svelte";
@@ -31,7 +36,6 @@
     }
   });
 
-  let drawMode: "append-start" | "append-end" | "adjust" = "append-end";
   let snapMode = true;
   let undoLength = 0;
 
@@ -41,7 +45,7 @@
     snapped: boolean;
   }
   let extraNodes: ExtraNode[] = [];
-  $: updateExtraNodes($routeTool, $waypoints, drawMode, draggingExtraNode);
+  $: updateExtraNodes($routeTool, $waypoints, draggingExtraNode);
 
   let cursor: Waypoint | null = null;
   let hoveringOnMarker = false;
@@ -50,7 +54,6 @@
   $: previewGj = getPreview(
     $routeTool,
     $waypoints,
-    drawMode,
     cursor,
     hoveringOnMarker || draggingMarker,
   );
@@ -75,18 +78,14 @@
   }
 
   function onMapClick(e: CustomEvent<MapMouseEvent>) {
+    if ($waypoints.length >= 3) {
+      return;
+    }
     waypoints.update((w) => {
-      if (drawMode == "append-start") {
-        w.splice(0, 0, {
-          point: e.detail.lngLat.toArray(),
-          snapped: snapMode,
-        });
-      } else if (drawMode == "append-end") {
-        w.push({
-          point: e.detail.lngLat.toArray(),
-          snapped: snapMode,
-        });
-      }
+      w.push({
+        point: e.detail.lngLat.toArray(),
+        snapped: snapMode,
+      });
       return w;
     });
   }
@@ -113,13 +112,13 @@
     hoveringOnMarker = false;
   }
 
-  function calculateRoutes(
+  function calculateGj(
     routeTool: RouteTool | null,
     waypoints: Waypoint[],
-  ): FeatureCollection {
+  ): GeoJSONType {
     try {
       if (routeTool) {
-        return JSON.parse(routeTool.inner.calculateRoute(waypoints));
+        return calculateArea(routeTool, waypoints);
       }
     } catch (err) {}
     return emptyGeojson();
@@ -128,27 +127,20 @@
   function getPreview(
     routeTool: RouteTool | null,
     waypoints: Waypoint[],
-    drawMode: "append-start" | "append-end" | "adjust",
     cursor: Waypoint | null,
     suppress: boolean,
   ): FeatureCollection {
-    if (suppress) {
+    if (suppress || waypoints.length >= 3) {
       return emptyGeojson();
     }
     try {
       if (routeTool && waypoints.length > 0 && cursor) {
-        if (drawMode == "append-start") {
-          return JSON.parse(
-            routeTool.inner.calculateRoute([cursor, waypoints[0]]),
-          );
-        } else if (drawMode == "append-end") {
-          return JSON.parse(
-            routeTool.inner.calculateRoute([
-              waypoints[waypoints.length - 1],
-              cursor,
-            ]),
-          );
-        }
+        return JSON.parse(
+          routeTool.inner.calculateRoute([
+            waypoints[waypoints.length - 1],
+            cursor,
+          ]),
+        );
       }
     } catch (err) {}
     return emptyGeojson();
@@ -157,13 +149,12 @@
   function updateExtraNodes(
     routeTool: RouteTool | null,
     waypoints: Waypoint[],
-    drawMode: "append-start" | "append-end" | "adjust",
     draggingExtraNode: boolean,
   ) {
     if (draggingExtraNode) {
       return;
     }
-    if (!routeTool || drawMode != "adjust") {
+    if (!routeTool || waypoints.length < 3) {
       extraNodes = [];
       return;
     }
@@ -171,9 +162,12 @@
     let nodes: ExtraNode[] = [];
     let insertIdx = 1;
 
-    for (let i = 0; i < waypoints.length - 1; i++) {
+    let copy = JSON.parse(JSON.stringify(waypoints));
+    copy.push(copy[0]);
+
+    for (let i = 0; i < copy.length - 1; i++) {
       let extra = JSON.parse(
-        routeTool.inner.getExtraNodes(waypoints[i], waypoints[i + 1]),
+        routeTool.inner.getExtraNodes(copy[i], copy[i + 1]),
       );
       for (let [x, y, snapped] of extra) {
         nodes.push({ point: [x, y], snapped, insertIdx });
@@ -218,44 +212,33 @@
       cancel();
     } else if (e.key == "s" && !formFocused) {
       toggleSnap();
-    } else if (e.key == "1" && !formFocused) {
-      drawMode = "append-start";
-    } else if (e.key == "2" && !formFocused) {
-      drawMode = "append-end";
-    } else if (e.key == "3" && !formFocused) {
-      drawMode = "adjust";
     }
   }
 </script>
 
 <div style="display: flex">
   <div style="display: flex; flex-direction: row">
-    <TinyRadio
-      style="flex-direction: column; border-right: 1px solid black"
-      choices={[
-        ["snap", "Snap to roads"],
-        ["free", "Draw anywhere"],
-      ]}
-      value={snapMode ? "snap" : "free"}
-      on:change={toggleSnap}
-    />
-
-    <TinyRadio
-      style="flex-direction: column; margin-left: 8px"
-      choices={[
-        ["append-start", "Extend from start"],
-        ["append-end", "Extend from end"],
-        ["adjust", "Adjust middle points"],
-      ]}
-      bind:value={drawMode}
-    />
+    {#if $waypoints.length < 3}
+      <TinyRadio
+        style="flex-direction: column; border-right: 1px solid black"
+        choices={[
+          ["snap", "Snap to roads"],
+          ["free", "Draw anywhere"],
+        ]}
+        value={snapMode ? "snap" : "free"}
+        on:change={toggleSnap}
+      />
+      <p>Click to add at least 3 points</p>
+    {:else}
+      <p>Drag to adjust. Click to toggle snapped. Right click to delete.</p>
+    {/if}
   </div>
 
   <div style="margin-left: auto">
     <FixedButtonGroup>
       <DefaultButton
         on:click={finish}
-        disabled={$waypoints.length < 2}
+        disabled={$waypoints.length < 3}
         style="margin-bottom: 0px"
       >
         Finish
@@ -276,7 +259,7 @@
         <ul>
           <li>
             <b>Click</b>
-            the map to add new points, while extending from the start or end
+            the map to add new points, until there are at least 3 points
           </li>
           <li>
             <b>Click and drag</b>
@@ -294,18 +277,6 @@
 
         <p>Keyboard shortcuts:</p>
         <ul>
-          <li>
-            <b>1</b>
-            to extend from start
-          </li>
-          <li>
-            <b>2</b>
-            to extend from end
-          </li>
-          <li>
-            <b>3</b>
-            to drag middle points
-          </li>
           <li>
             <b>s</b>
             to switch between snapping to roads and drawing anywhere
@@ -366,13 +337,15 @@
   </Marker>
 {/each}
 
-<GeoJSON data={calculateRoutes($routeTool, $waypoints)} generateId>
+<GeoJSON data={calculateGj($routeTool, $waypoints)} generateId>
   <LineLayer
     paint={{
       "line-color": "black",
       "line-width": 10,
     }}
   />
+
+  <FillLayer paint={{ "fill-color": "grey", "fill-opacity": 0.5 }} />
 </GeoJSON>
 
 <GeoJSON data={previewGj}>

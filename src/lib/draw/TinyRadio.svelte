@@ -5,6 +5,7 @@
 
   // A list of [value, label] representing the choices
   export let choices: [string, string][];
+  export let style = "";
 
   // The current value
   export let value: string;
@@ -15,6 +16,7 @@
 <div
   class="govuk-radios govuk-radios--inline govuk-radios--small"
   data-module="govuk-radios"
+  {style}
 >
   {#each choices as [thisValue, thisLabel]}
     <div class="govuk-radios__item">

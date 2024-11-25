@@ -4,8 +4,9 @@
   import type { Map } from "maplibre-gl";
   import { onMount } from "svelte";
   import { init, RouteTool } from "route-snapper-ts";
-  import { routeToolGj, snapMode, undoLength } from "./stores";
   import { fetchWithProgress } from "$lib/common";
+  import { emptyGeojson } from "$lib/maplibre";
+  import { writable } from "svelte/store";
 
   export let map: Map;
   export let url: string;
@@ -23,8 +24,15 @@
       const graphBytes = await fetchWithProgress(url, (p) => {
         progress = p;
       });
+      // The stores are unused; the WASM API is used directly. This TS wrapper is unused.
       routeTool.set(
-        new RouteTool(map, graphBytes, routeToolGj, snapMode, undoLength),
+        new RouteTool(
+          map,
+          graphBytes,
+          writable(emptyGeojson()),
+          writable(true),
+          writable(0),
+        ),
       );
       progress = 100;
       routeToolReady = true;

@@ -2,33 +2,27 @@
   import type { Feature, LineString, Polygon } from "geojson";
   import {
     mode,
-    routeTool,
     newFeatureId,
     getArbitrarySchemeRef,
     featureProps,
+    routeTool,
   } from "$lib/draw/stores";
-  import { onDestroy, onMount } from "svelte";
-  import SnapPolygonControls from "./SnapPolygonControls.svelte";
+  import { DefaultButton, SecondaryButton } from "govuk-svelte";
+  import { onMount } from "svelte";
+  import AreaControls from "./AreaControls.svelte";
   import { type Config } from "$lib/config";
-  import type { FeatureWithID } from "$lib/draw/types";
-  import type { Schemes } from "$lib/draw/types";
+  import type { FeatureWithID, Schemes } from "$lib/draw/types";
   import type { Writable } from "svelte/store";
+  import { waypoints, calculateArea } from "./stores";
 
   export let cfg: Config<F, S>;
   export let gjSchemes: Writable<Schemes<F, S>>;
 
   onMount(() => {
-    $routeTool!.startArea();
-    $routeTool!.addEventListenerSuccess(onSuccess);
-    $routeTool!.addEventListenerFailure(onFailure);
-  });
-  onDestroy(() => {
-    $routeTool!.stop();
-    $routeTool!.clearEventListeners();
+    $waypoints = [];
   });
 
   function onSuccess(feature: Feature<LineString | Polygon>) {
-    // We did startArea, so we know it's a Polygon
     let f = feature as FeatureWithID<F, Polygon>;
     f.properties = { ...f.properties, ...$featureProps };
     gjSchemes.update((gj) => {
@@ -47,8 +41,15 @@
   }
 
   function finish() {
-    $routeTool!.finish();
+    if (!$routeTool || $waypoints.length < 3) {
+      return;
+    }
+    try {
+      onSuccess(calculateArea($routeTool, $waypoints));
+    } catch (err) {
+      console.warn(`Finishing area failed: ${err}`);
+    }
   }
 </script>
 
-<SnapPolygonControls {finish} cancel={onFailure} />
+<AreaControls {finish} cancel={onFailure} />
