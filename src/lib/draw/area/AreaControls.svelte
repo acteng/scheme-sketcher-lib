@@ -21,7 +21,7 @@
   } from "svelte-maplibre";
   import type { Schemes, Mode } from "$lib/draw/types";
   import type { MapMouseEvent } from "maplibre-gl";
-  import type { Feature, FeatureCollection } from "geojson";
+  import type { Feature, FeatureCollection, GeoJSON as GeoJSONType } from "geojson";
   import { RouteTool } from "route-snapper-ts";
   import { layerId } from "$lib/maplibre";
   import { onDestroy } from "svelte";
@@ -120,7 +120,7 @@
   function calculateGj(
     routeTool: RouteTool | null,
     waypoints: Waypoint[],
-  ): FeatureCollection {
+  ): GeoJSONType {
     try {
       if (routeTool) {
         return calculateArea(routeTool, waypoints);

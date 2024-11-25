@@ -157,7 +157,7 @@
     // Don't constantly update unsavedFeature for areas; it'll do unnecessary extra work.
     if ($routeTool && $areaWaypoints.length >= 3) {
       try {
-        unsavedFeature = calculateArea($routeTool, $areaWaypoints);
+        unsavedFeature = calculateArea($routeTool, $areaWaypoints) as FeatureWithID<F>;
       } catch (err) {
         console.warn(`Finishing area failed: ${err}`);
       }
