@@ -233,15 +233,19 @@
         value={$snapMode ? "snap" : "free"}
         on:change={toggleSnap}
       />
-      <i>Click to add at least 3 points</i>
+      <p>Click to add at least 3 points</p>
     {:else}
-      <i>Adjust the area</i>
+      <p>Adjust the area</p>
     {/if}
   </div>
 
   <div style="margin-left: auto">
     <FixedButtonGroup>
-      <DefaultButton on:click={finish} style="margin-bottom: 0px">
+      <DefaultButton
+        on:click={finish}
+        disabled={$waypoints.length < 3}
+        style="margin-bottom: 0px"
+      >
         Finish
       </DefaultButton>
       <SecondaryButton

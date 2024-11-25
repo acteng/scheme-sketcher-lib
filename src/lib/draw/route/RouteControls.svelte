@@ -257,7 +257,11 @@
 
   <div style="margin-left: auto">
     <FixedButtonGroup>
-      <DefaultButton on:click={finish} style="margin-bottom: 0px">
+      <DefaultButton
+        on:click={finish}
+        disabled={$waypoints.length < 2}
+        style="margin-bottom: 0px"
+      >
         Finish
       </DefaultButton>
       <SecondaryButton
