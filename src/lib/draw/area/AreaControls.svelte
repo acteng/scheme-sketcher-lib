@@ -37,7 +37,7 @@
   });
 
   let snapMode = true;
-  let undoLength = 0;
+  let undoStates: Waypoint[][] = [];
 
   interface ExtraNode {
     point: [number, number];
@@ -67,7 +67,18 @@
   }
 
   function undo() {
-    // TODO
+    let state = undoStates.pop();
+    undoStates = undoStates;
+    if (state) {
+      $waypoints = state;
+    }
+  }
+
+  function captureUndoState() {
+    if (undoStates.length == 100) {
+      undoStates.shift();
+    }
+    undoStates = [...undoStates, JSON.parse(JSON.stringify($waypoints))];
   }
 
   function toggleSnap() {
@@ -81,6 +92,7 @@
     if ($waypoints.length >= 3) {
       return;
     }
+    captureUndoState();
     waypoints.update((w) => {
       w.push({
         point: e.detail.lngLat.toArray(),
@@ -98,6 +110,7 @@
   }
 
   function toggleSnapped(idx: number) {
+    captureUndoState();
     waypoints.update((w) => {
       w[idx].snapped = !w[idx].snapped;
       return w;
@@ -105,6 +118,7 @@
   }
 
   function removeWaypoint(idx: number) {
+    captureUndoState();
     waypoints.update((w) => {
       w.splice(idx, 1);
       return w;
@@ -179,6 +193,8 @@
   }
 
   function addNode(node: ExtraNode) {
+    // Capture state before starting to drag
+    captureUndoState();
     waypoints.update((w) => {
       w.splice(node.insertIdx, 0, {
         point: node.point,
@@ -190,6 +206,7 @@
   }
 
   function updateDrag(node: ExtraNode) {
+    // Don't constantly update undoStates
     waypoints.update((w) => {
       w[node.insertIdx].point = node.point;
       return w;
@@ -212,7 +229,15 @@
       cancel();
     } else if (e.key == "s" && !formFocused) {
       toggleSnap();
+    } else if (e.key == "z" && e.ctrlKey) {
+      e.stopPropagation();
+      undo();
     }
+  }
+
+  function startDraggingWaypoint() {
+    captureUndoState();
+    draggingMarker = true;
   }
 </script>
 
@@ -244,14 +269,14 @@
         Finish
       </DefaultButton>
       <SecondaryButton
-        disabled={undoLength == 0}
+        disabled={undoStates.length == 0}
         on:click={undo}
         noBottomMargin
       >
-        {#if undoLength == 0}
+        {#if undoStates.length == 0}
           Undo
         {:else}
-          Undo ({undoLength})
+          Undo ({undoStates.length})
         {/if}
       </SecondaryButton>
       <SecondaryButton on:click={cancel} noBottomMargin>Cancel</SecondaryButton>
@@ -329,7 +354,7 @@
     on:contextmenu={() => removeWaypoint(idx)}
     on:mouseenter={() => (hoveringOnMarker = true)}
     on:mouseleave={() => (hoveringOnMarker = false)}
-    on:dragstart={() => (draggingMarker = true)}
+    on:dragstart={startDraggingWaypoint}
     on:dragend={() => (draggingMarker = false)}
     zIndex={1}
   >
