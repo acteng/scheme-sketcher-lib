@@ -199,7 +199,8 @@
   }
 
   function addNode(node: ExtraNode) {
-    // Capture state before starting to drag
+    // Turn an extra node into a waypoint. Capture state before the user drags
+    // around the new waypoint.
     captureUndoState();
     waypoints.update((w) => {
       w.splice(node.insertIdx, 0, {
