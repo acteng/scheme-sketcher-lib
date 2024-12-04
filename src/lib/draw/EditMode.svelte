@@ -6,6 +6,8 @@
     featureProps,
     pointPosition,
     setPrecision,
+    cancelCurrentFeature,
+    finishCurrentFeature,
   } from "$lib/draw/stores";
   import { waypoints as routeWaypoints } from "./route/stores";
   import { waypoints as areaWaypoints, calculateArea } from "./area/stores";
@@ -17,7 +19,6 @@
   import AreaControls from "./area/AreaControls.svelte";
   import type { AreaProps, RouteProps } from "route-snapper-ts";
   import type { Writable } from "svelte/store";
-  import { finishCurrentFeature } from "./stores";
 
   export let cfg: Config<F, S>;
   export let gjSchemes: Writable<Schemes<F, S>>;
@@ -40,6 +41,7 @@
     // Immediately copy the feature, so that if no geometry edits happen and
     // only form updates (through $featureProps), the edit is still used.
     unsavedFeature = JSON.parse(JSON.stringify(feature));
+    cancelCurrentFeature.set(cancel);
 
     if (feature.geometry.type == "LineString") {
       if (feature.properties.waypoints) {
@@ -94,6 +96,7 @@
   onDestroy(() => {
     $pointPosition = null;
     finishCurrentFeature.set(() => {});
+    cancelCurrentFeature.set(() => {});
 
     $routeTool?.stop();
     $routeTool?.clearEventListeners();

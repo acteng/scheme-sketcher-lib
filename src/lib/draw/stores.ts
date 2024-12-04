@@ -34,6 +34,9 @@ export const featureProps: Writable<FeatureProps<any>> = writable({});
 // Used to share the function currently required to finish drawing a feature
 export const finishCurrentFeature: Writable<Function> = writable(() => {});
 
+// Used to share the function currently required to cancel drawing a feature
+export const cancelCurrentFeature: Writable<Function> = writable(() => {});
+
 // All feature IDs must:
 //
 // - be unique

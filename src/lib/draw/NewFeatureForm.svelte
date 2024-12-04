@@ -3,7 +3,12 @@
   import { onDestroy } from "svelte";
   import type { Schemes } from "$lib/draw/types";
   import { get, type Writable } from "svelte/store";
-  import { featureProps, finishCurrentFeature, mode } from "./stores";
+  import {
+    featureProps,
+    cancelCurrentFeature,
+    finishCurrentFeature,
+    mode,
+  } from "./stores";
   import { DefaultButton, SecondaryButton } from "govuk-svelte";
 
   export let cfg: Config<F, S>;
@@ -30,7 +35,7 @@
 
 <SecondaryButton
   on:click={() => {
-    mode.set({ mode: "list" });
+    $cancelCurrentFeature();
   }}
 >
   Cancel
