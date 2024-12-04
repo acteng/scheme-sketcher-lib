@@ -13,6 +13,7 @@
   import { map, type Config } from "$lib/config";
   import type { FeatureWithID, Schemes } from "$lib/draw/types";
   import type { Writable } from "svelte/store";
+  import { finishCurrentFeature } from "$lib/draw/stores";
 
   export let cfg: Config<F, S>;
   export let gjSchemes: Writable<Schemes<F, S>>;
@@ -21,9 +22,12 @@
     if ($map) {
       $map.getCanvas().style.cursor = "crosshair";
     }
+    finishCurrentFeature.set(onSuccess);
   });
+
   onDestroy(() => {
     $pointPosition = null;
+    finishCurrentFeature.set(() => {});
     if ($map) {
       $map.getCanvas().style.cursor = "inherit";
     }

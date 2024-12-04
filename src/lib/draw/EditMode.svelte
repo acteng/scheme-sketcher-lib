@@ -17,6 +17,7 @@
   import AreaControls from "./area/AreaControls.svelte";
   import type { AreaProps, RouteProps } from "route-snapper-ts";
   import type { Writable } from "svelte/store";
+  import { finishCurrentFeature } from "./stores";
 
   export let cfg: Config<F, S>;
   export let gjSchemes: Writable<Schemes<F, S>>;
@@ -60,6 +61,7 @@
         });
       }
       controls = "route";
+      finishCurrentFeature.set(finishRoute);
     } else if (feature.geometry.type == "Polygon") {
       if (feature.properties.waypoints) {
         // Transform into the correct format
@@ -82,13 +84,16 @@
         $areaWaypoints = $areaWaypoints;
       }
       controls = "area";
+      finishCurrentFeature.set(finishArea);
     } else if (feature.geometry.type == "Point") {
       $pointPosition = JSON.parse(JSON.stringify(feature.geometry.coordinates));
       controls = "point";
+      finishCurrentFeature.set(finish);
     }
   });
   onDestroy(() => {
     $pointPosition = null;
+    finishCurrentFeature.set(() => {});
 
     $routeTool?.stop();
     $routeTool?.clearEventListeners();

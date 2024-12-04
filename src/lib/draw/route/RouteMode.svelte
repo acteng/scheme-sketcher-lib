@@ -7,19 +7,24 @@
     featureProps,
     routeTool,
   } from "$lib/draw/stores";
-  import { DefaultButton, SecondaryButton } from "govuk-svelte";
-  import { onMount } from "svelte";
+  import { onDestroy, onMount } from "svelte";
   import RouteControls from "./RouteControls.svelte";
   import { type Config } from "$lib/config";
   import type { FeatureWithID, Schemes } from "$lib/draw/types";
   import type { Writable } from "svelte/store";
   import { waypoints } from "./stores";
+  import { finishCurrentFeature } from "../stores";
 
   export let cfg: Config<F, S>;
   export let gjSchemes: Writable<Schemes<F, S>>;
 
   onMount(() => {
     $waypoints = [];
+    finishCurrentFeature.set(finish);
+  });
+
+  onDestroy(() => {
+    finishCurrentFeature.set(() => {});
   });
 
   function onSuccess(feature: Feature<LineString | Polygon>) {
