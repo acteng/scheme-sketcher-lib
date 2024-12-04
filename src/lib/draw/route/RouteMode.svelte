@@ -13,17 +13,19 @@
   import type { FeatureWithID, Schemes } from "$lib/draw/types";
   import type { Writable } from "svelte/store";
   import { waypoints } from "./stores";
-  import { finishCurrentFeature } from "../stores";
+  import { cancelCurrentFeature, finishCurrentFeature } from "$lib/draw/stores";
 
   export let cfg: Config<F, S>;
   export let gjSchemes: Writable<Schemes<F, S>>;
 
   onMount(() => {
     $waypoints = [];
+    cancelCurrentFeature.set(onFailure);
     finishCurrentFeature.set(finish);
   });
 
   onDestroy(() => {
+    cancelCurrentFeature.set(() => {});
     finishCurrentFeature.set(() => {});
   });
 

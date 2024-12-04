@@ -3,6 +3,7 @@
     deleteIntervention,
     mode,
     featureProps,
+    cancelCurrentFeature,
     finishCurrentFeature,
   } from "$lib/draw/stores";
   import {
@@ -52,7 +53,7 @@
 
 <SecondaryButton
   on:click={() => {
-    mode.set({ mode: "list" });
+    $cancelCurrentFeature();
   }}
 >
   Cancel
