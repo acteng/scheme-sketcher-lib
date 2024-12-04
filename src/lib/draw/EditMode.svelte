@@ -209,7 +209,7 @@
 {#if controls == "point"}
   <PointControls {finish} {cancel} />
 {:else if controls == "route"}
-  <RouteControls finish={finishRoute} {cancel} />
+  <RouteControls finish={finishRoute} {cancel} editingExisting />
 {:else if controls == "area"}
   <AreaControls finish={finishArea} {cancel} />
 {/if}

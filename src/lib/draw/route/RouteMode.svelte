@@ -60,4 +60,4 @@
   }
 </script>
 
-<RouteControls {finish} cancel={onFailure} />
+<RouteControls {finish} cancel={onFailure} editingExisting={false} />

@@ -22,6 +22,7 @@
 
   export let finish: () => void;
   export let cancel: () => void;
+  export let editingExisting: boolean;
 
   onDestroy(() => {
     $waypoints = [];
@@ -31,7 +32,9 @@
     }
   });
 
-  let drawMode: "append-start" | "append-end" | "adjust" = "append-end";
+  let drawMode: "append-start" | "append-end" | "adjust" = editingExisting
+    ? "adjust"
+    : "append-end";
   let snapMode = true;
   let undoStates: Waypoint[][] = [];
 
