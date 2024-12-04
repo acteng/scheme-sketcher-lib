@@ -2,8 +2,9 @@
   import { type Config } from "$lib/config";
   import { onDestroy } from "svelte";
   import type { Schemes } from "$lib/draw/types";
-  import type { Writable } from "svelte/store";
-  import { featureProps } from "./stores";
+  import { get, type Writable } from "svelte/store";
+  import { featureProps, finishCurrentFeature, mode } from "./stores";
+  import { DefaultButton, SecondaryButton } from "govuk-svelte";
 
   export let cfg: Config<F, S>;
   export let gjSchemes: Writable<Schemes<F, S>>;
@@ -18,6 +19,22 @@
 </script>
 
 <h2>New intervention</h2>
+
+<DefaultButton
+  on:click={() => {
+    $finishCurrentFeature();
+  }}
+>
+  Finish
+</DefaultButton>
+
+<SecondaryButton
+  on:click={() => {
+    mode.set({ mode: "list" });
+  }}
+>
+  Cancel
+</SecondaryButton>
 
 <svelte:component
   this={cfg.editFeatureForm}

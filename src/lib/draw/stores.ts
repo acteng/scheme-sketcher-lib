@@ -31,6 +31,9 @@ export const mode: Writable<Mode> = writable({ mode: "list" });
 // the generic parameter isn't known here.
 export const featureProps: Writable<FeatureProps<any>> = writable({});
 
+// Used to share the function currently required to finish drawing a feature
+export const finishCurrentFeature: Writable<Function> = writable(() => {});
+
 // All feature IDs must:
 //
 // - be unique
