@@ -94,7 +94,7 @@
   onDestroy(() => {
     $pointPosition = null;
     finishCurrentFeature.set(() => {});
-    
+
     $routeTool?.stop();
     $routeTool?.clearEventListeners();
 

@@ -1,6 +1,16 @@
 <script lang="ts" generics="F, S">
-  import { deleteIntervention, mode, featureProps, finishCurrentFeature } from "$lib/draw/stores";
-  import { ErrorMessage, DefaultButton, SecondaryButton, WarningButton } from "govuk-svelte";
+  import {
+    deleteIntervention,
+    mode,
+    featureProps,
+    finishCurrentFeature,
+  } from "$lib/draw/stores";
+  import {
+    ErrorMessage,
+    DefaultButton,
+    SecondaryButton,
+    WarningButton,
+  } from "govuk-svelte";
   import { type Config } from "$lib/config";
   import type { FeatureWithID, Schemes } from "$lib/draw/types";
   import type { Writable } from "svelte/store";
@@ -32,7 +42,11 @@
 
 <h2>Editing {cfg.interventionName(feature)}</h2>
 
-<DefaultButton on:click={() => {$finishCurrentFeature()}}>
+<DefaultButton
+  on:click={() => {
+    $finishCurrentFeature();
+  }}
+>
   Finish
 </DefaultButton>
 
