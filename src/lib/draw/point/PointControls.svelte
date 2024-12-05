@@ -33,9 +33,15 @@
   }
 
   function keyDown(e: KeyboardEvent) {
-    if (e.key === "Escape") {
+    if (e.key == "Escape") {
       e.stopPropagation();
-      cancel();
+      if ($pointPosition) {
+        finish();
+      } else {
+        window.alert(
+          "You can't save this point until you place it on the map. Press 'Cancel' to discard these changes.",
+        );
+      }
     }
   }
 </script>
