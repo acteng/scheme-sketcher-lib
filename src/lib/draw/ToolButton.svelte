@@ -13,16 +13,15 @@
   on:click={() => mode.set(setMode)}
   disabled={disabled || $mode.mode != "list"}
   style:margin-bottom={$mode.mode == "list" ? "0px" : "8px"}
-  class:focused={$mode == setMode}
+  class:focused={$mode.mode == setMode.mode}
 >
   <slot />
 </button>
 
 <style>
-  /* Manually copied govuk-button:focus */
+  /* Mimicking the govuk-button:focus style, but activating also for a
+   * keybinding, not just clicking */
   .focused {
-    border-color: #fd0;
-    outline: 3px solid transparent;
-    box-shadow: inset 0 0 0 1px #fd0;
+    outline: 3px solid #fd0;
   }
 </style>

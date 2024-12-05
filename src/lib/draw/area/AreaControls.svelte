@@ -329,6 +329,10 @@
             <b>Escape</b>
             to finish
           </li>
+          <li>
+            From the main mode, <b>3</b>
+            to draw a new area
+          </li>
         </ul>
       </HelpButton>
     </FixedButtonGroup>

@@ -28,7 +28,22 @@
   onDestroy(() => {
     $routeTool?.tearDown();
   });
+
+  function keyDown(e: KeyboardEvent) {
+    if ($mode.mode != "list") {
+      return;
+    }
+    if (e.key == "1") {
+      $mode = { mode: "new-point" };
+    } else if (e.key == "2" && $routeTool) {
+      $mode = { mode: "new-route" };
+    } else if (e.key == "3" && $routeTool) {
+      $mode = { mode: "new-area" };
+    }
+  }
 </script>
+
+<svelte:window on:keydown={keyDown} />
 
 <HoverLayer {cfg} {gjSchemes} />
 

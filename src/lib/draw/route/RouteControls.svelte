@@ -361,6 +361,10 @@
             <b>Escape</b>
             to finish
           </li>
+          <li>
+            From the main mode, <b>2</b>
+            to draw a new route
+          </li>
         </ul>
       </HelpButton>
     </FixedButtonGroup>
