@@ -77,6 +77,14 @@
           to cancel
         </li>
       </ul>
+
+      <p>Keyboard shortcuts:</p>
+      <ul>
+        <li>
+          From the main mode, <b>1</b>
+          to draw a new point
+        </li>
+      </ul>
     </HelpButton>
   </FixedButtonGroup>
 </div>
