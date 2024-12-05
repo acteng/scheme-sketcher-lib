@@ -222,14 +222,24 @@
     let tag = (e.target as HTMLElement).tagName;
     let formFocused = tag == "INPUT" || tag == "TEXTAREA";
 
-    if (e.key === "Enter" && !formFocused) {
+    if (e.key == "Enter" && !formFocused) {
       e.stopPropagation();
       if ($waypoints.length >= 3) {
         finish();
+      } else {
+        window.alert(
+          "You can't save this area unless it has at least three points. Press 'Cancel' to discard these changes.",
+        );
       }
-    } else if (e.key === "Escape") {
+    } else if (e.key == "Escape") {
       e.stopPropagation();
-      cancel();
+      if ($waypoints.length >= 3) {
+        finish();
+      } else {
+        window.alert(
+          "You can't save this area unless it has at least three points. Press 'Cancel' to discard these changes.",
+        );
+      }
     } else if (e.key == "s" && !formFocused) {
       toggleSnap();
     } else if (e.key == "z" && e.ctrlKey) {
@@ -315,11 +325,9 @@
           </li>
           <li>
             <b>Enter</b>
-            to finish
-          </li>
-          <li>
+            or
             <b>Escape</b>
-            to cancel
+            to finish
           </li>
         </ul>
       </HelpButton>
