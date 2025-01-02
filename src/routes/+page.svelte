@@ -1,26 +1,26 @@
 <script lang="ts">
   import "../style/main.css";
-  // @ts-expect-error no declarations
-  import { initAll } from "govuk-frontend";
-  import { onMount } from "svelte";
-  import { MapLibre } from "svelte-maplibre";
-  import type { Map } from "maplibre-gl";
-  import { type Config, map } from "$lib/config";
+  import { map, type Config } from "$lib/config";
   import {
+    BoundaryLayer,
     ImageLayer,
     InterventionLayer,
-    BoundaryLayer,
-    Toolbox,
     NewFeatureForm,
+    Toolbox,
   } from "$lib/draw";
-  import { mode, emptySchemes } from "$lib/draw/stores";
-  import { ListMode, EditFeatureForm } from "$lib/sidebar";
+  import { emptySchemes, mode } from "$lib/draw/stores";
+  import type { SchemeData } from "$lib/draw/types";
+  import { EditFeatureForm, ListMode } from "$lib/sidebar";
+  // @ts-expect-error no declarations
+  import { initAll } from "govuk-frontend";
+  import { SecondaryButton } from "govuk-svelte";
+  import type { Map } from "maplibre-gl";
+  import { onMount } from "svelte";
+  import { MapLibre } from "svelte-maplibre";
+  import { writable } from "svelte/store";
   import ExampleFeatureForm from "./ExampleFeatureForm.svelte";
   import ExampleSchemeForm from "./ExampleSchemeForm.svelte";
-  import { writable } from "svelte/store";
   import type { ExampleFeature, ExampleScheme } from "./types";
-  import type { SchemeData } from "$lib/draw/types";
-  import { SecondaryButton } from "govuk-svelte";
 
   onMount(() => {
     initAll();

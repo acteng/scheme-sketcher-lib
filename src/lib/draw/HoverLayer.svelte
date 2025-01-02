@@ -1,6 +1,8 @@
 <script lang="ts" generics="F, S">
+  import type { Config } from "$lib/config";
   import { circleRadius, colors, lineWidth } from "$lib/draw/colors";
   import { sidebarHover } from "$lib/draw/stores";
+  import type { Schemes } from "$lib/draw/types";
   import {
     emptyGeojson,
     isLine,
@@ -9,9 +11,7 @@
     layerId,
   } from "$lib/maplibre";
   import { CircleLayer, GeoJSON, LineLayer } from "svelte-maplibre";
-  import type { Schemes } from "$lib/draw/types";
   import type { Writable } from "svelte/store";
-  import type { Config } from "$lib/config";
 
   export let cfg: Config<F, S>;
   export let gjSchemes: Writable<Schemes<F, S>>;

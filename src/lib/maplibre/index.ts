@@ -1,5 +1,3 @@
-export { layerId, type ConfigWithZorder } from "./zorder";
-
 // Helpers for https://maplibre.org/maplibre-gl-js-docs/style-spec/
 import turfBbox from "@turf/bbox";
 import type { FeatureCollection, GeoJSON } from "geojson";
@@ -7,6 +5,8 @@ import type {
   DataDrivenPropertyValueSpecification,
   ExpressionSpecification,
 } from "maplibre-gl";
+
+export { layerId, type ConfigWithZorder } from "./zorder";
 
 export const isPolygon: ExpressionSpecification = [
   "==",

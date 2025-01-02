@@ -1,24 +1,24 @@
 <script lang="ts" generics="F, S">
-  import type { Feature, LineString, Point, Polygon } from "geojson";
-  import {
-    mode,
-    routeTool,
-    featureProps,
-    pointPosition,
-    setPrecision,
-    cancelCurrentFeature,
-    finishCurrentFeature,
-  } from "$lib/draw/stores";
-  import { waypoints as routeWaypoints } from "./route/stores";
-  import { waypoints as areaWaypoints, calculateArea } from "./area/stores";
-  import type { FeatureWithID, Schemes } from "$lib/draw/types";
   import { type Config } from "$lib/config";
+  import {
+    cancelCurrentFeature,
+    featureProps,
+    finishCurrentFeature,
+    mode,
+    pointPosition,
+    routeTool,
+    setPrecision,
+  } from "$lib/draw/stores";
+  import type { FeatureWithID, Schemes } from "$lib/draw/types";
+  import type { Feature, LineString, Point, Polygon } from "geojson";
+  import type { AreaProps, RouteProps } from "route-snapper-ts";
   import { onDestroy, onMount } from "svelte";
+  import type { Writable } from "svelte/store";
+  import AreaControls from "./area/AreaControls.svelte";
+  import { waypoints as areaWaypoints, calculateArea } from "./area/stores";
   import PointControls from "./point/PointControls.svelte";
   import RouteControls from "./route/RouteControls.svelte";
-  import AreaControls from "./area/AreaControls.svelte";
-  import type { AreaProps, RouteProps } from "route-snapper-ts";
-  import type { Writable } from "svelte/store";
+  import { waypoints as routeWaypoints } from "./route/stores";
 
   export let cfg: Config<F, S>;
   export let gjSchemes: Writable<Schemes<F, S>>;

@@ -1,12 +1,12 @@
 <script lang="ts">
   import { HelpButton } from "$lib/common";
-  import { DefaultButton, SecondaryButton } from "govuk-svelte";
-  import FixedButtonGroup from "../FixedButtonGroup.svelte";
-  import { pointPosition } from "$lib/draw/stores";
-  import { MapEvents, Marker } from "svelte-maplibre";
-  import type { MapMouseEvent } from "maplibre-gl";
   import { map } from "$lib/config";
-  import { onMount, onDestroy } from "svelte";
+  import { pointPosition } from "$lib/draw/stores";
+  import { DefaultButton, SecondaryButton } from "govuk-svelte";
+  import type { MapMouseEvent } from "maplibre-gl";
+  import { onDestroy, onMount } from "svelte";
+  import { MapEvents, Marker } from "svelte-maplibre";
+  import FixedButtonGroup from "../FixedButtonGroup.svelte";
 
   export let finish: () => void;
   export let cancel: () => void;

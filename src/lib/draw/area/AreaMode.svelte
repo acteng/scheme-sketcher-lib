@@ -1,21 +1,21 @@
 <script lang="ts" generics="F, S">
-  import type { Feature, LineString, Polygon } from "geojson";
+  import { type Config } from "$lib/config";
   import {
+    cancelCurrentFeature,
+    featureProps,
+    finishCurrentFeature,
+    getArbitrarySchemeRef,
     mode,
     newFeatureId,
-    getArbitrarySchemeRef,
-    featureProps,
     routeTool,
-    cancelCurrentFeature,
-    finishCurrentFeature,
   } from "$lib/draw/stores";
+  import type { FeatureWithID, Schemes } from "$lib/draw/types";
+  import type { Feature, LineString, Polygon } from "geojson";
   import { DefaultButton, SecondaryButton } from "govuk-svelte";
   import { onDestroy, onMount } from "svelte";
-  import AreaControls from "./AreaControls.svelte";
-  import { type Config } from "$lib/config";
-  import type { FeatureWithID, Schemes } from "$lib/draw/types";
   import type { Writable } from "svelte/store";
-  import { waypoints, calculateArea } from "./stores";
+  import AreaControls from "./AreaControls.svelte";
+  import { calculateArea, waypoints } from "./stores";
 
   export let cfg: Config<F, S>;
   export let gjSchemes: Writable<Schemes<F, S>>;

@@ -1,24 +1,24 @@
 <script lang="ts" generics="F, S">
-  import { mode, routeTool } from "./stores";
+  import areaIcon from "$lib/assets/area.svg";
   import imageIcon from "$lib/assets/image.svg";
   import pointIcon from "$lib/assets/point.svg";
-  import areaIcon from "$lib/assets/area.svg";
   import routeIcon from "$lib/assets/route.svg";
   import splitRouteIcon from "$lib/assets/split_route.svg";
   import streetViewIcon from "$lib/assets/street_view.svg";
-  import HoverLayer from "./HoverLayer.svelte";
-  import type { Schemes } from "$lib/draw/types";
-  import type { Writable } from "svelte/store";
   import { map, type Config } from "$lib/config";
+  import type { Schemes } from "$lib/draw/types";
+  import { onDestroy } from "svelte";
+  import type { Writable } from "svelte/store";
+  import AreaMode from "./area/AreaMode.svelte";
   import EditMode from "./EditMode.svelte";
+  import HoverLayer from "./HoverLayer.svelte";
   import ImageMode from "./image/ImageMode.svelte";
   import PointMode from "./point/PointMode.svelte";
   import RouteMode from "./route/RouteMode.svelte";
-  import SplitRouteMode from "./route/SplitRouteMode.svelte";
-  import AreaMode from "./area/AreaMode.svelte";
-  import StreetViewMode from "./StreetViewMode.svelte";
-  import { onDestroy } from "svelte";
   import RouteSnapperLoader from "./route/RouteSnapperLoader.svelte";
+  import SplitRouteMode from "./route/SplitRouteMode.svelte";
+  import { mode, routeTool } from "./stores";
+  import StreetViewMode from "./StreetViewMode.svelte";
   import ToolButton from "./ToolButton.svelte";
 
   export let cfg: Config<F, S>;

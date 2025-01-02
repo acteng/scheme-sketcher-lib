@@ -1,11 +1,10 @@
 <script lang="ts" generics="F, S">
-  import { CollapsibleCard, Radio, SecondaryButton } from "govuk-svelte";
-  import type { MapMouseEvent } from "maplibre-gl";
-  import { userSettings } from "$lib/draw/stores";
-  import { onDestroy } from "svelte";
   import cameraCursorUrl from "$lib/assets/camera_cursor.svg?url";
+  import { userSettings } from "$lib/draw/stores";
+  import { CollapsibleCard, Radio, SecondaryButton } from "govuk-svelte";
+  import type { Map, MapMouseEvent } from "maplibre-gl";
+  import { onDestroy } from "svelte";
   import StreetViewHelp from "./StreetViewHelp.svelte";
-  import type { Map } from "maplibre-gl";
 
   export let cfg: { getStreetViewRoadLayerNames: (map: Map) => string[] };
   export let map: Map | null;

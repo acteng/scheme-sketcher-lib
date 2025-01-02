@@ -1,7 +1,7 @@
 <script lang="ts" generics="F, S">
+  import { map, type Config } from "$lib/config";
   import { mode } from "$lib/draw/stores";
   import { layerId } from "$lib/maplibre";
-  import { map, type Config } from "$lib/config";
   import { ImageSource, Marker, RasterLayer } from "svelte-maplibre";
   import { imgSrc, opacity } from "./stores";
 

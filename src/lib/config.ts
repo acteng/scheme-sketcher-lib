@@ -1,13 +1,13 @@
 import type {
-  FeatureWithID,
-  Schemes,
-  SchemeData,
   FeatureProps,
+  FeatureWithID,
+  SchemeData,
+  Schemes,
 } from "$lib/draw/types";
-import type { Feature, LineString, Polygon, Point } from "geojson";
-import { get, writable, type Writable } from "svelte/store";
-import { SvelteComponent, type ComponentType } from "svelte";
+import type { Feature, LineString, Point, Polygon } from "geojson";
 import type { Map } from "maplibre-gl";
+import { SvelteComponent, type ComponentType } from "svelte";
+import { get, writable, type Writable } from "svelte/store";
 
 // TODO Still do this, or use something else?
 export let map: Writable<Map | null> = writable(null);

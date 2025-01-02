@@ -1,16 +1,16 @@
 import { type Config } from "$lib/config";
-import { writable, type Writable } from "svelte/store";
-import {
-  type Mode,
-  type Schemes,
-  type FeatureProps,
-  type UserSettings,
-  isStreetViewImagery,
-} from "./types";
-import { RouteTool } from "route-snapper-ts";
 import type { Position } from "geojson";
+import { RouteTool } from "route-snapper-ts";
+import { writable, type Writable } from "svelte/store";
 import { v4 as uuidv4 } from "uuid";
 import { randomSchemeColor } from "./colors";
+import {
+  isStreetViewImagery,
+  type FeatureProps,
+  type Mode,
+  type Schemes,
+  type UserSettings,
+} from "./types";
 
 // A global singleton, with the route tool loaded for the current map. It's
 // null before it's loaded.

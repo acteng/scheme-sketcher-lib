@@ -1,13 +1,13 @@
 <script lang="ts">
   import mask from "@turf/mask";
+  import { map } from "$lib/config";
+  import { bbox, layerId, type ConfigWithZorder } from "$lib/maplibre";
   import type {
     Feature,
     FeatureCollection,
     MultiPolygon,
     Polygon,
   } from "geojson";
-  import { bbox, layerId, type ConfigWithZorder } from "$lib/maplibre";
-  import { map } from "$lib/config";
   import { getContext } from "svelte";
   import { FillLayer, GeoJSON } from "svelte-maplibre";
 

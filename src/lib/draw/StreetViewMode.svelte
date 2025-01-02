@@ -1,11 +1,10 @@
 <script lang="ts" generics="F, S">
-  import { StreetViewHelp, StreetViewTool } from "$lib/common";
+  import { HelpButton, StreetViewHelp, StreetViewTool } from "$lib/common";
+  import { map, type Config } from "$lib/config";
   import { mode, userSettings } from "$lib/draw/stores";
   import { ButtonGroup, DefaultButton, Radio } from "govuk-svelte";
-  import { type Config, map } from "$lib/config";
-  import { HelpButton } from "$lib/common";
-  import TinyRadio from "./TinyRadio.svelte";
   import FixedButtonGroup from "./FixedButtonGroup.svelte";
+  import TinyRadio from "./TinyRadio.svelte";
 
   export let cfg: Config<F, S>;
 

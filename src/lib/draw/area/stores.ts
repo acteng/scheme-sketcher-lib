@@ -1,6 +1,6 @@
-import { writable, type Writable } from "svelte/store";
-import { RouteTool } from "route-snapper-ts";
 import type { Feature, Polygon } from "geojson";
+import { RouteTool } from "route-snapper-ts";
+import { writable, type Writable } from "svelte/store";
 
 export interface Waypoint {
   point: [number, number];

@@ -1,19 +1,19 @@
 <script lang="ts" generics="F, S">
+  import { type Config } from "$lib/config";
   import {
-    deleteIntervention,
-    mode,
-    featureProps,
     cancelCurrentFeature,
+    deleteIntervention,
+    featureProps,
     finishCurrentFeature,
+    mode,
   } from "$lib/draw/stores";
+  import type { FeatureWithID, Schemes } from "$lib/draw/types";
   import {
-    ErrorMessage,
     DefaultButton,
+    ErrorMessage,
     SecondaryButton,
     WarningButton,
   } from "govuk-svelte";
-  import { type Config } from "$lib/config";
-  import type { FeatureWithID, Schemes } from "$lib/draw/types";
   import type { Writable } from "svelte/store";
 
   export let cfg: Config<F, S>;

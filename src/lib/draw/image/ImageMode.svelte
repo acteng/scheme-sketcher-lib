@@ -1,9 +1,9 @@
 <script lang="ts">
+  import { HelpButton } from "$lib/common";
   import { mode } from "$lib/draw/stores";
   import { DefaultButton, FormElement, WarningButton } from "govuk-svelte";
-  import { imgSrc, opacity } from "./stores";
-  import { HelpButton } from "$lib/common";
   import FixedButtonGroup from "../FixedButtonGroup.svelte";
+  import { imgSrc, opacity } from "./stores";
 
   let fileInput: HTMLInputElement;
 

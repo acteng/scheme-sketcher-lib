@@ -1,26 +1,26 @@
 <script lang="ts" generics="F, S">
+  import deleteIcon from "$lib/assets/delete.svg?url";
   import { Modal, WarningIcon } from "$lib/common";
+  import { map, type Config } from "$lib/config";
   import {
+    emptySchemes,
     hideSchemes,
     mode,
     sidebarHover,
-    emptySchemes,
   } from "$lib/draw/stores";
+  import type { Schemes } from "$lib/draw/types";
+  import { bbox } from "$lib/maplibre";
   import {
     ButtonGroup,
     Checkbox,
     CheckboxGroup,
+    DefaultButton,
     ErrorMessage,
     SecondaryButton,
     Select,
     WarningButton,
-    DefaultButton,
   } from "govuk-svelte";
-  import { bbox } from "$lib/maplibre";
-  import { map, type Config } from "$lib/config";
   import { onDestroy } from "svelte";
-  import deleteIcon from "$lib/assets/delete.svg?url";
-  import type { Schemes } from "$lib/draw/types";
   import type { Writable } from "svelte/store";
 
   export let cfg: Config<F, S>;

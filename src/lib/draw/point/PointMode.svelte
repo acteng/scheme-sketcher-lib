@@ -1,20 +1,20 @@
 <script lang="ts" generics="F, S">
-  import type { Point } from "geojson";
+  import { map, type Config } from "$lib/config";
   import {
+    cancelCurrentFeature,
+    featureProps,
+    finishCurrentFeature,
+    getArbitrarySchemeRef,
     mode,
     newFeatureId,
-    getArbitrarySchemeRef,
-    featureProps,
     pointPosition,
     setPrecision,
-    cancelCurrentFeature,
-    finishCurrentFeature,
   } from "$lib/draw/stores";
-  import { onMount, onDestroy } from "svelte";
-  import PointControls from "./PointControls.svelte";
-  import { map, type Config } from "$lib/config";
   import type { FeatureWithID, Schemes } from "$lib/draw/types";
+  import type { Point } from "geojson";
+  import { onDestroy, onMount } from "svelte";
   import type { Writable } from "svelte/store";
+  import PointControls from "./PointControls.svelte";
 
   export let cfg: Config<F, S>;
   export let gjSchemes: Writable<Schemes<F, S>>;

@@ -3,20 +3,20 @@
   // component to work. This is an exception to how LeftSidebar manages most
   // modes.
 
-  import { splitRoute, type RouteProps } from "route-snapper-ts";
   import nearestPointOnLine from "@turf/nearest-point-on-line";
-  import type { Feature, LineString, Point, Position } from "geojson";
-  import { mode, newFeatureId, setPrecision } from "$lib/draw/stores";
-  import { emptyGeojson, layerId } from "$lib/maplibre";
-  import type { MapMouseEvent } from "maplibre-gl";
+  import splitIcon from "$lib/assets/split_route.svg";
+  import { HelpButton } from "$lib/common";
   import { map, type Config } from "$lib/config";
+  import { mode, newFeatureId, setPrecision } from "$lib/draw/stores";
+  import type { FeatureWithID, Schemes } from "$lib/draw/types";
+  import { emptyGeojson, layerId } from "$lib/maplibre";
+  import type { Feature, LineString, Point, Position } from "geojson";
+  import { DefaultButton } from "govuk-svelte";
+  import type { MapMouseEvent } from "maplibre-gl";
+  import { splitRoute, type RouteProps } from "route-snapper-ts";
   import { onDestroy, onMount } from "svelte";
   import { CircleLayer, GeoJSON, MapEvents } from "svelte-maplibre";
-  import splitIcon from "$lib/assets/split_route.svg";
-  import type { FeatureWithID, Schemes } from "$lib/draw/types";
   import type { Writable } from "svelte/store";
-  import { DefaultButton } from "govuk-svelte";
-  import { HelpButton } from "$lib/common";
   import FixedButtonGroup from "../FixedButtonGroup.svelte";
 
   export let cfg: Config<F, S>;

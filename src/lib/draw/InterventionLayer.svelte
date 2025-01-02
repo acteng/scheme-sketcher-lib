@@ -1,7 +1,8 @@
 <script lang="ts" generics="F, S">
+  import { map, type Config } from "$lib/config";
   import { circleRadius, colors, lineWidth } from "$lib/draw/colors";
-  import type { Feature } from "geojson";
   import { hideSchemes, mode } from "$lib/draw/stores";
+  import type { FeatureWithID, Schemes } from "$lib/draw/types";
   import {
     addLineStringEndpoints,
     constructMatchExpression,
@@ -10,7 +11,7 @@
     isPolygon,
     layerId,
   } from "$lib/maplibre";
-  import { type Config, map } from "$lib/config";
+  import type { Feature } from "geojson";
   import type {
     DataDrivenPropertyValueSpecification,
     ExpressionSpecification,
@@ -23,7 +24,6 @@
     Popup,
     type LayerClickInfo,
   } from "svelte-maplibre";
-  import type { FeatureWithID, Schemes } from "$lib/draw/types";
   import type { Writable } from "svelte/store";
 
   export let cfg: Config<F, S>;

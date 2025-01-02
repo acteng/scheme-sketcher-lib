@@ -1,24 +1,24 @@
 <script lang="ts">
-  import { routeTool, mode, userSettings } from "$lib/draw/stores";
-  import { waypoints, type Waypoint } from "./stores";
   import { HelpButton } from "$lib/common";
-  import TinyRadio from "../TinyRadio.svelte";
-  import FixedButtonGroup from "../FixedButtonGroup.svelte";
+  import { map } from "$lib/config";
+  import { mode, routeTool, userSettings } from "$lib/draw/stores";
+  import type { Mode, Schemes } from "$lib/draw/types";
+  import { emptyGeojson, layerId } from "$lib/maplibre";
+  import type { Feature, FeatureCollection } from "geojson";
   import { DefaultButton, SecondaryButton } from "govuk-svelte";
+  import type { MapMouseEvent } from "maplibre-gl";
+  import { RouteTool } from "route-snapper-ts";
+  import { onDestroy } from "svelte";
   import {
-    Marker,
-    MapEvents,
+    CircleLayer,
     GeoJSON,
     LineLayer,
-    CircleLayer,
+    MapEvents,
+    Marker,
   } from "svelte-maplibre";
-  import type { Schemes, Mode } from "$lib/draw/types";
-  import type { MapMouseEvent } from "maplibre-gl";
-  import type { Feature, FeatureCollection } from "geojson";
-  import { RouteTool } from "route-snapper-ts";
-  import { layerId, emptyGeojson } from "$lib/maplibre";
-  import { onDestroy } from "svelte";
-  import { map } from "$lib/config";
+  import FixedButtonGroup from "../FixedButtonGroup.svelte";
+  import TinyRadio from "../TinyRadio.svelte";
+  import { waypoints, type Waypoint } from "./stores";
 
   export let finish: () => void;
   export let cancel: () => void;

@@ -1,10 +1,10 @@
 <script lang="ts" generics="F, S">
-  import { addEmptyScheme } from "$lib/draw/stores";
-  import { ErrorMessage, FileInput, SecondaryButton } from "govuk-svelte";
-  import PerSchemeControls from "./PerSchemeControls.svelte";
   import { type Config } from "$lib/config";
+  import { addEmptyScheme } from "$lib/draw/stores";
   import type { Schemes } from "$lib/draw/types";
+  import { ErrorMessage, FileInput, SecondaryButton } from "govuk-svelte";
   import type { Writable } from "svelte/store";
+  import PerSchemeControls from "./PerSchemeControls.svelte";
 
   export let cfg: Config<F, S>;
   export let gjSchemes: Writable<Schemes<F, S>>;

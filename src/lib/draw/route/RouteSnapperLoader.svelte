@@ -1,11 +1,11 @@
 <script lang="ts">
+  import { fetchWithProgress } from "$lib/common";
   import { routeTool } from "$lib/draw/stores";
+  import { emptyGeojson } from "$lib/maplibre";
   import { ErrorMessage } from "govuk-svelte";
   import type { Map } from "maplibre-gl";
-  import { onMount } from "svelte";
   import { init, RouteTool } from "route-snapper-ts";
-  import { fetchWithProgress } from "$lib/common";
-  import { emptyGeojson } from "$lib/maplibre";
+  import { onMount } from "svelte";
   import { writable } from "svelte/store";
 
   export let map: Map;

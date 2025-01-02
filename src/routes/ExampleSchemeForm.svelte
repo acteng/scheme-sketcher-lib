@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { TextInput } from "govuk-svelte";
   import type { Schemes } from "$lib/draw/types";
+  import { TextInput } from "govuk-svelte";
   import type { Writable } from "svelte/store";
   import type { ExampleFeature, ExampleScheme } from "./types";
 
