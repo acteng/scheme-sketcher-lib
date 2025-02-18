@@ -28,7 +28,12 @@
 
   // Use your own key (for MapTiler or another basemap service)
   let apiKey = "MZEJTanw3WpxRvt7qDfo";
+
   let routeSnapperUrl = "https://atip.uk/route-snappers/v3/LAD_Adur.bin.gz";
+  // Enable this one to test decompression via pako. Verify this doesn't send
+  // back a Content-Encoding header by using `curl -v`.
+  //let routeSnapperUrl = "https://assets.od2net.org/headerless_LAD_Adur_bin_gz";
+
   let boundaryGeojson = {
     type: "Feature" as const,
     geometry: {
