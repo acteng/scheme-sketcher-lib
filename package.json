@@ -100,7 +100,7 @@
     "route-snapper-ts": "^0.0.8",
     "sass": "~1.102.0",
     "svelte-maplibre": "^0.9.14",
-    "uuid": "^10.0.0"
+    "uuid": "^14.0.0"
   },
   "svelte": "./dist/index.js",
   "types": "./dist/index.d.ts",
